@@ -1,0 +1,26 @@
+<div id="map">
+			<h3><span>新疆风光</span></h3>
+			<p><a href="#" title="点击看大图"><img src="images/map1.jpg"></a></p>
+			<p><a href="#" title="点击看大图"><img src="images/map2.jpg"></a></p>
+		</div>
+		<div id="food">
+			<h3><span>小吃推荐</span></h3>
+			<ul>
+				<li><a href="#">17号抓饭</a></li>
+				<li><a href="#">大盘鸡</a></li>
+				<li><a href="#">五一夜市</a></li>
+				<li><a href="#">水果</a></li>
+			</ul>
+		</div>
+		<div id="life">
+			<h3><span>宾馆酒店</span></h3>
+			<ul>
+				<li><a href="#">美丽华大饭店</a></li>
+				<li><a href="#">海德大饭店</a></li>
+				<li><a href="#">银都大饭店</a></li>
+				<li><a href="#">鸿福大饭店</a></li>
+				<li><a href="#">友好大酒店</a></li>
+				<li><a href="#">棉麻宾馆</a></li>
+				<li><a href="#">电信宾馆</a></li>
+			</ul>
+		</div>

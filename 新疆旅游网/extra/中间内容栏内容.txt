@@ -1,0 +1,19 @@
+<div id="ghost"><a href="#" title="魔鬼城探秘"><img src="images/ghost.jpg" border="0"></a></div>
+		<div id="beauty">
+			<h3><span>美景寻踪</span></h3>
+			<ul>
+				<li><a href="#"><img src="images/beauty1.jpg"></a></li>
+				<li><a href="#"><img src="images/beauty2.jpg"></a></li>
+				<li><a href="#"><img src="images/beauty3.jpg"></a></li>
+				<li><a href="#"><img src="images/beauty4.jpg"></a></li>
+			</ul>
+		</div>
+		<div id="route">
+			<h3><span>线路精选</span></h3>
+			<ul>
+				<li><a href="#">吐鲁番——库尔勒——库车——塔中——和田——喀什</a></li>
+				<li><a href="#">乌鲁木齐——天池——克拉马依——乌伦古湖——喀纳斯</a></li>
+				<li><a href="#">乌鲁木齐——奎屯——乔尔玛——那拉提——巴音布鲁克</a></li>
+				<li><a href="#">乌鲁木齐——五彩城——将军隔壁——吉木萨尔</a></li>
+			</ul>
+		</div>
