@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box1 {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+        }
+        
+        .box2 {
+            width: 300px;
+            height: 300px;
+            background-color: yellow;
+        }
+        
+        .box3 {
+            width: 200px;
+            height: 200px;
+            background-color: green;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 行内引入：onclick-添加点击事件
+                    alert()-弹框输出
+            优点：简单直接
+            缺点：结构不分离，无复用性,维护性不强 -->
+    <div class="box1" onclick="alert('你点我呀！！！')"></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+    <!-- 内部引入 -->
+    <script>
+        // 单行注释
+        /*
+            多行注释
+            优点：结构分离，增加维护性和复用性（只能在当前页面）
+            缺点：多页面之间无法复用
+        */
+        document.querySelector('.box2').onclick = function() {
+            alert('点你咋的！！！')
+        }
+    </script>
+    <!-- 外部引入
+            优点：结构彻底分离，维护性强
+                    推荐使用 -->
+    <script src="main.js"></script>
+</body>
+
+</html>
