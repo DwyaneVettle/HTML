@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var a = 2;
+        // 在前现变化，在后先运算
+        console.log(a++); // 2
+        console.log(++a); // 4
+
+        // 每一个字符在做比较时都是比较Unicode编码
+        var b = 'A',
+            c = 'a';
+        console.log(b.charCodeAt(0)); // 查询Unicode编码对应值 65
+        console.log(b > c); // false
+
+        var x = 10,
+            y = 20,
+            z = 30;
+        // 运算优先级() ! && ||
+        console.log(!(x > y && y > z || x < y && z > y)); // false
+        // 三元运算符
+        var result = x > y ? x : y
+        console.log(result); // 20
+    </script>
+</body>
+
+</html>

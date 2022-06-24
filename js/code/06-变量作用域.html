@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+    <h1>JavaScript 全局作用域</h1>
+
+    <p>可以从任何脚本或函数中访问全局变量。</p>
+
+    <p id="demo"></p>
+
+    <script>
+        var carName = "porsche";
+        myFunction();
+
+        function myFunction() {
+            document.getElementById("demo").innerHTML =
+                "I can display " + carName;
+        }
+    </script>
+
+</body>
+
+</html>

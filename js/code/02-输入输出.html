@@ -12,8 +12,17 @@
     <script>
         alert("浏览器弹出框。")
         console.log("这时控制台信息，供程序员使用。");
-        prompt("用户输入的信息可以被保存起来。")
+        a = prompt("用户输入的信息可以被保存起来。");
+        alert(a)
     </script>
+    <div>
+        <script>
+            // 在某一位置写入内容
+            document.write("<h1>Hello</h1>")
+        </script>
+    </div>
+    <!-- 执行document.write()后会重写网页 -->
+    <input type="button" value="清除所有内容" onclick="document.write('清空后的文本')">
 </body>
 
 </html>

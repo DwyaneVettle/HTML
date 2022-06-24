@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            padding: 20px;
+            font-size: 20px;
+        }
+        
+        #div1 {
+            width: 30%;
+            border: 1px solid red;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <script>
+        var flag = "off"; //flag表示灯的状态, off表示灯是关闭的!
+        function changeImg() {
+            //1.通过id获取img元素(返回是一个JS对象)
+            var imgObj = document.getElementById("img1");
+            if (flag == "off") { // 表明灯是关闭状态, 点击后则需要打开
+                imgObj.src = "imgs/on.gif";
+                flag = "on"; // 更新灯的状态为开灯
+            } else { // flag="on" 表名灯是打开状态, 点击后则需要关闭
+                imgObj.src = "imgs/off.gif";
+                flag = "off";
+            }
+        }
+    </script>
+
+    <input type="button" value="开/关灯" onclick="changeImg()" /> <br/><br/>
+    <img id="img1" src="imgs/off.gif" />
+</body>
+
+</html>
