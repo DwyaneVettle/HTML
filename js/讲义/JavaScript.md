@@ -264,6 +264,8 @@ var elems = document.getElementsByName("");
 
 
 
+**除了以上方式获取元素目标外，还可通过一种通用的方式querySelector()**，querySelector()的参数为css选择器的形式，比如要选一个id属性为abc的标签出来，那么正确的处理方式是querySelector("#abc")。
+
 ### 4.3.事件绑定方式
 
 1.**内联方式**
@@ -745,11 +747,331 @@ console.log(result); // 20
 
 ## 6.流程控制
 
-​	JavaScript中的流程控制就是控制代码的执行顺序。
+​	JavaScript中的流程控制就是控制代码的执行顺序，主要有三种类型：顺序结构、选择结构、循环结构。顺序结构就是我们以上使用的JS代码，它从上到下依次执行代码语句。这里我们主要来说选择结构和循环机构。
+
+- **顺序结构：**-单线程，没有分支
+
+```javascript
+// 顺序结构
+console.log(b); // undefined
+var b = 100;
+var a = "ok";
+console.log(a); // ok
+console.log(b); // 100
+// console.log(c); // 报错，未定义
+// 解决方案
+try {
+   console.log(c);
+} catch (error) {
+   console.log(error.message);
+}
+```
+
+
+
+### 6.1.选择结构
+
+- **if语句**
+
+  <img src="JavaScript.assets/image-20220627155520005.png" alt="image-20220627155520005" style="zoom:67%;" />
+
+  - 简单if语句
+
+  ```javascript
+  if(条件表达式) {
+      表达式成立时执行的代码块;
+  }
+  ```
+
+  注意 : 除零值以外，其他值都为真，以下条件为假值false:
+
+  ```javascript
+  if(0){}
+  if(0.0){}
+  if(""){} //空字符串
+  if(undefined){}
+  if(NaN){}
+  if(null){}
+  ```
+
+  特殊写法：{}可以省略，但一旦省略，if条件语句只控制其后的第一行代码。
+
+  **案例：如果获取当前时间，如果时间小于20小时，输出Good Day**
+
+  ```javascript
+  <head>
+      <meta charset="utf-8">
+      <title>if语句</title>
+  </head>
+  
+  <body>
+  
+      <p>如果时间早于 20:00，会获得问候 "Good day"。</p>
+      <button onclick="myFunction()">点击这里</button>
+      <p id="demo"></p>
+      <script>
+          function myFunction() {
+              var x = "";
+              var time = new Date().getHours();
+              if (time < 20) {
+                  x = "Good day";
+              }
+              document.getElementById("demo").innerHTML = x;
+          }
+      </script>
+  
+  </body>
+  
+  ```
+
+  
+
+  
+
+  - **if-else结构**
+
+  ```javascript
+  if(条件表达式){
+  	//条件成立时执行
+  }else{
+  	//条件不成立时选择执行
+  }
+  ```
+
+  ```javascript
+  <head>
+      <meta charset="utf-8">
+      <title>if-else</title>
+  </head>
+  
+  <body>
+  
+      <p>点击这个按钮，获得基于时间的问候。</p>
+      <button onclick="myFunction()">点击这里</button>
+      <p id="demo"></p>
+      <script>
+          function myFunction() {
+              var x = "";
+              var time = new Date().getHours();
+              if (time < 20) {
+                  x = "Good day";
+              } else {
+                  x = "Good evening";
+              }
+              document.getElementById("demo").innerHTML = x;
+          }
+      </script>
+  
+  </body>
+  ```
+
+  
+
+  - **多重条件语句**
+
+```javascript
+ if(条件1){
+  	//条件1成立时执行
+  }else if(条件2){
+  	//条件2成立时执行
+  }else if(条件3){
+  	//条件3成立时执行
+  }...else{
+  	//条件不成立时执行
+  }
+```
+
+![image-20220624220251728](JavaScript.assets/image-20220624220251728.png)
+
+**案例：如果时间小于 10:00，则生成问候 "Good morning"，如果时间大于 10:00 小于 20:00，则生成问候 "Good day"，否则生成问候 "Good evening"：**
+
+```javascript
+<head>
+    <meta charset="utf-8">
+    <title>if多重分支</title>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        var d = new Date();
+        var time = d.getHours();
+        if (time < 10) {
+            document.write("<b>早上好</b>");
+        } else if (time >= 10 && time < 20) {
+            document.write("<b>今天好</b>");
+        } else {
+            document.write("<b>晚上好!</b>");
+        }
+    </script>
+    <p>
+        这个例子演示了 if..else if...else 语句。
+    </p>
+
+</body>
+```
+
+**案例：根据随机数判断：**
+
+```javascript
+<body>
+
+    <p id="demo"></p>
+    <script>
+        var r = Math.random();
+        var x = document.getElementById("demo")
+        if (r > 0.5) {
+            x.innerHTML = "<a href='https://www.baidu.com'>访问百度</a>";
+        } else {
+            x.innerHTML = "<a href='http://wwf.org'>Visit WWF</a>";
+        }
+    </script>
+
+</body>
+```
+
+**案例：音乐播放器进度条：**
+
+```javascript
+<body>
+    <!-- 滑块元素 -->
+    <input type="range" min="1" value="5" max="10" id="rng">
+    <!-- 使用内嵌的方式编写js代码 -->
+    <script>
+        //使用变量保存通过id获取的元素对象
+        var rng = document.getElementById("rng");
+        //绑定元素对象的事件
+        rng.onchange = function() {
+            //在控制台输出滑动后的值
+            console.log(this.value);
+            var _val = this.value;
+            if (_val == 1) {
+                console.log("A")
+            } else if (_val == 2) {
+                console.log("B");
+            } else if (_val == 3) {
+                console.log("C")
+            } else {
+                console.log("不合格")
+            }
+        }
+    </script>
+</body>
+```
 
 
 
 
+
+- **switch语句**
+
+```javascript
+switch(value){
+	 case 值1 :
+	 //value与值1匹配全等时,执行的代码段
+	 break; //结束匹配
+	 case 值2 :
+	 //value与值2匹配全等时,执行的代码段
+	 break;
+	 case 值3 :
+     //value与值3匹配全等时,执行的代码段
+	 break;
+	 default:
+ 	 //所有case匹配失败后默认执行的语句
+ 	 break;
+}
+```
+
+使用方式：
+
+```javascript
+1. switch语句用于值的匹配，case用于列出所有可能的值；只有switch()表达式的值与case的值匹配全等时，才会执行case对应的代码段
+2. break用于结束匹配，不再向后执行；可以省略，break一旦省略，会从当前匹配到的case开始，向后执行所有的代码语句，直至结束或碰到break跳出
+3. default用来表示所有case都匹配失败的情况，一般写在末尾，做默认操作
+4. 多个case共用代码段
+  		case 值1:
+  		case 值2:
+  		case 值3:
+  		//以上任意一个值匹配全等都会执行的代码段
+```
+
+![image-20220624220633491](JavaScript.assets/image-20220624220633491.png)
+
+
+
+
+
+
+
+
+
+
+
+### 6.2.循环结构
+
+循环结构的作用是根据条件重复执行某段代码，分为while循环、do-while循环、for循环
+
+- **while循环**
+
+```javascript
+定义循环变量;
+   while(循环条件){
+   条件满足时执行的代码段
+   更新循环变量;
+}
+```
+
+
+
+- **do-while循环**
+
+```javascript
+do{
+	循环体;
+	更新循环变量
+}while(循环条件);
+```
+
+![image-20220624222123895](JavaScript.assets/image-20220624222123895.png)
+
+while循环和do-while循环的区别：
+
+1. while 循环先判断循环条件，条件成立才执行循环体
+2. do-while 循环不管条件是否成立，先执行一次循环体
+
+
+
+- **for循环**
+
+```javascript
+for(定义循环变量;循环条件;更新循环变量){
+	循环体;
+}
+```
+
+![image-20220624222320955](JavaScript.assets/image-20220624222320955.png)
+
+
+
+### 6.3.break和continue语句
+
+JS中的break和continue语句和Java，Python都一样，**break 强制结束循环，continue 结束当次循环，开始下一次循环**。
+
+![image-20220624222508235](JavaScript.assets/image-20220624222508235.png)
+
+
+
+## 7.函数
+
+函数是用来封装一段待执行的代码块，并可达到代码的复用性，其语法格式如下：
+
+```javascript
+function 函数名() {
+    代码块
+}
+```
+
+函数用关键字function来定义，函数体包含在{}里，函数名的命名规则必须符合变量名的规则。
 
 
 

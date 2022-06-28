@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 顺序结构
+        console.log(b); // undefined
+        var b = 100;
+        var a = "ok";
+        console.log(a); // ok
+        console.log(b); // 100
+        // console.log(c); // 报错
+        // 解决方案
+        try {
+            console.log(c);
+        } catch (error) {
+            console.log(error.message);
+        }
+    </script>
+</body>
+
+</html>
