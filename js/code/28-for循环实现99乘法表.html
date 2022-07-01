@@ -1,0 +1,34 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        span {
+            border: 1px solid #8eff4f;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+<script>
+    //函数的定义
+    function show99() {
+        //ul和li
+        document.write("<ul>")
+        for (let i = 1; i <= 9; i++) {
+            document.write("<li>")
+            for (let j = 1; j <= i; j++) {
+                document.write("<span>" + i + "*" + j + "=" + i * j + "&emsp;</span>")
+            }
+            document.write("</li>")
+
+        }
+        document.write("</ul>")
+    }
+    show99(); //函数的调用
+</script>
+
+</html>

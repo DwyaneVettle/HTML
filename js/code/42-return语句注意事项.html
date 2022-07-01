@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function sum(num1, num2) {
+            return num1 + num2;
+            alert("return后的语句不会执行");
+        }
+        // 如果返回多个值，可以采用数组
+        function fun(num2, num3) {
+            return num2, num3;
+        }
+        console.log(fun(2, 3)); // 返回多个值的情况以最后一个值为准
+    </script>
+</body>
+
+</html>

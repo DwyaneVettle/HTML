@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<p>局部变量在声明的函数外不可以访问。</p>
+<p id="demo"></p>
+<script>
+    function myFunction() {
+        var carName = "Volvo";
+        console.log(carName);
+    }
+    myFunction();
+    document.getElementById("demo").innerHTML = "carName 的类型是：" + typeof carName;
+</script>
+</body>
+
+</html>

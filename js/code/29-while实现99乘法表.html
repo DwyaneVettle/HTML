@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html {
+            font-family: monospace;
+        }
+    </style>
+    <script>
+        var i = 0;
+        do {
+            i++;
+            var j = 0;
+            do {
+                j++;
+                document.write(i + "*" + j + "=" + i * j, "&nbsp;")
+            }
+            while (j < i);
+            document.write("<br>");
+        }
+        while (i < 9);
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

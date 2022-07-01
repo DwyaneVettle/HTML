@@ -345,6 +345,63 @@ btn.onclick = function (){
 
 
 
+### 4.6.innerHTML和innerText
+
+document 对象中有innerHTML和innerText 两个属性， 这两个属性都是获取document对象的文本内容的，这两个属性间有哪些区别呢？通过几个例子来看一下。
+
+```javascript
+<html>
+	<head><title>innerHTML</title></head>
+	<body>
+		<div id="d1"><p id="p1">hello world </p></div>
+		<script>
+			var content = document.getElementById("d1");
+			alert(content.innerHTML);
+			alert(content.innerText)
+		</script>
+	</body>
+</html>
+```
+
+运行以上代码我们可以看出输出"hello world"和"hello world"。
+
+
+
+```javascript
+<html>
+	<head><title>innerHTML</title></head>
+	<body>
+		<div id="d1"><p id="p1">hello world </p></div>
+		<script>
+			var content = document.getElementById("d1");
+			alert(content.innerHTML);
+			alert(content.innerText)
+		</script>
+	</body>
+</html>
+```
+
+运行以上代码我们可以看出输出"<p id="p1">hello world </p>" 和" hello world"。
+
+通过以上两个案例我们可以看出：
+
+- **innerHTML**指的是***\*从对象的起始位置到终止位置的全部内容,包括Html标签\****。
+- **innerText**  指的是**从起始位置到终止位置的内容,但它去除Html标签**。
+
+
+
+**outerHTML**
+
+说到innerHTML，顺便说一下跟innerHTML相对的outerHTML属性。
+
+继续看上面的代码，将alert(content.innerText) 修改为 alert(content.outerHTML) 
+
+ 通过浏览器可以看到弹出框为<p id="p1">hello world </p>和 <divid="d1"><p id="p1">hello world</p></div>
+
+**outerHTML指的是\**除了包含innerHTML的全部内容外, 还包含对象标签本身\****。
+
+
+
 ## 5.基础语法
 
 ### 5.1.语法规范
@@ -472,7 +529,13 @@ const PI = 3.14;
 
 ### 5.3.数据类型
 
-<img src="JavaScript.assets/image-20220621222134824.png" alt="image-20220621222134824" style="zoom:67%;" />
+**值类型(基本类型)**：字符串（String）、数字(Number)、布尔(Boolean)、空（Null）、未定义（Undefined）、Symbol。
+
+**引用数据类型（对象类型）**：对象(Object)、数组(Array)、函数(Function)，还有两个特殊的对象：正则（RegExp）和日期（Date）。
+
+<img src="JavaScript.assets/image-20220701110414893.png" alt="image-20220701110414893" style="zoom:67%;" />
+
+注：Symbol 是 ES6 引入了一种新的原始数据类型，表示独一无二的值。
 
  	在计算机中不同的数据类型占用的空间不同，因此我们要根据数据的需要把他们分为不同的数据类型。就如在Java中"你好"属于字符串类型，123属于整数类型。JS能保存的数据类型有：数值、字符串、数组、对象等。但JS不同于C、Java等语言，JS的数据类型是弱类型语言，它的变量数据类型是在程序运行过程中，**根据等号右边的值来判断该变量的数据类型。**
 
@@ -965,6 +1028,8 @@ try {
 
 - **switch语句**
 
+用于基于不同条件来执行不同的动作。
+
 ```javascript
 switch(value){
 	 case 值1 :
@@ -997,13 +1062,92 @@ switch(value){
 
 ![image-20220624220633491](JavaScript.assets/image-20220624220633491.png)
 
+案例1：判断今天是星期几：
 
+```javascript
+<!DOCTYPE html>
+<html>
 
+<head>
+    <meta charset="utf-8">
+    <title>switch语句</title>
+</head>
 
+<body>
 
+    <p>点击下面的按钮来显示今天是周几：</p>
+    <button onclick="myFunction()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            var x;
+            var d = new Date().getDay();
+            switch (d) {
+                case 0:
+                    x = "今天是星期日";
+                    break;
+                case 1:
+                    x = "今天是星期一";
+                    break;
+                case 2:
+                    x = "今天是星期二";
+                    break;
+                case 3:
+                    x = "今天是星期三";
+                    break;
+                case 4:
+                    x = "今天是星期四";
+                    break;
+                case 5:
+                    x = "今天是星期五";
+                    break;
+                case 6:
+                    x = "今天是星期六";
+                    break;
+            }
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
 
+</body>
 
+</html>
+```
 
+案例2：default语句的使用
+
+```javascript
+<html>
+<head>
+<meta charset="utf-8">
+<title>default</title>
+</head>
+<body>
+
+<p>点击下面的按钮，会显示出基于今日日期的消息：</p>
+<button onclick="myFunction()">点击这里</button>
+<p id="demo"></p>
+<script>
+function myFunction()
+{
+	var x;
+	var d=new Date().getDay();
+	switch (d)
+    {
+  		case 6:x="今天是星期六";
+    	break;
+  		case 0:x="今天是星期日";
+    	break;
+  		default:
+    	x="期待周末";
+  	}
+	document.getElementById("demo").innerHTML=x;
+}
+</script>
+
+</body>
+</html>
+```
 
 
 
@@ -1021,6 +1165,33 @@ switch(value){
 }
 ```
 
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>while语句</title>
+</head>
+<body>
+
+<p>点击下面的按钮，只要 i 小于 5 就一直循环代码块。</p>
+<button onclick="myFunction()">点击这里</button>
+<p id="demo"></p>
+<script>
+function myFunction(){
+	var x="",i=0;
+	while (i<5){
+		x=x + "该数字为 " + i + "<br>";
+		i++;
+	}
+	document.getElementById("demo").innerHTML=x;
+}
+</script>
+
+</body>
+</html>
+```
+
 
 
 - **do-while循环**
@@ -1032,7 +1203,43 @@ do{
 }while(循环条件);
 ```
 
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>do-while语句</title>
+</head>
+
+<body>
+
+    <p>点击下面的按钮，只要 i 小于 5 就一直循环代码块。</p>
+    <button onclick="myFunction()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            var x = "",
+                i = 0;
+            do {
+                x = x + "该数字为 " + i + "<br>";
+                i++;
+            }
+            while (i < 5)
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
 ![image-20220624222123895](JavaScript.assets/image-20220624222123895.png)
+
+
 
 while循环和do-while循环的区别：
 
@@ -1051,7 +1258,78 @@ for(定义循环变量;循环条件;更新循环变量){
 
 ![image-20220624222320955](JavaScript.assets/image-20220624222320955.png)
 
+for语句：
 
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>for循环</title>
+</head>
+
+<body>
+
+    <script>
+        cars = ["BMW", "Volvo", "BYD", "Benz"];
+        for (var i = 0; i < cars.length; i++) {
+            document.write(cars[i] + "<br>");
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
+for/in语句：
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>for/in</title>
+</head>
+
+<body>
+
+    <p>点击下面的按钮，循环遍历对象 "person" 的属性。</p>
+    <button onclick="myFunction()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            var x;
+            var txt = "";
+            var person = {
+                fname: "Bill",
+                lname: "Gates",
+                age: 56
+            };
+            for (x in person) {
+                txt = txt + person[x];
+            }
+            document.getElementById("demo").innerHTML = txt;
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
+JavaScript支持不同类型的循环，它们的区别是：
+
+- for-循环代码块一定的次数
+- for/in-循环遍历对象的属性
+- while-当指定的条件为true时，循环指定的代码块
+- do/while-同样当指定条件为true时，循环指定代码块
 
 ### 6.3.break和continue语句
 
@@ -1061,23 +1339,553 @@ JS中的break和continue语句和Java，Python都一样，**break 强制结束�
 
 
 
-## 7.函数
-
-函数是用来封装一段待执行的代码块，并可达到代码的复用性，其语法格式如下：
+break语句：
 
 ```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>break语句</title>
+</head>
+
+<body>
+
+    <p>点击按钮，测试带有 break 语句的循环。</p>
+    <button onclick="myFunction()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            var x = "",
+                i = 0;
+            for (i = 0; i < 10; i++) {
+                if (i == 3) {
+                    break;
+                }
+                x = x + "该数字为 " + i + "<br>";
+            }
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
+continue语句-for：
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>continue语句</title>
+</head>
+
+<body>
+
+    <p>点击下面的按钮来执行循环，该循环会跳过 i=3 的数字。</p>
+    <button onclick="myFunction()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            var x = "",
+                i = 0;
+            for (i = 0; i < 10; i++) {
+                if (i == 3) {
+                    continue;
+                }
+                x = x + "该数字为 " + i + "<br>";
+            }
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+continue语句-while:
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>continue语句</title>
+</head>
+<body>
+	<p id= "demo">点击下面的按钮来执行循环，该循环会跳过 i=3 的数字。</p>
+	<button onclick="myFunction()">点击这里</button>
+
+	<script>
+		function myFunction(){
+			var x= "", i= 0;
+			while (i < 10){
+				if (i == 3){
+					i++;    //加入i++不会进入死循环
+					continue;
+				}
+				x= x + "该数字为 " + i + "<br>";
+				i++;
+
+			}
+			document.getElementById("demo").innerHTML= x;
+		}
+	</script>
+</body>
+</html>
+```
+
+
+
+### 6.4.案例
+
+99乘法表:
+
+```javascript
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        span {
+            border: 1px solid #8eff4f;
+        }
+    </style>
+</head>
+
+<body>
+
+</body>
+<script>
+    //函数的定义
+    function show99() {
+        //ul和li
+        document.write("<ul>")
+        for (let i = 1; i <= 9; i++) {
+            document.write("<li>")
+            for (let j = 1; j <= i; j++) {
+                document.write("<span>" + i + "*" + j + "=" + i * j + "&emsp;</span>")
+            }
+            document.write("</li>")
+
+        }
+        document.write("</ul>")
+    }
+    show99(); //函数的调用
+</script>
+
+</html>
+```
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html {
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+	<script>
+        var i = 0;
+        do {
+            i++;
+            var j = 0;
+            do {
+                j++;
+                document.write(i + "*" + j + "=" + i * j, "&nbsp;")
+            }
+            while (j < i);
+            document.write("<br>");
+        }
+        while (i < 9);
+    </script>
+</body>
+
+</html>
+```
+
+
+
+求学生成绩：要求用户输入班级人数，然后依次输入每个学生成绩，最后打印出该班平均成绩和总成绩。
+
+1.弹出输入框，输入班级人数，输入学生成绩；
+
+2.计算总成绩；
+
+3.求出平均成绩。
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        var sum = 0; // 求和
+        var average = 0; // 平均值 
+        var num = prompt("请输入班级总人数：");
+        for (var i = 1; i < num; i++) {
+            var score = prompt("请输入" + i + "个学生成绩");
+            sum = sum + parseFlaot(score); // 将字符型转换为数字
+        }
+        average = sum / num;
+        alert("班级的总成绩是：" + sum);
+        alert("班级的平均成绩是：" + average);
+    </script>
+</body>
+
+</html>
+```
+
+
+
+完成以下案例：
+
+- 打印100以内7的倍数
+- 打印100以内所有偶数的和
+- 计算100的阶乘100!
+- 100-999之间的水仙花数，abc=a3+b3+c3
+- 打印出1000-2000之间所有的闰年数，并以每行4个数的形式输出
+- 打印n行n列的星星
+
+
+
+## 7.函数
+
+函数是由事件驱动的或者当它被调用时执行的可重复使用的代码块。其语法格式如下：
+
+```javascript
+// 1.声明函数
 function 函数名() {
     代码块
+    return 返回值
+}
+// 2.调用函数
+函数名()
+```
+
+函数用关键字function来定义，函数体包含在{}里，函数名的命名规则必须符合变量名的规则。JavaScript 对大小写敏感。关键词 function 必须是小写的，并且必须以与函数名称相同的大小写来调用函数。
+
+```javascript
+<script>
+        // 通过关键字function声明函数
+        function helloWorld() {
+            alert("Hello World!");
+        }
+        // 通过函数名调用函数,不调用函数不会执行
+        helloWorld();
+</script>
+```
+
+利用函数求1000-2000之间的闰年：
+
+```javascript
+<script>
+        function runYear() {
+            var i = 0;
+            for (var a = 1000; a <= 2000; a++) {
+                if (a % 4 == 0 && a % 100 != 0 || a % 400 == 0) {
+                    document.write(a + '&nbsp' + '');
+                    i++;
+                    if (i % 4 == 0) {
+                        document.write("<br>");
+                    }
+                }
+            }
+        }
+        runYear()
+</script>
+```
+
+
+
+### 7.1.函数的参数
+
+​	在调用函数时，可以向其传递值，这些值被称为参数。这些参数可以在函数中使用，并可以发送多个参数，参数之间用逗号(,)隔开：
+
+```javascript
+myFunction(argument1,argument2)
+```
+
+当声明函数时，把参数当作变量来声明，变量和参数必须以一致的顺序出现，第一个变量就是第一个被传递的参数的给定的值，依次类推：
+
+```javascript
+function myFunction(var1,var2) {
+	代码
 }
 ```
 
-函数用关键字function来定义，函数体包含在{}里，函数名的命名规则必须符合变量名的规则。
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+
+    <p>点击这个按钮，来调用带参数的函数。</p>
+    <button onclick="myFunction('龟叔','Python创始人')">点击这里</button>
+    <button onclick="myFunction('贝奇','JS创始人')">点击这里</button>
+    <script>
+        function myFunction(name, job) {
+            alert("Welcome " + name + ", the " + job);
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+​	上面代码中，在声明函数中的参数name和job是函数中的**形式参数**，也称为形参，而在函数调用时，传递的"龟叔"，"Python创始人"等是函数中的**实际参数**，也称为实参。我们可以理解为**在声明函数时的参数即为形参，在函数调用时传递的值就是实参**。
 
 
 
-## Unicode
+**案例：求任意两个数的和和两个数之间的和：**
 
-大多数计算机采用[ASCII](https://baike.baidu.com/item/ASCII/309296)码（[美国标准信息交换码](https://baike.baidu.com/item/美国标准信息交换码/1541479)），它是表示所有大小写字母、数字、标点符号和[控制字符](https://baike.baidu.com/item/控制字符/6913704)的7位编码方案。统一码（[Unicode](https://baike.baidu.com/item/Unicode/750500)）包含ASCII码，'\u0000'到'\u007F'对应全部128个ACSII字符。在[JAVA](https://baike.baidu.com/item/JAVA/85979)中可以使用统一码。
+```javascript
+<script>
+        function sum(num1, num2) {
+            console.log(num1 + num2);
+        }
+        sum(4, 5);
 
-![](JavaScript.assets/unicode.webp)
+        function getSum(start, end) {
+            var sum = 0;
+            for (var i = start; i <= end; i++) {
+                sum += i;
+            }
+            console.log(sum);
+        }
+        getSum(0, 100);
+</script>
+```
+
+
+
+JavaScript语言相比于Java函数的参数传递是比较自由的，可以不用一一对应，但也有一定的规则：
+
+- 形参和实参一一对应，正常对应输出
+- 实参个数多余形参，最终由形参个数决定
+- 实参个数小于形参，多余的形参定义为undifined
+
+```javascript
+<script>
+        function sum(num1, num2) {
+            console.log(num1 + num2);
+        }
+        // 实参和形参匹配，正常输出
+        sum(10, 20);
+        // 形参个数小于实参，取值由形参决定
+        sum(10, 20, 30);
+        // 形参个数大于实参，多的形参会被定义为undifined
+        sum(10); // Nan
+</script>
+```
+
+
+
+### 7.2.函数的返回值
+
+有时，我们希望函数将值返回给调用它的地方，通过return语句就可以实现，在使用return语句时，函数会停止执行，并返回指定的值。语法格式为：
+
+```javascript
+function fun() {
+    var x = 10;
+    return x;
+}
+```
+
+需要注意的是整个JS代码不会停止执行，仅仅是函数遇到return语句停止，然后返回值给调用者。函数调用将被返回值取代：
+
+```javascript
+var fun = fun();
+```
+
+此时fun变量的值就是10，也就是fun()函数的返回值。即使不保存在变量中， 也可以在代码中使用返回值：
+
+```javascritp
+document.getElementById('demo').innerHTML = fun();
+```
+
+```javascript
+<p>调用会将结果返回给调用者</p>
+<p id="demo"></p>
+<script>
+   function fun(num1, num2) {
+        return num1 * num2;
+   }
+   document.getElementById('demo').innerHTML = fun(10, 10);
+</script>
+```
+
+仅仅是希望退出函数时，也可以使用return语句，返回值是可选的：
+
+```javascript
+function myFunction(a,b)
+{
+    if (a>b)
+    {
+        return;
+    }
+    x=a+b
+}
+```
+
+如果 a 大于 b，则上面的代码将退出函数，并不会计算 a 和 b 的总和。
+
+```javascript
+function myFunction(a, b) {
+   if (a > b) {
+        return;
+    }
+    x = a + b;
+    return x;
+ }
+var result = myFunction(2, 3);
+alert(result);
+```
+
+**案例：求几个数的最大值**
+
+```javascript
+function getMax(arr) {
+    var max = arr[0];
+    for (var i = 1; i <= arr.length; i++) {
+        if (arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    return max;
+}
+var result = getMax([2, 4, 6, 7, 33, 66, 23, 26]);
+alert(result);
+```
+
+
+
+**需要注意的是：函数return语句只能返回一个返回值，并立即终止函数。函数没有return，只返回undifined。**
+
+```javascript
+function sum(num1, num2) {
+    return num1 + num2;
+    alert("return后的语句不会执行");
+}
+// 如果返回多个值，可以采用数组
+function fun(num2, num3) {
+    return num2, num3;
+}
+console.log(fun(2, 3)); // 返回多个值的情况以最后一个值为准
+```
+
+
+
+### 7.3.arguments的使用
+
+​	在实际的开发过程中，不确定需要传递参数的个数时，可以用arguments关键字来获取，它相当于是当前函数的内置对象， 多有的函数都内置了arguments对象，用来存数传递的所有实参。
+
+```javascript
+// arguments接收不确定个数参数时是一个伪数组，只有数组的特点，没有数组的增删方法
+function fun() {
+    console.log(arguments);
+}
+fun(1, 2, 4, 5, 6, 7, 8);
+```
+
+
+
+### 7.4.作用域
+
+​	在JS中声明的变量是有生命周期的，从它被声明开始，局部变量会在函数运行后被删除，全局变量会在页面关闭的时候删除。而变量的可用范围就是它的作用域，作用域可以增强代码的逻辑性和实用性，减少变量名的冲突。
+
+#### 7.4.1.局部作用域
+
+变量在函数内声明即为局部变量，具有局部作用域，它只能在函数内部访问。在函数外不能使用。
+
+```javascript
+<p>局部变量在声明的函数外不可以访问。</p>
+<p id="demo"></p>
+<script>
+    function myFunction() {
+        var carName = "Volvo";
+        console.log(carName);
+    }
+    myFunction();
+    document.getElementById("demo").innerHTML = "carName 的类型是：" + typeof carName;
+</script>
+</body>
+```
+
+因为局部变量只作用于函数内，所以不同的函数可以使用相同名称的变量。局部变量在函数开始执行时创建，函数执行完后局部变量会自动销毁。所以上述代码中，在函数内输出carName的值是Volvo，在函数外就为undifined。
+
+
+
+#### 7.4.2.全局作用域
+
+变量在函数外定义即为全局变量，全局变量具有全局作用域，网页中所有地方都可以使用该变量。
+
+```javascript
+<body>
+
+<p>全局变量在任何脚本和函数内均可访问。</p>
+<p id="demo"></p>
+<script>
+var carName = "Volvo";
+myFunction();
+function myFunction() 
+{
+    document.getElementById("demo").innerHTML =
+		"我可以显示 " + carName;
+}
+</script>
+
+</body>
+```
+
+
+
+**需要注意的是：如果变量在函数内部没有用var关键字来声明，该变量具有全局作用域：**
+
+```javascript
+<body>
+
+    <p>
+    如果你的变量没有声明，它将自动成为全局变量：
+</p>
+<p id="demo"></p>
+<script>
+    myFunction();
+document.getElementById("demo").innerHTML =
+    "我可以显示 " + carName;
+function myFunction() 
+{
+    carName = "Volvo";
+}
+</script>
+```
 
