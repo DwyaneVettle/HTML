@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #pic {
+            width: 300px;
+            margin: 0 auto;
+            border: solid 1px red;
+        }
+        
+        #pic input {
+            margin-right: 45px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1.添加元素；2.添加样式；3.添加逻辑；4.优化 -->
+    <div id="pic">
+        <div class="img">
+            <img id="img" width="300" src="imgs/1.png">
+        </div>
+        <fieldset>
+            <legend>选择元素</legend>
+            <!-- name属性的值相同可以确保单选按钮组相互排斥选择 -->
+            <input checked="checked" type="radio" name="pic" id="pic1">
+            <input type="radio" name="pic" id="pic2">
+            <input type="radio" name="pic" id="pic3">
+            <input type="radio" name="pic" id="pic4">
+        </fieldset>
+    </div>
+    <script>
+        // 1.获取单选按钮对象并保存在变量中
+        var pic1 = document.getElementById("pic1");
+        var pic2 = document.getElementById("pic2");
+        var pic3 = document.getElementById("pic3");
+        var pic4 = document.getElementById("pic4");
+        var img = document.getElementById("img");
+        // 2.绑定点击事件
+        pic1.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/1.png");
+        }
+        pic2.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/2.png");
+        }
+        pic3.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/on.gif");
+        }
+        pic4.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/off.gif");
+        }
+    </script>
+</body>
+
+</html>

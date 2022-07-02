@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #pics {
+            width: 413px;
+            height: 218px;
+            border: solid 1px red;
+            margin: 0 auto;
+            /* 子绝父相 */
+            position: relative;
+        }
+        
+        #pics>.left {
+            top: 50%;
+            left: 0;
+            position: absolute;
+            cursor: pointer;
+        }
+        
+        #pics>.right {
+            top: 50%;
+            right: 0;
+            position: absolute;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="pics">
+        <img id="img" src="imgs/1.png" alt="">
+        <div class="left">
+            <img src="imgs/l1.png" alt="">
+        </div>
+        <div class="right">
+            <img src="imgs/r1.png" alt="">
+        </div>
+    </div>
+    <script>
+        // 1.设置图片保存的地址-数组
+        var arrImgs = ['imgs/1.png', 'imgs/2.png']
+            // 2.获取两侧图标的地址
+        var right = document.getElementsByClassName('right')[0];
+        var left = document.getElementsByClassName('left')[0];
+        // 定义下标变量，根据数组下标点击,点击+1
+        var index = 0;
+        // 获取显示图片元素对象
+        var img = document.getElementById("img");
+        // 3.绑定点击事件
+        right.onclick = function() {
+            index++;
+            // console.log(index);
+            // 判断是否超过最大值
+            if (index == arrImgs.length) {
+                index = 0;
+            }
+            // 调用修改属性方法重置图片对象的来源
+            img.setAttribute("src", arrImgs[index]);
+        }
+        left.onclick = function() {
+            // 判断如果小于0，index等于数组下标最大值
+            if (index == 0) {
+                index = arrImgs.length;
+                // 下标-1
+                index--;
+            }
+            // 调用修改属性方法重置图片对象的来源
+            img.setAttribute("src", arrImgs[index]);
+        }
+    </script>
+</body>
+
+</html>

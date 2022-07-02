@@ -1889,3 +1889,499 @@ function myFunction()
 </script>
 ```
 
+
+
+**练习：利用分组元素实现网页换肤：**
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        fieldset {
+            width: 200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 分组元素 -->
+    <fieldset>
+        <!-- 分组元素标题 -->
+        <legend>控制页面颜色</legend>
+        <div class="btns">
+            <button id="red">红色</button>
+            <button id="green">绿色</button>
+            <button id="blue">蓝色</button>
+        </div>
+    </fieldset>
+    <script>
+        // 1.找到对应元素，保存在变量中
+        var btnRed = document.getElementById("red");
+        var btnGreen = document.getElementById("green");
+        var btnBlue = document.getElementById("blue");
+        // 2.绑定按钮元素的单击事件
+        btnRed.onclick = function() {
+            // 使用元素的背景色改变
+            document.body.style.backgroundColor = "red";
+        }
+        btnGreen.onclick = function() {
+            // 使用元素的背景色改变
+            document.body.style.backgroundColor = "green";
+        }
+        btnBlue.onclick = function() {
+            // 使用元素的背景色改变
+            document.body.style.backgroundColor = "blue";
+        }
+    </script>
+</body>
+
+</html>
+```
+
+
+
+**练习：点击单选按钮显示不同的内容。**
+
+<img src="JavaScript.assets/image-20220702115824842.png" alt="image-20220702115824842" style="zoom:50%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #pic {
+            width: 300px;
+            margin: 0 auto;
+            border: solid 1px red;
+        }
+        
+        #pic input {
+            margin-right: 45px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1.添加元素；2.添加样式；3.添加逻辑；4.优化 -->
+    <div id="pic">
+        <div class="img">
+            <img id="img" width="300" src="imgs/1.png">
+        </div>
+        <fieldset>
+            <legend>选择元素</legend>
+            <!-- name属性的值相同可以确保单选按钮组相互排斥选择 -->
+            <input checked="checked" type="radio" name="pic" id="pic1">
+            <input type="radio" name="pic" id="pic2">
+            <input type="radio" name="pic" id="pic3">
+            <input type="radio" name="pic" id="pic4">
+        </fieldset>
+    </div>
+    <script>
+        // 1.获取单选按钮对象并保存在变量中
+        var pic1 = document.getElementById("pic1");
+        var pic2 = document.getElementById("pic2");
+        var pic3 = document.getElementById("pic3");
+        var pic4 = document.getElementById("pic4");
+        var img = document.getElementById("img");
+        // 2.绑定点击事件
+        pic1.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/1.png");
+        }
+        pic2.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/2.png");
+        }
+        pic3.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/on.gif");
+        }
+        pic4.onclick = function() {
+            // 改变图片的显示来源,setAttribute设置或重置属性src的值
+            img.setAttribute("src", "imgs/off.gif");
+        }
+    </script>
+</body>
+
+</html>
+```
+
+
+
+**作业：根据下图思路，点击左右两边的按钮切换图片**-code/47
+
+![](JavaScript.assets/作业2-1656735514136.png)
+
+## 8.对象
+
+JS中所有事务都是对象，比如：字符串、数值、数组、函数等，此外，JS还允许自定义对象。对象是由**属性和方法**组成，通过点(.)来进行访问。JS还提供多个内置对象，如String,Date,Array等。
+
+```javascript
+objectName.propertyName   // 访问对象属性
+objectName.methodName()   // 访问对象方法
+```
+
+比如定义一个字符串，访问其length属性和toUpperCase()的方法：
+
+```javascript
+<script>
+    var message = 'Hello JavaScript';
+    console.log(message.length); // 16
+    var x = message.toUpperCase(); 
+    console.log(x); // HELLO JAVASCRIPT
+</script>
+```
+
+### 8.1.创建对象
+
+通过以下两种方法能创建自己的对象：
+
+1. 使用Object定义并创建对象实例；
+2. 使用函数来定义对象，然后创建新的对象数组。
+
+- **使用Object创建对象**
+
+在JS中，几乎所有对象的类型都是Object，它们都会从Object.prototype继承属性和方法，Object构造函数创建一个对象包装器，构造函数会根据给定的参数创建对象，具体有以下情况：
+
+- 如果给定值是null或undefined，将会创建并返回一个空对象；
+- 如果传进去的是一个基本类型的值，则会构造其包装类型的对象；
+- 如果传进去的是引用类型的值，仍然会返回这个值，经它们复制的变量保有和源对象相同的引用地址；
+- 当以非构造函数的形式被调用时，Object的行为等同于new Object()。
+
+语法格式：
+
+```javascript
+new Object([value]);  // 以构造函数方式声明，value可以是任何值
+```
+
+如：
+
+```javascript
+// 等价于 o = new Boolean(true);
+var o = new Object(true);
+```
+
+实例：
+
+```javascript
+<script>
+    var person = new Object();
+    person.firstname = "John";
+    person.lastname = "Doe";
+    person.age = 50;
+    person.eyecolor = "blue";
+    document.write(person.firstname + " is " + person.age + " years old.");
+</script>
+```
+
+以上方式也可以使用对象字面量(Json)来创建对象，语法格式为：
+
+```javascript
+{ name1 : value1, name2 : value2,...nameN : valueN }
+```
+
+其实就是大括号里面创建 **name:valu**e 对，然后 **name:value** 对之间以逗号 **,** 隔开。
+
+实例：
+
+```javascript
+person={firstname:"John",lastname:"Doe",age:50,eyecolor:"blue"}
+document.write(person.firstname + " is " + person.age + " years old.");
+```
+
+
+
+- **使用构造函数创建对象**
+
+```javascript
+function person(firstname, lastname, age, eyecolor) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.age = age;
+    this.eyecolor = eyecolor;
+}
+myFriend = new person("John", "Doe", 50, "blue");
+document.write(myFriend.firstname + " is " + myFriend.age + " years old.");
+```
+
+一旦有了构造器就可以创建对象实例，完成对象从初始化到实例化的过程:
+
+```javascript
+var myFriend01=new person("John","Doe",25,"blue");
+var myFriend02=new person("Sally","Rally",24,"green");
+```
+
+也可以直接为对象赋值，向已有对象添加新属性：
+
+```javascript
+function person(firstname, lastname, age, eyecolor) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.age = age;
+    this.eyecolor = eyecolor;
+}
+//myFriend = new person("John", "Doe", 50, "blue");
+//document.write(myFriend.firstname + " is " + myFriend.age + " years old.");
+person.firstname = "John";
+person.lastname = "Doe";
+person.age = 30;
+person.eyecolor = "blue";
+
+x = person.firstname;
+alert(x);
+```
+
+- **把方法添加到JS对象中**：方法只不过是附加在对象上的函数，在构造器内部定义对象的方法也可以改变相应的属性：
+
+```javascript
+<script>
+function person(firstname,lastname,age,eyecolor){
+    this.firstname=firstname;
+    this.lastname=lastname;
+    this.age=age;
+    this.eyecolor=eyecolor;
+    this.changeName=changeName;
+	function changeName(name){
+		this.lastname=name;
+	}
+}
+myFriend=new person("Sally","Rally",28,"green");
+myFriend.changeName("Doe");
+document.write(myFriend.lastname);
+</script>
+```
+
+
+
+### 8.2.JS的类
+
+**JavaScript虽然是面向对象的语言，但JavaScript不适用类。**在JS中不会使用类，也不会使用类创建对象，JS是基于prototype的，而不是基于类的。可以通过for...in...语句循环遍历对象的属性，语法为：
+
+```javascript
+for (variable in object) {
+    执行的代码……
+}
+```
+
+**注意：** for...in 循环中的代码块将针对每个属性执行一次。
+
+```javascript
+<body>
+
+    <p>点击下面的按钮，循环遍历对象 "person" 的属性。</p>
+    <button onclick="myFunction()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function myFunction() {
+            var x;
+            var txt = "";
+            var person = {
+                fname: "Bill",
+                lname: "Gates",
+                age: 56
+            };
+            for (x in person) {
+                txt = txt + person[x];
+            }
+            document.getElementById("demo").innerHTML = txt;
+        }
+    </script>
+
+</body>
+```
+
+**JS对象是不可变的，它们是通过引用来传递的：**
+
+```javascript
+<body>
+    <p>JavaScript 对象是可变的。</p>
+    <p>拷贝的对象改变，原始的也会跟着改变。</p>
+
+    <p id="demo"></p>
+
+    <script>
+        var person = {
+            firstName: "John",
+            lastName: "Doe",
+            age: 50,
+            eyeColor: "blue"
+        }
+
+        var x = person;
+        x.age = 10;
+
+        document.getElementById("demo").innerHTML =
+            person.firstName + " is " + person.age + " years old.";
+    </script>
+</body>
+```
+
+
+
+**new和不new的区别：**
+
+- 如果new了，函数内的this会指向当前这个person，并且就算函数内部不return也会返回一个对象
+- 如果不new，函数内的this会指向window
+
+```javascript
+<script>
+    function person(firstname, lastname, age, eyecolor) {
+    this.firstname = firstname;
+    this.lastname = lastname;
+    this.age = age;
+    this.eyecolor = eyecolor;
+    return [this.firstname, this.lastname, this.age, this.eyecolor, this]
+}
+
+var myFriend01 = new person("John", "Doe", 50, "blue");
+var myFriend02 = person("Sally", "Rally", 48, "green");
+console.log(myFriend01) // this 输出一个 person 对象
+console.log(myFriend02) // this 输出 window 对象
+</script>
+```
+
+
+
+### 8.3.原型对象prototype
+
+所有的JS对象都会从一个prototype中继承类和属性：
+
+- `Date` 对象从 `Date.prototype` 继承。
+- `Array` 对象从 `Array.prototype` 继承。
+- `Person` 对象从 `Person.prototype` 继承。
+
+所有JS的对象都是位于原型链顶端的Object实例，JS对象有一个指向一个原型对象链，当试图访问一个对象的属性时，它不仅仅在该对象上搜寻，还会搜寻该对象的原型，以及该对象原型的原型，依次层层向上搜索，直到找到一个名字匹配的属性或达到原型链的末尾。
+
+有时我们想要在所有已经存在的对象添加新的属性和方法，有时想要在对象的构造函数中添加属性和方法，使用prototype属性就可以给对象的构造函数添加新的属性。
+
+```javascript
+<body>
+
+    <h2>JavaScript 对象</h2>
+
+    <p id="demo"></p>
+
+    <script>
+        function Person(first, last, age, eye) {
+            this.firstName = first;
+            this.lastName = last;
+            this.age = age;
+            this.eyeColor = eye;
+        }
+
+        Person.prototype.nationality = "China";
+
+        var myFriend = new Person("John", "Doe", 25, "black");
+        document.getElementById("demo").innerHTML =
+            "我朋友的国籍是 " + myFriend.nationality;
+    </script>
+
+</body>
+```
+
+当然我们也可以使用 prototype 属性就可以给对象的构造函数添加新的方法：
+
+```javascript
+<body>
+
+<h2>JavaScript 对象</h2>
+
+<p id="demo"></p>
+
+<script>
+function Person(first, last, age, eye) {
+  this.firstName = first;
+  this.lastName = last;
+  this.age = age;
+  this.eyeColor = eye;
+}
+
+Person.prototype.name = function() {
+  return this.firstName + " " + this.lastName
+};
+
+var myFriend = new Person("John", "Doe", 25, "black");
+document.getElementById("demo").innerHTML =
+"我的朋友是 " + myFriend.name(); 
+</script>
+
+</body>
+```
+
+
+
+
+
+### 8.4.数组
+
+数组对象的作用是使用单独的变量来存储一系列的值。如果你有一组数据（如车的名字价格），然后你想找出某一辆车并不容易，数组可以用一个变量名存储所有的值，并且可以用变量名访问任何一个值，数组中的每个元素都有一个id，以便它可以更容易的被访问到。
+
+- **数组的创建：**
+
+```javascript
+// 1.常规方式
+var myCars = new Array();
+myCars[0]="Saab";      
+myCars[1]="Volvo";
+myCars[2]="BMW";
+
+// 简洁方式
+var myCars=new Array("Saab","Volvo","BMW");
+
+// 字面量
+var myCars=["Saab","Volvo","BMW"];
+```
+
+- **数组的特点：**
+
+  - 数组用于存储若干数据,自动为每位数据分配下标,从0开始
+  - 数组中的元素不限数据类型,长度可以动态调整
+  - 动态操作数组元素 ：根据元素下标读取或修改数组元素，arr[index]
+  - 在一个数组中可以有不同的对象，因为在JS中，数组元素是对象，函数也是对象，所以数组中可以包含对象元素、函数、数组：
+
+  ```javascript
+  myArray[0]=Date.now;
+  myArray[1]=myFunction;
+  myArray[2]=myCars;
+  ```
+
+  
+
+- **数组的访问：**
+
+通过指定数组名的索引号，你可以访问某个特定的元素。
+
+```javascript
+var name=myCars[0];
+```
+
+同样可以通过索引修改数组myCars的第一个元素：
+
+```javascript
+myCars[0]="BYD";
+```
+
+- **属性和方法：**
+  - 属性：length表示数组的长度，可读可写
+  - 方法：
+    - **push(data)**：在数组的末尾添加一个或多个元素，多个元素之间使用逗号隔开，返回添加之后的数组长度；
+    - **pop()**：移除末尾元素，返回被移除的元素；
+    - **unshift(data)**：在数组的头部添加一个或多个元素，返回添加之后的数组长度；
+    - **shift()**：移除数组的第一个元素，返回被移除的元素；
+    - **splice()**：删除指定位置和长度的元素，返回被删除的元素；
+    - **toString()**：将数组转换成字符串类型，返回字符串结果；
+    - **join(param)**：将数组传承字符串，可以指定元素之间的连接符，如果参数省略，默认按逗号隔开，返回 字符串；
+    - **reverse()**：反转数组，倒序重排，返回重排的数组，注意**该方法会修改原数组的结构**；
+    - **sort()**：对数组中的元素进行排序，默认按照Unicode编码升序排列，返回重排后的数组，直接修改原有数组，参数是自定义排序的算法（可选）。

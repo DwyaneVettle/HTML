@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        function person(firstname, lastname, age, eyecolor) {
+            this.firstname = firstname;
+            this.lastname = lastname;
+            this.age = age;
+            this.eyecolor = eyecolor;
+            return [this.firstname, this.lastname, this.age, this.eyecolor, this]
+        }
+
+        var myFriend01 = new person("John", "Doe", 50, "blue");
+        var myFriend02 = person("Sally", "Rally", 48, "green");
+        console.log(myFriend01) // this 输出一个 person 对象
+        console.log(myFriend02) // this 输出 window 对象
+    </script>
+</body>
+
+</html>

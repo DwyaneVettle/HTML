@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 使用Object创建对象
+        // var person = new Object();
+        // person.firstname = "John";
+        // person.lastname = "Doe";
+        // person.age = 50;
+        // person.eyecolor = "blue";
+        // document.write(person.firstname + " is " + person.age + " years old.");
+        // person = {
+        //     firstname: "John",
+        //     lastname: "Doe",
+        //     age: 50,
+        //     eyecolor: "blue"
+        // }
+        // document.write(person.firstname + " is " + person.age + " years old.");
+        // 使用构造器创建对象
+        function person(firstname, lastname, age, eyecolor) {
+            this.firstname = firstname;
+            this.lastname = lastname;
+            this.age = age;
+            this.eyecolor = eyecolor;
+        }
+        //myFriend = new person("John", "Doe", 50, "blue");
+        //document.write(myFriend.firstname + " is " + myFriend.age + " years old.");
+        person.firstname = "John";
+        person.lastname = "Doe";
+        person.age = 30;
+        person.eyecolor = "blue";
+
+        x = person.firstname;
+        alert(x);
+    </script>
+</body>
+
+</html>
