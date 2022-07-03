@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1.声明数组
+        var arr = ['a', 'b', 'c', 'd'];
+        // 2.push()末尾添加
+        arr.push('aa', 'bb');
+        console.log(arr.toString());
+        // 3.pop()删除最后一个元素
+        arr.pop();
+        // toString()转换为字符串
+        console.log(arr.toString());
+        // 4.unshift()头部增加
+        console.log(arr.unshift('e'));
+        var arr2 = [2, 4, 1, 7, 8];
+        // 5.正序排序
+        arr2.sort();
+        console.log(arr2.toString());
+        // 6.反向排序
+        arr2.reverse();
+        console.log(arr2.toString());
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var str = 'efgabcde';
+        // 1.定义正则对象/中表示要查找的内容/,下面表示查找a，i表示全局
+        var reg = /a/i
+            // 2.使用对象来定义正则表达式-a表示要查找的内容，ig表示全局忽略大小写的模式查找
+        var reg2 = new RegExp("a", "ig");
+        // 开始匹配
+        console.log(reg.test(str)); // true
+        console.log(reg2.test(str)); // true
+        // 查看下一次匹配的索引位置
+        console.log(reg2.lastIndex); // 4
+        // 第二次查询是false，因为上次查询到4的位置，如果要查询得到，需要重置下次查询位置
+        // reg2.lastIndex = 0; // 重置到起始索引
+        console.log(reg2.test(str)); //false
+
+        // match()和replace()方法
+        var str3 = "aacdefga";
+        var reg3 = /a/ig;
+        var arr = str3.match(reg3); // 定义数组，查找保存
+        console.log(arr.toString()); // a,a,a
+        // 将查找后的元素a替换成i
+        str3.replace(reg3, "i");
+        // 输出替换后的str3值
+        console.log(str3); // 返回替换前的字符串aacdefga
+        // 如果要替换输出，需要保存到变量中
+        var s = str3.replace(reg3, "z");
+        console.log(s); // zzcdefgz
+    </script>
+</body>
+
+</html>

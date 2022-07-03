@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var num = 123.456;
+        // 1.向上取整
+        console.log(Math.ceil(num)); // 124
+        // 2.向下取整
+        console.log(Math.floor(num)); // 123
+        // 3.四舍五入
+        console.log(Math.round(num)); // 123
+        // 4.生成随机数
+        console.log(Math.random());
+        // 5.生成随机验证码，4位数，由数字和字母组成
+        // 5.1.定义数组，保存所有可见的字符
+        var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f'];
+        // 5.2.随机取索引号
+        //var index = Math.floor(Math.random() * arr.length);
+        // 5.3.测试生成的下标对应值
+        console.log(arr[index]);
+        // r保存随机码，并遍历生成4个随机码保存到r中
+        var r = '';
+        for (var i = 1; i < 5; i++) {
+            var index = Math.floor(Math.random() * arr.length);
+            r += arr[index];
+        }
+        console.log(r);
+    </script>
+</body>
+
+</html>

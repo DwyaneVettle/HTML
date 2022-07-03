@@ -2375,6 +2375,7 @@ myCars[0]="BYD";
 
 - **属性和方法：**
   - 属性：length表示数组的长度，可读可写
+  
   - 方法：
     - **push(data)**：在数组的末尾添加一个或多个元素，多个元素之间使用逗号隔开，返回添加之后的数组长度；
     - **pop()**：移除末尾元素，返回被移除的元素；
@@ -2385,3 +2386,498 @@ myCars[0]="BYD";
     - **join(param)**：将数组传承字符串，可以指定元素之间的连接符，如果参数省略，默认按逗号隔开，返回 字符串；
     - **reverse()**：反转数组，倒序重排，返回重排的数组，注意**该方法会修改原数组的结构**；
     - **sort()**：对数组中的元素进行排序，默认按照Unicode编码升序排列，返回重排后的数组，直接修改原有数组，参数是自定义排序的算法（可选）。
+    
+    ```javascript
+    <script>
+            // 1.声明数组
+            var arr = ['a', 'b', 'c', 'd'];
+            // 2.push()末尾添加
+            arr.push('aa', 'bb');
+            console.log(arr.toString());
+            // 3.pop()删除最后一个元素
+            arr.pop();
+            // toString()转换为字符串
+            console.log(arr.toString());
+            // 4.unshift()头部增加
+            console.log(arr.unshift('e'));
+            var arr2 = [2, 4, 1, 7, 8];
+            // 5.正序排序
+            arr2.sort();
+            console.log(arr2.toString());
+            // 6.反向排序
+            arr2.reverse();
+            console.log(arr2.toString());
+        </script>
+    ```
+    
+    
+    
+    **案例：用数组操作学生信息**
+    
+    <img src="JavaScript.assets/image-20220703111247593.png" alt="image-20220703111247593" style="zoom:50%;" />
+    
+    ```javascript
+    <!DOCTYPE html>
+    <html lang="en">
+    
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>
+            ul {
+                list-style-type: none;
+                margin: 0;
+                padding: 0;
+                width: 260px;
+                border: solid 1px red;
+            }
+            
+            ul>li:nth-child(1) {
+                font-weight: 700;
+                background-color: #ddd;
+                border: 0;
+            }
+            
+            ul>li {
+                border-bottom: dashed 1px blue;
+                padding: 5px 10px;
+            }
+            
+            ul>li>span {
+                display: inline-block;
+                width: 80px;
+            }
+            
+            #add {
+                padding: 5px 10px;
+            }
+            
+            #add>div>span {
+                display: inline-block;
+                width: 60px;
+                text-align: right;
+            }
+            
+            #add>div {
+                margin: 10px 0;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div id="stu">
+            <ul id="ul">
+                <!--
+                <li>
+                    <span>姓名</span>
+                    <span>年龄</span>
+                </li>
+                 <li>
+                    <span>张三</span>
+                    <span>20</span>
+                </li> 
+                <li>
+                    <span>李四</span>
+                    <span>22</span>
+                </li>
+                -->
+            </ul>
+            <div id="add">
+                <div>
+                    <span>姓名:</span>
+                    <input type="text" id="name">
+                </div>
+                <div>
+                    <span>年龄:</span>
+                    <input type="text" id="age">
+                </div>
+                <div>
+                    <span></span>
+                    <button id="btnAdd">增加</button>
+                </div>
+            </div>
+        </div>
+        <script>
+            // 1.定义数组-json格式
+            var stu = [{
+                name: '张三',
+                age: 20
+            }, {
+                name: '李四',
+                age: 22
+            }, {
+                name: '王五',
+                age: 30
+            }]
+    
+            function loadStu() {
+                // 定义一个保存全部字符的变量
+                var HTML = "<li><span>姓名</span><span>年龄</span></li>";
+                // 2.用遍历和下标读取数组元素
+                for (var i = 0; i < stu.length; i++) {
+                    // console.log(stu[i].name);
+                    HTML += '<li>';
+                    HTML += '<span >' + stu[i].name + '</span>';
+                    HTML += '<span > ' + stu[i].age + '</span>';
+                    HTML += '</li >';
+                }
+                // 将元素添加进页面
+                document.getElementById("ul").innerHTML = HTML;
+            }
+            // 首次加载数据
+            loadStu()
+                // 3.获取增加按钮，点击增加数据
+            document.getElementById("btnAdd").onclick = function() {
+                // 找到文本框输入的值，并保存
+                var _name = document.getElementById("name").value;
+                var _age = document.getElementById("age").value;
+                // 声明对象
+                var _obj = {};
+                // 设置对象的值
+                _obj.name = _name;
+                _obj.age = _age;
+                // 将对象增加到数组中
+                stu.push(_obj);
+                // 添加成功，更新页面
+                loadStu()
+            }
+        </script>
+    </body>
+    
+    </html>**
+    ```
+
+**作业：完成学生信息的删除修改。**
+
+
+
+**二位数组：**数组中的每一个元素又是一个数组。
+
+```javascript\
+ var arr1 = [1,2,3];
+ var arr2 = [[1,2],[3,4],[5,6,7]];
+
+ arr2[0][0]
+ arr2[0][1]
+ arr2[1][0]
+ arr2[1][1]
+ arr2[2][0]
+ arr2[2][1]
+ //操作数组元素
+ var r1 = arr2[0] //内层数组
+ var num = r1[0]; //值 1
+ //简写
+ var num2 = arr2[1][0];
+```
+
+
+
+### 8.5.字符串对象
+
+String对象用于处理已有的字符块。字符串的创建有如下两种方式：
+
+```javascript
+var str = "100";
+var str2 = new String("hello");
+```
+
+字符串采用数组结构存储每位字符，自动为字符分配下标，从0开始。
+
+- **数组和方法**
+
+  - 属性：length表示获取字符串的长度
+
+  - 方法：
+
+    - **toUpperCase()** ：转大写字母，返回转换后的字符串,不影响原始字符串
+
+    - **toLowerCase()**： 转小写字母，返回转换后的字符串,不影响原始字符串
+
+    - **charAt(index)**：获取指定下标的字符，参数为指定的下标,可以省略,默认为0
+
+    - **charCodeAt(index)** ： 获取指定下标的字符编码，参数为指定的下标,可以省略,默认为0
+
+    - **indexOf(str,fromIndex)**：获取指定字符的下标,从前向后查询,找到即返回，str 表示要查找的字符串,必填，fromIndex 表示起始下标,默认为0。返回指定字符的下标,查找失败返回-1
+
+    - **lastIndexOf(str,fromIndex)**：获取指定字符最后一次出现的下标,从后向前查找,找到即返回，str 必填,表示要查找的内容，fromIndex	选填,指定起始下标
+
+    - **substring(startIndex,endIndex)**：根据指定的下标范围截取字符串,startIndex ~ endIndex-1，startIndex	表示起始下标， endIndex	表示结束下标(不包含),可以省略,省略表示截止末尾
+
+    - **substr(startIndex,len)**：根据下标截取指定的字符串，len表示解决长度
+
+    - **split(param)**：将字符串按照指定的字符进行分割,以数组形式返回分割结果， 指定分隔符,必须是字符串中存在的字符,如果字符串中不存在,分割失败,仍然返回数组
+
+    - 模式匹配
+
+    - 正则表达式对象 RegExp(Regualr Expression):
+
+      - 1. 语法 ：
+           var reg1 = /微软/ig;-忽略大小写
+           var reg2 = new RegExp('匹配模式','修饰符');
+           正则表达式对象可以接收一个变量。
+
+        2. 属性 ：
+
+           lastIndex : 可读可写，表示下一次匹配的起始索引
+           注意 ：
+
+           1. 默认情况下，正则表达式对象不能重复调用方法，
+              如果重复调用，结果会出错：
+              由于 lastIndex 保存再一次匹配的起始下标，
+              重复调用时，不能保证每次都从下标0开始
+              验证，可以手动调整 lastIndex 为 0。
+           2. 只有正则对象设置全局匹配 g ，该属性才起作用。
+
+        3. 方法 ：
+
+           test(str) :验证字符串中是否存在满足正则匹配模式的内容，存在则返回true，
+
+           不存在返回false参数为要验证的字符串。
+
+      - 作用 : 借助正则表达式实现字符串中固定格式内容的查找和替换
+        正则表达式 :
+         var reg1 = /字符模式/修饰符;
+         修饰符 : 
+          i :  ignorecase 忽略大小写
+          g : global 全局范围
+        字符串方法 :
+
+        + **match(regExp/subStr)**
+          作用 : 查找字符串中满足正则格式或满足指定字符串的内容
+          返回 : 数组,存放查找结果
+        + **replace(regExp/subStr,newStr)**
+          作用 : 根据正则表达式或字符串查找相关内容并进行替换
+          返回 : 替换后的字符串,不影响原始字符串。
+
+```javascript
+<body>
+    <div id="tip"></div>
+    <input type="text" id="txt">
+    <script>
+        // 1.创建字符串
+        var str1 = '100';
+        var str2 = new String("HelloWorld");
+        // 2.获取字符串长度
+        console.log(str1.length);
+        // 3.获取指定下标的字符charAt()
+        console.log(str1.charAt(0));
+        // 4.charCodeAt(index)  获取指定下标的字符编码
+        console.log(str2.charCodeAt(1));
+        // 5.获取指定字符的下标
+        console.log(str2.indexOf('e'));
+        // 6.截取字符串substring(startIndex,endIndex)
+        console.log(str2.substring(1, 3));
+        console.log(str2.substr(1, 3));
+        // 7.split(param)分割
+        console.log(str2.split('o'));
+        // 获取div,input元素
+        var div = document.getElementById("tip");
+        var txt = document.getElementById("txt");
+        // 绑定文本框的事件，oninput当文本框有内容时触发事件
+        txt.oninput = function() {
+            // toUpperCase()将字符串变为大写
+            div.innerHTML = txt.value.toUpperCase();
+        }
+    </script>
+</body>
+```
+
+
+
+### 8.6.Math对象
+
+Math对象的任务主要是执行常见的算数任务。Math对象提供多种算数值类型和函数，无需在使用这个对象之前对它进行定义。
+
+- **属性：**
+  - Math.PI：圆周率
+  - Math.E：返回算术常量 e，即自然对数的底数（约等于2.718）
+  - Math.LN2：返回 2 的自然对数（约等于0.693）
+  - Math.LN10：返回 10 的自然对数（约等于2.302）
+  - Math.LOG2E：返回以 2 为底的 e 的对数（约等于 1.4426950408889634）
+  - Math.LOG10E：返回以 10 为底的 e 的对数（约等于0.434）
+  - Math.SQRT1_2：返回 2 的平方根的倒数（约等于 0.707）
+  - Math.SQRT2：返回 2 的平方根（约等于 1.414）
+- **方法：**
+
+| 序号 | 方法           | 描述                                                        |
+| ---- | -------------- | ----------------------------------------------------------- |
+| 1    | abs(x)         | 返回x的绝对值                                               |
+| 2    | acos(x)        | 返回x的反余弦值                                             |
+| 3    | asin(x)        | 返回x的反正弦值                                             |
+| 4    | atan(x)        | 以介于 -PI/2 与 PI/2 弧度之间的数值来返回 x 的反正切值      |
+| 5    | atan2(y,x)     | 返回从 x 轴到点 (x,y) 的角度（介于 -PI/2 与 PI/2 弧度之间） |
+| 6    | ceil(x)        | 对数进行上舍入                                              |
+| 7    | cos(x)         | 返回数的余弦                                                |
+| 8    | exp(x)         | 返回 Ex 的指数                                              |
+| 9    | floor(x)       | 对 x 进行下舍入                                             |
+| 10   | log(x)         | 返回数的自然对数（底为e）                                   |
+| 11   | max(x,y,z..n)  | 返回 x,y,z,...,n 中的最高值                                 |
+| 12   | min(x,y,z...n) | 返回 x,y,z,...,n中的最低值                                  |
+| 13   | pow(x,y)       | 返回 x 的 y 次幂                                            |
+| 14   | random()       | 返回 0 ~ 1 之间的随机数                                     |
+| 15   | round(x)       | 四舍五入                                                    |
+| 16   | sin(x)         | 返回数的正弦                                                |
+| 17   | sqrt(x)        | 返回数的平方根                                              |
+| 18   | tan(x)         | 返回角的正切                                                |
+
+```javascript
+<script>
+        var num = 123.456;
+        // 1.向上取整
+        console.log(Math.ceil(num)); // 124
+        // 2.向下取整
+        console.log(Math.floor(num)); // 123
+        // 3.四舍五入
+        console.log(Math.round(num)); // 123
+        // 4.生成随机数
+        console.log(Math.random());
+        // 5.生成随机验证码，4位数，由数字和字母组成
+        // 5.1.定义数组，保存所有可见的字符
+        var arr = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 'A', 'B', 'C', 'D', 'E', 'F', 'a', 'b', 'c', 'd', 'e', 'f'];
+        // 5.2.随机取索引号
+        //var index = Math.floor(Math.random() * arr.length);
+        // 5.3.测试生成的下标对应值
+        console.log(arr[index]);
+        // r保存随机码，并遍历生成4个随机码保存到r中
+        var r = '';
+        for (var i = 1; i < 5; i++) {
+            var index = Math.floor(Math.random() * arr.length);
+            r += arr[index];
+        }
+        console.log(r);
+</script>
+```
+
+
+
+### 8.7.日期Date对象
+
+Date对象用于处理日期和时间。
+
+- **日期对象的创建：**
+
+```javascript
+1. var date2 = new Date("2011/11/11");
+2. var date3 = new Date("2011/11/11 11:11:11");
+
+var d = new Date();
+var d = new Date(milliseconds); // 参数为毫秒
+var d = new Date(dateString);
+var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
+```
+
+- **milliseconds** 参数是一个 Unix 时间戳（Unix Time Stamp），它是一个整数值，表示自 1970 年 1 月 1 日 00:00:00 UTC（the Unix epoch）以来的毫秒数。
+- **dateString** 参数表示日期的字符串值。
+- **year, month, day, hours, minutes, seconds, milliseconds** 分别表示年、月、日、时、分、秒、毫秒。
+
+
+
+- **日期对象的方法：**
+
+  - **getTime():**读取或设置当前时间的毫秒值
+
+  - 获取时间分量：
+
+    - **getFullYear()**：从 Date 对象以四位数字返回年份
+    - **getMonth()**：从 Date 对象返回月份 (0 ~ 11)
+    - **getDate()**：从 Date 对象返回一个月中的某一天 (1 ~ 31)
+    - **getDay()**：从 Date 对象返回一周中的某一天 (0 ~ 6)
+    - **getHours()**：返回 Date 对象的小时 (0 ~ 23)
+    - **getMilliseconds()：**返回 Date 对象的毫秒(0 ~ 999)
+    - **getMinutes()：**返回 Date 对象的分钟 (0 ~ 59)
+    - **getSeconds()**：返回 Date 对象的秒数 (0 ~ 59)
+    - **getTime()**：返回 1970 年 1 月 1 日至今的毫秒数
+
+    其他方法参考：https://www.runoob.com/jsref/jsref-obj-date.html
+
+```javascript
+<script>
+    // 1.定义日期对象获取时间
+    var dt = new Date();
+    // 2.获取年
+    console.log(dt.getFullYear());
+    // 3.获取月,0-11
+    console.log(dt.getMonth());
+    // 4.获取星期几
+    console.log(dt.getDay());
+    // 5.获取日期
+    console.log(dt.getDate());
+    // 6.获取时分秒
+    console.log(dt.getHours());
+    console.log(dt.getMinutes());
+    console.log(dt.getSeconds());
+
+    // 国庆日
+    var dt2 = new Date("2022/10/01 00:00:00");
+    var num = dt2 - dt; // 得到的num是毫秒值
+    console.log(num / 1000 / 60 / 60 / 24); // 得到天数
+</script>
+```
+
+
+
+### 8.8.练习
+
+**练习1：模拟百度，将搜索到的关键字以红色显示。**(效果待优化)
+
+<img src="JavaScript.assets/2022-07.png" style="zoom:50%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #search {
+            width: 300px;
+            margin: 0 auto;
+            border: solid 1px #ccc;
+            padding: 20px 15px;
+        }
+        
+        #p1>span {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="search">
+        <input type="text" id="key">
+        <button id="btnSearch">查找</button>
+    </div>
+    <p id="p1">
+        今天是个好天气，明天可能会下雨，后天还会晴起来，每天都有好心情。 白日依山尽，黄河入海流。天气好不好，代码不会少。
+    </p>
+    <script>
+        // 根据id获取对象
+        function $$(id) {
+            document.getElementById(id);
+        }
+        // 获取按钮
+        var btnSearch = $$("btnSearch");
+        // 获取文本框对象
+        var key = $$("key");
+        // 获取内容p元素
+        var p1 = $$("p1");
+        // 点击查找
+        btnSearch.onclick = function() {
+            // 定义正则对象
+            var reg = new RegExp(key.value, "ig");
+            // 获取内容
+            var newStr = p1.innerHTML.replace(reg, "<span>" + key.value + "</span>");
+            // 更新新的字符内容
+            p1.innerHTML = newStr;
+        }
+    </script>
+</body>
+
+</html>
+```
+

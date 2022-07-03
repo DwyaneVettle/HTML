@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        // 1.定义日期对象获取时间
+        var dt = new Date();
+        // 2.获取年
+        console.log(dt.getFullYear());
+        // 3.获取月,0-11
+        console.log(dt.getMonth());
+        // 4.获取星期几
+        console.log(dt.getDay());
+        // 5.获取日期
+        console.log(dt.getDate());
+        // 6.获取时分秒
+        console.log(dt.getHours());
+        console.log(dt.getMinutes());
+        console.log(dt.getSeconds());
+
+        // 国庆日
+        var dt2 = new Date("2022/10/01 00:00:00");
+        var num = dt2 - dt; // 得到的num是毫秒值
+        console.log(num / 1000 / 60 / 60 / 24); // 得到天数
+    </script>
+</body>
+
+</html>
