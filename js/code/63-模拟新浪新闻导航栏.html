@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #tabs {
+            /* 根据图片设置宽高 */
+            width: 416px;
+            height: 218px;
+            border: solid 1px red;
+        }
+        
+        #tabs>.nav {
+            overflow: hidden;
+        }
+        
+        #tabs>.nav>div {
+            float: left;
+            text-align: center;
+            padding: 5px 0;
+            /*4个*/
+            width: 104px;
+        }
+        /* 焦点背景色为蓝色，其他导航栏颜色改变 */
+        /* #tabs>.nav>div:nth-child(1),
+        #tabs>.nav>div:nth-child(2),
+        #tabs>.nav>div:nth-child(3) {
+            background-color: #c5c5c5;
+        } */
+        /* 隐藏和显示，很多元素调用，因切换导航栏需要 */
+        
+        .hid {
+            display: none;
+        }
+        
+        .show {
+            display: block;
+        }
+        /* 焦点颜色，当点击导航栏背景变为蓝色，字体为白色 */
+        
+        .focus {
+            background-color: blue;
+            color: white;
+        }
+        /* 背景样式 */
+        
+        .bg {
+            border-color: #c5c5c5;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 模拟新浪导航栏 -->
+    <div id="tabs">
+        <div class="nav">
+            <div class="bg" id="div1">热点新闻</div>
+            <div class="bg" id="div2">合作播报</div>
+            <div class="bg" id="div3">行业资讯</div>
+            <div id="div4" class="focus">运营攻略</div>
+        </div>
+        <div class="con">
+            <div id="div1_1" class="hid">111</div>
+            <div id="div1_2" class="hid">222</div>
+            <div id="div1_3" class="hid">333</div>
+            <div id="div1_4">444</div>
+        </div>
+    </div>
+    <script>
+        // 通过获取对象
+        function $$(id) {
+            return document.getElementById(id);
+        }
+        // 点击div1获取焦点样式，清除其他的颜色
+        $$("div1").onclick = function() {
+                $$("div1").className = "focus";
+                $$("div2").className = "bg";
+                $$("div3").className = "bg";
+                $$("div4").className = "bg";
+                // 显示下面的内容，隐藏其他内容
+                $$("div1_1").className = "show";
+                $$("div1_2").className = "hid";
+                $$("div1_3").className = "hid";
+                $$("div1_4").className = "hid";
+            }
+            // 点击div2获取焦点样式，清除其他的颜色
+        $$("div2").onclick = function() {
+                $$("div1").className = "bg";
+                $$("div2").className = "focus";
+                $$("div3").className = "bg";
+                $$("div4").className = "bg";
+                // 显示下面的内容，隐藏其他内容
+                $$("div1_1").className = "hid";
+                $$("div1_2").className = "show";
+                $$("div1_3").className = "hid";
+                $$("div1_4").className = "hid";
+            }
+            // 点击div3获取焦点样式，清除其他的颜色
+        $$("div3").onclick = function() {
+                $$("div1").className = "bg";
+                $$("div2").className = "bg";
+                $$("div3").className = "focus";
+                $$("div4").className = "bg";
+                // 显示下面的内容，隐藏其他内容
+                $$("div1_1").className = "hid";
+                $$("div1_2").className = "hid";
+                $$("div1_3").className = "show";
+                $$("div1_4").className = "hid";
+            }
+            // 点击div4获取焦点样式，清除其他的颜色
+        $$("div4").onclick = function() {
+            $$("div1").className = "bg";
+            $$("div2").className = "bg";
+            $$("div3").className = "bg";
+            $$("div4").className = "focus";
+            // 显示下面的内容，隐藏其他内容
+            $$("div1_1").className = "hid";
+            $$("div1_2").className = "hid";
+            $$("div1_3").className = "hid";
+            $$("div1_4").className = "show";
+        }
+    </script>
+</body>
+
+</html>

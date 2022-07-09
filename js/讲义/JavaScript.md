@@ -498,6 +498,97 @@ ES2015引入了两个新的关键词：let和const。这两个关键词在JS中�
 
 局部声明的变量拥有函数作用域。局部变量只能在它声明的函数内访问。
 
+**let 声明的变量只在 let 命令所在的代码块内有效。const 声明一个只读的常量，一旦声明，常量的值就不能改变。**
+
+在ES6之前没有块级作用域的概念，使用var声明的变量不具备块级作用域的特性：
+
+```javascript
+{ 
+    var x = 2; 
+}
+// 这里可以使用 x 变量
+```
+
+```javascript
+<body>
+
+<h2>使用 var 声明变量</h2>
+
+<p id="demo"></p>
+
+<script>
+var  x = 10;
+// 这里输出 x 为 10
+{  
+    var x = 2;
+    // 这里输出 x 为 2
+}
+// 这里输出 x 为 2
+document.getElementById("demo").innerHTML = x;
+</script>
+
+</body>
+```
+
+
+
+let声明的变量只能在let所在的代码块{}内有效，在{}外不能访问：
+
+```javascript
+{ 
+    let x = 2;
+}
+// 这里不能使用 x 变量
+```
+
+```javascript
+<body>
+
+<h2>使用 let 声明变量</h2>
+
+<p id="demo"></p>
+
+<script>
+var  x = 10;
+// 这里输出 x 为 10
+{  
+    let x = 2;
+    // 这里输出 x 为 2
+}
+// 这里输出 x 为 10
+document.getElementById("demo").innerHTML = x;
+</script>
+
+</body>
+```
+
+循环作用域也有一些改变：
+
+var:
+
+```javascript
+var i = 5;
+for (var i = 0; i < 10; i++) {
+    // 一些代码...
+}
+// 这里输出 i 为 10
+```
+
+let:
+
+```javascript
+let i = 5;
+for (let i = 0; i < 10; i++) {
+    // 一些代码...
+}
+// 这里输出 i 为 5
+
+```
+
+在第一个实例中，使用了 **var** 关键字，它声明的变量是全局的，包括循环体内与循环体外。
+
+在第二个实例中，使用 **let** 关键字， 它声明的变量作用域只在循环体内，循环体外的变量不受影响。
+
 
 
 #### 5.2.2.常量
@@ -2880,4 +2971,868 @@ var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
 
 </html>
 ```
+
+
+
+**练习2：根据新浪新闻做以下选项卡，一个标题对应一个内容，点击标题，对应内容发生变化。**
+
+![作业1](JavaScript.assets/作业1.png)
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #tabs {
+            /* 根据图片设置宽高 */
+            width: 416px;
+            height: 218px;
+            border: solid 1px red;
+        }
+        
+        #tabs>.nav {
+            overflow: hidden;
+        }
+        
+        #tabs>.nav>div {
+            float: left;
+            text-align: center;
+            padding: 5px 0;
+            /*4个*/
+            width: 104px;
+        }
+        /* 焦点背景色为蓝色，其他导航栏颜色改变 */
+        /* #tabs>.nav>div:nth-child(1),
+        #tabs>.nav>div:nth-child(2),
+        #tabs>.nav>div:nth-child(3) {
+            background-color: #c5c5c5;
+        } */
+        /* 隐藏和显示，很多元素调用，因切换导航栏需要 */
+        
+        .hid {
+            display: none;
+        }
+        
+        .show {
+            display: block;
+        }
+        /* 焦点颜色，当点击导航栏背景变为蓝色，字体为白色 */
+        
+        .focus {
+            background-color: blue;
+            color: white;
+        }
+        /* 背景样式 */
+        
+        .bg {
+            border-color: #c5c5c5;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 模拟新浪导航栏 -->
+    <div id="tabs">
+        <div class="nav">
+            <div class="bg" id="div1">热点新闻</div>
+            <div class="bg" id="div2">合作播报</div>
+            <div class="bg" id="div3">行业资讯</div>
+            <div id="div4" class="focus">运营攻略</div>
+        </div>
+        <div class="con">
+            <div id="div1_1" class="hid">111</div>
+            <div id="div1_2" class="hid">222</div>
+            <div id="div1_3" class="hid">333</div>
+            <div id="div1_4">444</div>
+        </div>
+    </div>
+    <script>
+        // 通过获取对象
+        function $$(id) {
+            return document.getElementById(id);
+        }
+        // 点击div1获取焦点样式，清除其他的颜色
+        $$("div1").onclick = function() {
+                $$("div1").className = "focus";
+                $$("div2").className = "bg";
+                $$("div3").className = "bg";
+                $$("div4").className = "bg";
+                // 显示下面的内容，隐藏其他内容
+                $$("div1_1").className = "show";
+                $$("div1_2").className = "hid";
+                $$("div1_3").className = "hid";
+                $$("div1_4").className = "hid";
+            }
+            // 点击div2获取焦点样式，清除其他的颜色
+        $$("div2").onclick = function() {
+                $$("div1").className = "bg";
+                $$("div2").className = "focus";
+                $$("div3").className = "bg";
+                $$("div4").className = "bg";
+                // 显示下面的内容，隐藏其他内容
+                $$("div1_1").className = "hid";
+                $$("div1_2").className = "show";
+                $$("div1_3").className = "hid";
+                $$("div1_4").className = "hid";
+            }
+            // 点击div3获取焦点样式，清除其他的颜色
+        $$("div3").onclick = function() {
+                $$("div1").className = "bg";
+                $$("div2").className = "bg";
+                $$("div3").className = "focus";
+                $$("div4").className = "bg";
+                // 显示下面的内容，隐藏其他内容
+                $$("div1_1").className = "hid";
+                $$("div1_2").className = "hid";
+                $$("div1_3").className = "show";
+                $$("div1_4").className = "hid";
+            }
+            // 点击div4获取焦点样式，清除其他的颜色
+        $$("div4").onclick = function() {
+            $$("div1").className = "bg";
+            $$("div2").className = "bg";
+            $$("div3").className = "bg";
+            $$("div4").className = "focus";
+            // 显示下面的内容，隐藏其他内容
+            $$("div1_1").className = "hid";
+            $$("div1_2").className = "hid";
+            $$("div1_3").className = "hid";
+            $$("div1_4").className = "show";
+        }
+    </script>
+</body>
+
+</html>
+```
+
+作业：利用函数提取公共类，优化以上代码。
+
+
+
+## 9.JS错误和异常
+
+​	JS处理异常的方式和Java类似，用try语句测试代码块的错误，catch语句处理错误，throw语句创建自定义错误，finally语句在try-catch语句之后，无论是否触发异常，该语句都会执行。
+
+​	JS引擎执行JS代码时，会发生各种错误。可能是程序员造成的语法错误，可能是浏览器差异造成的功能差异，也有可能是服务器或用户输入时导致的异常，当然也有其他不可预知的错误。当错误发生时，JS引擎会停止，并发出一个错误，描述这种情况的技术术语是：JS将抛出一个错误。
+
+
+
+### 9.1.JS的try---catch语句
+
+​	try语句允许我们定义在执行时进行错误测试的代码块，catch语句允许我们定义当try语句发生错误时，所执行的代码块。它们都是成对出现的。其语法格式如下：
+
+```javascript
+try {
+    ...    //异常的抛出
+} catch(e) {
+    ...    //异常的捕获与处理
+} finally {
+    ...    //结束处理
+}
+```
+
+实例：故意在try语句中写错了alert()，代码就会执行catch语句代码：
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <script>
+        var txt = "";
+
+        function message() {
+            try {
+                adddlert("Welcome guest!");
+            } catch (err) {
+                txt = "本页有一个错误。\n\n";
+                txt += "错误描述：" + err.message + "\n\n";
+                txt += "点击确定继续。\n\n";
+                alert(txt);
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <input type="button" value="查看消息" onclick="message()" />
+
+</body>
+
+</html>
+```
+
+### 9.2.finally语句
+
+finally语句是不论之前的try-catch语句是否产生异常，都会执行该代码块。
+
+案例：要求输入5-10之间的数字，小于5会执行太小，大于10会执行太大。
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <p>不管输入是否正确，输入框都会再输入后清空。</p>
+    <p>请输入 5 ~ 10 之间的数字：</p>
+
+    <input id="demo" type="text">
+    <button type="button" onclick="myFunction()">点我</button>
+
+    <p id="p01"></p>
+
+    <script>
+        function myFunction() {
+            var message, x;
+            message = document.getElementById("p01");
+            message.innerHTML = "";
+            x = document.getElementById("demo").value;
+            try {
+                if (x == "") throw "值是空的";
+                if (isNaN(x)) throw "值不是一个数字";
+                x = Number(x);
+                if (x > 10) throw "太大";
+                if (x < 5) throw "太小";
+            } catch (err) {
+                message.innerHTML = "错误: " + err + ".";
+            } finally {
+                document.getElementById("demo").value = "";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
+### 9.3.throw语句
+
+throw语句允许我们创建自定义异常，术语叫创建或抛出异常。如果将throw语句和try-catch语句一起使用就可以控制程序流，并生成自定义异常的信息。其语法为：
+
+```javascript
+throw exception
+```
+
+异常可以是 JavaScript 字符串、数字、逻辑值或对象。
+
+实例：检测输入变量的值，如果值是错误的，会抛出一个异常，catch会捕捉到这个异常，并显示一段自定义错误信息。
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <p>不管输入是否正确，输入框都会再输入后清空。</p>
+    <p>请输入 5 ~ 10 之间的数字：</p>
+
+    <input id="demo" type="text">
+    <button type="button" onclick="myFunction()">点我</button>
+
+    <p id="p01"></p>
+
+    <script>
+        function myFunction() {
+            var message, x;
+            message = document.getElementById("p01");
+            message.innerHTML = "";
+            x = document.getElementById("demo").value;
+            try {
+                if (x == "") throw "值是空的";
+                if (isNaN(x)) throw "值不是一个数字";
+                x = Number(x);
+                if (x > 10) throw "太大";
+                if (x < 5) throw "太小";
+            } catch (err) {
+                message.innerHTML = "错误: " + err + ".";
+            } finally {
+                document.getElementById("demo").value = "";
+            }
+        }
+    </script>
+
+</body>
+
+</html>
+```
+
+
+
+## 10.JS表单
+
+在之前的H5中，表单的验证是通过required属性来完成的，它可以阻止表单提交，以下实例如果fname为空，就会被required阻止：
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+
+    <form action="demo_form.php" method="post">
+        <input type="text" name="fname" required="required">
+        <input type="submit" value="提交">
+    </form>
+
+    <p>点击提交按钮，如果输入框是空的，浏览器会提示错误信息。</p>
+
+</body>
+
+</html>
+```
+
+HTML表单验证也可以通过JS来完成，以下实例代码用于判断表单字段(fname)值是否存在， 如果不存在，就弹出信息，阻止表单提交：
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["fname"].value;
+            if (x == null || x == "") {
+                alert("需要输入名字。");
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <form name="myForm" action="demo_form.php" onsubmit="return validateForm()" method="post">
+        名字: <input type="text" name="fname">
+        <input type="submit" value="提交">
+    </form>
+
+</body>
+
+</html>
+```
+
+
+
+在一般情况下，JS用来在数据被发送到服务器前对HTML表单中的这些输入数据进行验证，表单数据也经常需要JS来验证其正确性：
+
+- 验证表单数据是否为空
+- 验证是否输入一个正确的email地址
+- 验证日期是否输入争取
+- 验证表单输入内容是否为数字型
+
+**必填项目：**假如必填或必选项为空，那么警告框会弹出，并且函数的返回值为 false，否则函数的返回值则为 true（意味着数据没有问题）：
+
+```javascript
+<head>
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["fname"].value;
+            if (x == null || x == "") {
+                alert("姓必须填写");
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <form name="myForm" action="" onsubmit="return validateForm()" method="post">
+        姓: <input type="text" name="fname">
+        <input type="submit" value="提交">
+    </form>
+
+</body>
+```
+
+**email验证：**输入的数据必须包含 @ 符号和点号(.)。同时，@ 不可以是邮件地址的首字符，并且 @ 之后需有至少一个点号：
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<head>
+    <script>
+        function validateForm() {
+            var x = document.forms["myForm"]["email"].value;
+            var atpos = x.indexOf("@");
+            var dotpos = x.lastIndexOf(".");
+            if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= x.length) {
+                alert("不是一个有效的 e-mail 地址");
+                return false;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+    <form name="myForm" action="" onsubmit="return validateForm();" method="post">
+        Email: <input type="text" name="email">
+        <input type="submit" value="提交">
+    </form>
+
+</body>
+
+</html>
+```
+
+
+
+## 11.JS的JSON数据
+
+JSON(**J**ava**S**cript **O**bject **N**otation)是用于存数和传输的数据格式，通常用于服务器向网页传递数据。它是一种轻量级的数据交换格式，是一门独立的语言，而且易于理解。
+
+**JSON 使用 JavaScript 语法，但是 JSON 格式仅仅是一个文本。文本可以被任何编程语言读取及作为数据格式传递。**
+
+JSON 语法定义了 sites 对象: 3 条网站信息（对象）的数组：
+
+```json
+{"sites":[
+    {"name":"Runoob", "url":"www.runoob.com"}, 
+    {"name":"Google", "url":"www.google.com"},
+    {"name":"Taobao", "url":"www.taobao.com"}
+]}
+```
+
+JSON语法格式：
+
+- 数据为k-v结构；
+- 数据由逗号分隔；
+- 大括号保存对象；
+- 方括号保存数组。
+
+```javascript
+// JSON数据
+"name":"gitee"	
+// JSON对象
+{"name":"Runoob", "url":"www.runoob.com"}   
+// JSON数组
+"sites":[
+    {"name":"Runoob", "url":"www.runoob.com"}, 
+    {"name":"Google", "url":"www.google.com"},
+    {"name":"Taobao", "url":"www.taobao.com"}
+]
+```
+
+- **相关函数：**
+
+| 函数             | 描述                                         |
+| ---------------- | -------------------------------------------- |
+| JSON.parse()     | 用于将一个 JSON 字符串转换为 JavaScript 对象 |
+| JSON.stringify() | 用于将 JavaScript 值转换为 JSON 字符串       |
+
+```javascrip
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+
+    <h2>为 JSON 字符串创建对象</h2>
+    <p id="demo"></p>
+    <script>
+        var text = '{ "sites" : [' +
+            '{ "name":"Runoob" , "url":"www.runoob.com" },' +
+            '{ "name":"Google" , "url":"www.google.com" },' +
+            '{ "name":"Taobao" , "url":"www.taobao.com" } ]}';
+
+        obj = JSON.parse(text);
+        document.getElementById("demo").innerHTML = obj.sites[1].name + " " + obj.sites[1].url;
+    </script>
+
+</body>
+
+</html>
+```
+
+**JSON和JS对象的关系：**
+
+JSON 是 JS 对象的字符串表示法。它使用文本表示一个 JS 对象的信息，（JSON）本质是一个字符串。
+
+```javascript
+var obj = {a: 'Hello', b: 'World'}; //这是一个js对象，注意js对象的键名也是可以使用引号包裹的,这里的键名就不用引号包含
+var json = '{"a": "Hello", "b": "World"}'; //这是一个 JSON 字符串，本质是一个字符串
+```
+
+JSON（格式字符串） 和 JS 对象（也可以叫JSON对象 或 JSON 格式的对象）互转（JSON.parse 和 JSON.stringify）。
+
+要实现从JSON字符串转换为JS对象，使用 JSON.parse() 方法：
+
+```javascript
+var obj = JSON.parse('{"a": "Hello", "b": "World"}'); //结果是 {a: 'Hello', b: 'World'}  一个对象
+```
+
+要实现从JS对象转换为JSON字符串，使用 JSON.stringify() 方法：
+
+```javascript
+var json = JSON.stringify({a: 'Hello', b: 'World'}); //结果是 '{"a": "Hello", "b": "World"}'  一个JSON格式的字符串
+```
+
+
+
+## 12.this关键字
+
+面向对象语言中this表示对当前对象的一个引用，但在JS中this不是固定不变的，它会随着执行环境的改变而改变：
+
+- 在方法中，this表示该方法所属的对象
+- 如果单独使用，this表示全局对象
+- 在函数中，this表示全局对象
+- 在函数中，在严格模式下，this 是未定义的(undefined)
+- 在事件中，this 表示接收事件的元素
+- 类似 call() 和 apply() 方法可以将 this 引用到任何对象
+
+```javascript
+<body>
+
+    <h2>JavaScript <b>this</b> 关键字</h2>
+
+    <p>实例中，<b>this</b> 指向了 <b>person</b> 对象。</p>
+    <p>因为 person 对象是 fullName 方法的所有者。</p>
+
+    <p id="demo"></p>
+
+    <script>
+        // 创建一个对象
+        var person = {
+            firstName: "John",
+            lastName: "Doe",
+            id: 5566,
+            fullName: function() {
+                return this.firstName + " " + this.lastName;
+            }
+        };
+
+        // 显示对象的数据
+        document.getElementById("demo").innerHTML = person.fullName();
+    </script>
+
+</body>
+```
+
+
+
+### 12.1.在方法中的this
+
+在对象方法中，this指向它所在方法的对象，上面实例中，this表示person对象，fullName方法所属的对象就是person：
+
+
+
+### 12.2.单独使用的this
+
+单独使用this，则它指向全局(Global)对象，在浏览器中，window就是该全局对象为[**object Window**]:
+
+```javascript
+<body>
+
+    <h2>JavaScript <b>this</b> 关键字</h2>
+
+    <p>实例中，<b>this</b> 指向了 window 对象:</p>
+
+    <p id="demo"></p>
+
+    <script>
+        var x = this;
+        document.getElementById("demo").innerHTML = x;
+    </script>
+
+</body>
+```
+
+严格模式下，如果单独使用，this 也是指向全局(Global)对象:
+
+```javascript
+<body>
+
+    <h2>JavaScript <b>this</b> 关键字</h2>
+
+    <p>实例中，<b>this</b> 指向了 window 对象:</p>
+
+    <p id="demo"></p>
+
+    <script>
+        "use strict";
+        var x = this;
+        document.getElementById("demo").innerHTML = x;
+    </script>
+
+</body>
+```
+
+
+
+### 12.3.在函数中使用this
+
+在函数中，函数的所属者默认绑定到 this 上。在浏览器中，window 就是该全局对象为 [**object Window**]:
+
+```javascript
+<body>
+
+    <h2>JavaScript <b>this</b> 关键字</h2>
+
+    <p>实例中，<b>this</b> 表示 myFunction 函数的所有者：</p>
+
+    <p id="demo"></p>
+
+    <script>
+        document.getElementById("demo").innerHTML = myFunction();
+
+        function myFunction() {
+            return this;
+        }
+    </script>
+
+</body>
+```
+
+
+
+严格模式下函数是没有绑定到 this 上，这时候 this 是 **undefined**。
+
+```javascript
+<body>
+
+    <h2>JavaScript <b>this</b> 关键字</h2>
+
+    <p>函数中，默认情况下，<b>this</b> 指向全局对象。</p>
+    <p>严格模式下，<b>this</b> 为 <b>undefined</b>，因为严格模式下不允许默认绑定:</p>
+
+    <p id="demo"></p>
+
+    <script>
+        "use strict";
+        document.getElementById("demo").innerHTML = myFunction();
+
+        function myFunction() {
+            return this;
+        }
+    </script>
+
+</body>
+```
+
+
+
+### 12.3.事件中的this
+
+在 HTML 事件句柄中，this 指向了接收事件的 HTML 元素：
+
+```javascript
+<body>
+
+    <h2>JavaScript <b>this</b> 关键字</h2>
+
+    <button onclick="this.style.display='none'">点我后我就消失了</button>
+
+</body>
+```
+
+
+
+## 13.JS异步编程
+
+### 13.1.异步的概念
+
+异步（Asynchronous, async）是与同步（Synchronous, sync）相对的概念。
+
+在我们学习的传统单线程编程中，程序的运行是同步的（同步不意味着所有步骤同时运行，而是指步骤在一个控制流序列中按顺序执行）。而异步的概念则是不保证同步的概念，也就是说，一个异步过程的执行将不再与原有的序列有顺序关系。
+
+简单来理解就是：同步按你的代码顺序执行，异步不按照代码顺序执行，异步的执行效率更高。
+
+以上是关于异步的概念的解释，接下来我们通俗地解释一下异步：异步就是从主线程发射一个子线程来完成任务。
+
+<img src="JavaScript.assets/image-20220709225753878.png" alt="image-20220709225753878" style="zoom:67%;" />
+
+
+
+- **异步编程**
+
+在前端编程中（甚至后端有时也是这样），我们在处理一些简短、快速的操作时，例如计算 1 + 1 的结果，往往在主线程中就可以完成。主线程作为一个线程，不能够同时接受多方面的请求。所以，当一个事件没有结束时，界面将无法处理其他请求。
+
+现在有一个按钮，如果我们设置它的 onclick 事件为一个死循环，那么当这个按钮按下，整个网页将失去响应。
+
+为了避免这种情况的发生，我们常常用子线程来完成一些可能消耗时间足够长以至于被用户察觉的事情，比如读取一个大文件或者发出一个网络请求。因为子线程独立于主线程，所以即使出现阻塞也不会影响主线程的运行。但是子线程有一个局限：一旦发射了以后就会与主线程失去同步，我们无法确定它的结束，如果结束之后需要处理一些事情，比如处理来自服务器的信息，我们是无法将它合并到主线程中去的。
+
+为了解决这个问题，JavaScript 中的异步操作函数往往通过回调函数来实现异步任务的结果处理。
+
+
+
+### 13.2.回调函数
+
+回调函数就是一个函数，它是在我们启动一个异步任务的时候就告诉它：等你完成了这个任务之后要干什么。这样一来主线程几乎不用关心异步任务的状态了，他自己会善始善终。
+
+```javascript
+<body>
+
+    <p>回调函数等待 3 秒后执行。</p>
+    <p id="demo"></p>
+    <script>
+        function print() {
+            document.getElementById("demo").innerHTML = "邹老师厉害!";
+        }
+        setTimeout(print, 3000);
+    </script>
+
+</body>
+
+```
+
+这段程序中的 setTimeout 就是一个消耗时间较长（3 秒）的过程，它的第一个参数是个回调函数，第二个参数是毫秒数，这个函数执行之后会产生一个子线程，子线程会等待 3 秒，然后执行回调函数 "print"，在命令行输出 "邹老师厉害!"。
+
+当然，JavaScript 语法十分友好，我们不必单独定义一个函数 print ，我们常常将上面的程序写成：
+
+```javascript
+<body>
+
+    <p>回调函数等待 3 秒后执行。</p>
+    <p id="demo"></p>
+    <script>
+        setTimeout(function() {
+            document.getElementById("demo").innerHTML = "邹老师厉害!";
+        }, 3000);
+    </script>
+
+</body>
+```
+
+**注意：**既然 setTimeout 会在子线程中等待 3 秒，在 setTimeout 函数执行之后主线程并没有停止，所以：
+
+```javascript
+<p>回调函数等待 3 秒后执行。</p>
+<p id="demo1"></p>
+<p id="demo2"></p>
+<script>
+setTimeout(function () {
+    document.getElementById("demo1").innerHTML="邹老师厉害!!1";
+}, 3000);
+document.getElementById("demo2").innerHTML="邹老师厉害!!2";
+</script>
+
+</body>
+```
+
+
+
+### 13.3.异步ajax
+
+除了 setTimeout 函数以外，异步回调广泛应用于 AJAX 编程。
+
+XMLHttpRequest 常常用于请求来自远程服务器上的 XML 或 JSON 数据。一个标准的 XMLHttpRequest 对象往往包含多个回调：
+
+```javascript
+<body>
+
+    <p><strong>以下内容是通过异步请求获取的：</strong></p>
+    <p id="demo"></p>
+    <script>
+        var xhr = new XMLHttpRequest();
+
+        xhr.onload = function() {
+            // 输出接收到的文字数据
+            document.getElementById("demo").innerHTML = xhr.responseText;
+        }
+
+        xhr.onerror = function() {
+            document.getElementById("demo").innerHTML = "请求出错";
+        }
+
+        // 发送异步 GET 请求
+        xhr.open("GET", "/try/ajax/ajax_info.txt", true);
+        xhr.send();
+    </script>
+
+</body>
+
+```
+
+XMLHttpRequest 的 onload 和 onerror 属性都是函数，分别在它请求成功和请求失败时被调用。如果你使用完整的 jQuery 库，也可以更加优雅的使用异步 AJAX。异步AJAX我们会在后面的章节进行讲解
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
