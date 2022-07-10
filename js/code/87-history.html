@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+
+</head>
+
+<body>
+    <a href="https://www.baidu.com">百度</a>
+    <script>
+        // 获取history对象
+        var his = window.history;
+        console.log(his);
+    </script>
+    <!-- 通过history的back()方法返回上一页 -->
+    <button onclick="window.history.back()">返回上一页</button>
+    <!-- 通过history对象forword()前进 -->
+    <button onclick="window.history.forward()">前进到下一页</button>
+</body>
+
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <!-- 需求：每隔1秒输出一个ok -->
+    <button id="stop">停止</button>
+    <script>
+        // 启动定时器进程
+        var taskId = setInterval(function() {
+            console.log("ok");
+        }, 1000);
+        // 点击按钮，停止输出
+        document.getElementById("stop").onclick = function() {
+            // 停止定时器进程
+            clearInterval(taskId);
+        }
+    </script>
+</body>
+
+</html>

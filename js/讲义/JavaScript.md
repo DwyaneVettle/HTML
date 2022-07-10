@@ -3782,27 +3782,474 @@ XMLHttpRequest 的 onload 和 onerror 属性都是函数，分别在它请求成
 
 
 
+## 14.BOM
+
+### 14.1.BOM介绍
+
+BOM全称为“Browser Object Model”，即浏览器对象模型，它提供一些列操作浏览器的属性和方法。核心对象为window对象，不需要手动创建，跟随网页运行自动产生，直接使用，使用时可以省略书写。
 
 
 
+### 14.2.window对象常用方法
+
+- **网页弹框**
+
+```javascript
+alert()		//警告框
+prompt()	//带输入框的弹框
+confirm()	//确认框
+```
+
+- **网页打开与关闭**
+
+```javascript
+window.open("URL")  		// 新建窗口访问指定的URL-不提倡使用，因可能被拦截，更多使用超链接
+window.close()				// 关闭当前窗口-关闭的是通过window.open()打开的窗口
+```
+
+- **定时器方法**
+
+<img src="JavaScript.assets/image-20220710205603104.png" alt="image-20220710205603104" style="zoom:67%;" />
+
+1. 周期性定时器：每隔一段时间就执行一次代码。
+
+开启定时器：
+
+```javascript
+//开启定时器:
+var timerID = setInterval(function,interval);
+/*
+参数 :
+ function : 需要执行的代码,可以传入函数名;或匿名函数
+ interval : 时间间隔,默认以毫秒为单位 1s = 1000ms
+返回值 : 返回定时器的ID,用于关闭定时器
+*/
+```
+
+关闭定时器：
+
+```javascript
+//关闭指定id对应的定时器
+clearInterval(timerID);
+```
+
+2.一次性定时器：等待多久后执行一次代码。
+
+<img src="JavaScript.assets/image-20220710222118074.png" alt="image-20220710222118074" style="zoom:50%;" />
+
+```javascript
+//开启超时调用:
+var timerId = setTimeout(function,timeout);
+//关闭超时调用:
+clearTimeout(timerId);
+```
+
+使用场景：
+
+```javascript
+ 周期性
+     反复执行某动作
+     同步系统时间
+     倒计时
+一次性
+     按间隔时间一次性执行
+     延时代码的执行
+```
+
+**案例1：每隔一秒输出一个OK，点击停止按钮停止：**
+
+```javascript
+<body>
+    <!-- 需求：每隔1秒输出一个ok -->
+    <button id="stop">停止</button>
+    <script>
+        // 启动定时器进程
+        var taskId = setInterval(function() {
+            console.log("ok");
+        }, 1000);
+        // 点击按钮，停止输出
+        document.getElementById("stop").onclick = function() {
+            // 停止定时器进程
+            clearInterval(taskId);
+        }
+    </script>
+</body>
+```
 
 
 
+**案例2：点击增加即增加，不点击则自动隔1秒加1：**
+
+```javascript
+<button id="btn">点我就增加</button>
+<div id="tip"></div>
+<script>
+    //定义一个初始的变量
+    var i=0;
+//绑定事件
+document.getElementById("btn").onclick=function(){
+    //i增加1
+    i++;
+    //找到元素并赋值
+    document.getElementById("tip").innerText=i;
+}
+//click()等价于用户的单击事件的行为
+var task=window.setInterval(function(){
+    document.getElementById("btn").click();
+    //结束周期性的定时器
+    if(i==11)
+        window.clearInterval(task);
+},1000)
+</script>
+```
 
 
 
+**案例3：页面展示实时时间。**
+
+![image-20220710214013914](JavaScript.assets/image-20220710214013914.png)
+
+```javascript
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <style>
+        #box {
+            width: 130px;
+            border: solid 1px red;
+            margin: 0 auto;
+            padding: 10px 5px;
+            overflow: hidden;
+        }
+        
+        #box>span {
+            width: 20px;
+            font-size: 21px;
+            text-align: center;
+            float: left;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="box">
+        <!-- 分别代表时分秒 -->
+        <span id="hou">00</span>
+        <span style="width: 30px;">:</span>
+        <span id="min">00</span>
+        <span style="width: 30px;">:</span>
+        <span id="sec">00</span>
+    </div>
+    <script>
+        // 获取系统时间
+        //var dt = new Date();
+        // 小时
+        //document.getElementById("hou").innerText = dt.getHours();
+        // 分钟
+        //document.getElementById("min").innerText = dt.getMinutes();
+        // 秒
+        //document.getElementById("sec").innerText = dt.getSeconds();
+        // 定义一个定时器，每个一秒获取一次时间对象值并赋值给元素
+        var taskId = setInterval(function() {
+            // 获取系统时间
+            var dt = new Date();
+            // 小时
+            document.getElementById("hou").innerText = change(dt.getHours());
+            // 分钟
+            document.getElementById("min").innerText = change(dt.getMinutes());
+            // 秒
+            document.getElementById("sec").innerText = change(dt.getSeconds());
+        }, 1000);
+        // 定义一个一个数字变两个数字的函数，增加时间的美观性
+        function change(n) {
+            if (n < 10) {
+                return "0" + n;
+            } else {
+                return n;
+            }
+        }
+    </script>
+</body>
+
+</html>
+```
 
 
 
+**案例4：倒计时**
+
+```javascript
+<body>
+    <div id="box"></div>
+    <script>
+        //    指定计时器到期时间，首先先封装函数antitime()
+        function antitime() {
+            var now = new Date(); //获取当前时间
+            var to = new Date(2032, 7, 10, 0, 0, 0); //指定到期时间
+            // 然后拿到当前时间和指定时间的时间差，注意 是毫秒数
+            var deltaTime = (to - now) / 1000; //到期时间和当前时间相差的毫秒数/1000换算出总的秒数，方便后边用
+            // console.log(deltaTime)
+            // 判断 如果时间超了，停止倒计时
+            if (deltaTime <= 0) {
+                // 停止计时器
+                window.clearInterval(antitime);
+            }
+            // 已知毫秒数，计算天数时分秒
+            // 这里用到了取整数的方法，用到哪在哪除，并给其定义赋值，方便后面取用，
+            // 用parseInt()取整或者Math.floor()取整,在这里用的是Math.floor()。
+            // 计算天数并给其赋值
+            var d = Math.floor(deltaTime / 3600 / 24),
+                // 计算小时并给其赋值
+                h = Math.floor(deltaTime / 3600 % 24),
+                // 计算分钟并给其赋值
+                m = Math.floor(deltaTime / 60 % 60),
+                // 计算秒数并给其赋值
+                s = Math.floor(deltaTime % 60);
+
+            //为了增加用户体验，把时间的数字转成字符串，如果分秒毫秒不足10，则前面补0。
+            // 这里应该有更好的方法进行封装，为了更好理解，这样写出来。
+            if (d < 10) {
+                d = '0' + d;
+            } else if (h < 10) {
+                h = '0' + h;
+            } else if (m < 10) {
+                m = '0' + m;
+            } else if (s < 10) {
+                s = '0' + s;
+            }
+            // 定义一个空的字符串用来接收最后的值
+            var timer01 = '';
+            timer01 = '距离2032年1月1日还有' + d + '天' + h + '小时' + m + '分' + s + '秒';
+            // document.getElementById() 获取DOM元素节点，方便向节点填入数据并显示
+            document.getElementById('box');
+            // 让id拥有box属性的元素节点在页面显示timer01中的内容
+            box.innerHTML = timer01;
+        }
+        // 开启定时器，并让其1000毫秒更新一次
+        setInterval(antitime, 1000);
+    </script>
+
+</body>
+```
 
 
 
+**案例5：演示显示内容：**
+
+```javascript
+<script>
+    var taskId01 = setTimeout(function() {
+        console.log("今天是个好日子");
+    }, 2000);
+var taskId02 = setTimeout(function() {
+    console.log("明天会下雨");
+}, 4000);
+</script>
+```
 
 
 
+### 14.3.window对象常用属性
+
+window大部分属性是对象类型
+
+- **history**：保存访问过的URL，length属性表示当前访问过的数量。
+
+方法：
+
+```javascript
+back() 对应浏览器窗口的后退按钮，访问前一个记录
+forward() 对应前进按钮，访问记录中的下一个URL
+go(n) 参数为number值，翻阅几条历史记录，正值表示前进，负值表示后退
+```
+
+- **location**:保存当前窗口地址栏信息（URL），href属性设置或读取当前窗口的地址栏信息。
+
+方法：
+
+```javascript
+reload(param) 重载页面(刷新)
+参数为布尔值，默认为 false，表示从缓存中加载，设置为true,强制从服务器根目录加载
+```
+
+- **document**：提供操作HTML文档的方法，参见DOM。
 
 
 
+**案例1：history对象上下切换页面。**
+
+1.跳转到history的超链接页面temp.html：
+
+```html
+<body>
+    <a href="87-history.html">进入下一页</a>
+
+</body>
+```
+
+2.使用history对象跳转的页面：
+
+```javascript
+<body>
+    <a href="https://www.baidu.com">百度</a>
+    <script>
+        // 获取history对象
+        var his = window.history;
+        console.log(his);
+    </script>
+    <!-- 通过history的back()方法返回上一页 -->
+    <button onclick="window.history.back()">返回上一页</button>
+    <!-- 通过history对象forword()前进 -->
+    <button onclick="window.history.forward()">前进到下一页</button>
+</body>
+```
+
+
+
+**案例2：location**
+
+```javascript
+<script>
+    // 显示当前地址栏的url的信息
+    // 获取localtion对象
+    var loc = window.location;
+console.log(loc.href); // file:///D:/%E7%AC%94%E8%AE%B0/HTML/js/code/89-localtion.html
+// 重新刷新页面,默认false表示需要缓存对象刷新,true表示不需要缓存来刷新
+loc.reload(true)
+</script>
+```
+
+
+
+## 15.DOM节点操作
+
+DOM全称为“Document Object Model”，文档对象模型，提供操作HTML文档的方法。（注：每个HTML文件在浏览器中都视为一篇文档，操作文档实际就是操作页面元素。）
+
+
+
+### 15.1.节点对象
+
+JS会对HTML文档中的元素、属性、文本内容甚至注释进行封装，称为节点对象，提供相关的属性和方法。常用的节点对象有：
+
+- 元素节点（操作标签）
+- 属性节点（操作标签属性）
+- 文本节点（操作标签的文本内容）
+
+
+
+### 15.2.获取元素节点
+
+1.根据标签名获取元素节点列表
+
+```javascript
+var elems = document.getElementsByTagName("");
+/*
+参数 : 标签名
+返回值 : 节点列表,需要从节点列表中获取具体的元素节点对象,添加相应下标。
+*/
+```
+
+
+
+2.根据class属性值获取元素节点列表
+
+```javascript
+var elems = document.getElementsByClassName("");
+/*
+参数 : 类名(class属性值)
+返回值 : 节点列表
+*/
+```
+
+
+
+3.根据id属性值获取元素节点列表
+
+```javascript
+var elem = document.getElementById("");
+/*
+参数 : id属性值
+返回值 : 元素节点
+*/
+```
+
+
+
+4.根据 name 属性值取元素列表
+
+```javascript
+var elems = document.getElementsByName("");
+/*
+参数 : name属性值
+返回 : 节点列表
+*/
+```
+
+
+
+### 15.3.操作元素内容
+
+元素节点对象提供了以下属性来操作元素内容：
+
+```javascript
+innerHTML:读取或设置元素文本内容，可识别标签语法
+innerText:读取元素文本内容，不能识别标签语法
+value:读取或设置表单控件的值
+```
+
+
+
+### 15.4.操作元素属性
+
+1.获取 DOM 树中的属性值:
+
+<img src="JavaScript.assets/image-20220710232954285.png" alt="image-20220710232954285" style="zoom:67%;" />
+
+2.设置 DOM 树中的属性值：
+
+<img src="JavaScript.assets/image-20220710233016951.png" alt="image-20220710233016951" style="zoom:67%;" />
+
+```javascript
+elem.getAttribute("attrname");//根据指定的属性名返回对应属性值
+elem.setAttribute("attrname","value");//为元素添加属性,参数为属性名和属性值
+elem.removeAttribute("attrname");//移除指定属性
+```
+
+
+
+3.标签属性都是元素节点对象的属性,可以使用点语法访问，例如：
+
+```javascript
+h1.id = "d1"; 		 //set 方法
+console.log(h1.id);  //get 方法
+h1.id = null;		//remove 方法
+```
+
+注意：
+
+- 属性值以字符串表示
+- class属性需要更名为className，避免与关键字冲突，如：h1.className = "c1 c2 c3"。
+
+
+
+### 15.5.操作元素样式
+
+1. 为元素添加id,class属性，对应选择器样式；
+2. 操作元素的行内样式，访问元素节点的style属性，获取样式对象，样式对象中包含css属性，使用点语法操作：
+
+```javascript
+p.style.color = "white";
+p.style.width = "300px";
+p.style.fontSize = "20px";
+```
+
+注意：
+
+- 属性值以字符串形式给出，单位不能省略；
+- 如果css属性名包含连接符，使用JS访问时，一律去掉连接符，改为驼峰命名：font-size->fontSize。
 
 
 
