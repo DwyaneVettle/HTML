@@ -4202,6 +4202,49 @@ value:读取或设置表单控件的值
 
 
 
+```javascript
+<body>
+    <div id="div01">1</div>
+    <div>2</div>
+    <div class="div03">3</div>
+    <p class="p1">4</p>
+    <p class="p1">5</p>
+    <p class="p1">6</p>
+    <input type="text">
+    <span>1</span>
+    <span>2</span>
+    <script>
+        // 获取第2个div元素
+        var divs = document.getElementsByTagName("div");
+        console.log(divs[1]);
+        // 通过id获取
+        var div01 = document.getElementById("div01");
+        console.log(div01);
+        // 通过class获取
+        var div03 = document.getElementsByClassName("div03");
+        console.log(div03);
+
+        // 获取p集合
+        var ps = document.getElementsByClassName("p1");
+        // 控制台输出集合
+        console.log(ps);
+        // 在控制台输出第三个节点
+        console.log(ps[2]);
+
+        // 在文本框输入内容，内容在第一个span中显示
+        var inputs = document.getElementsByTagName("input");
+        var spans = document.getElementsByTagName("span");
+        inputs[0].oninput = function() {
+            spans[0].innerText = inputs[0].value;
+        }
+    </script>
+</body>
+```
+
+
+
+
+
 ### 15.4.操作元素属性
 
 1.获取 DOM 树中的属性值:
@@ -4220,6 +4263,46 @@ elem.removeAttribute("attrname");//移除指定属性
 
 
 
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        span:hover {
+            color: white;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <span class="focus">首页</span>
+        <span>新闻</span>
+        <span>图片</span>
+        <span title="这是热点">热点</span>
+    </div>
+    <script>
+        // 要求鼠标指向span标签，背景颜色变红-伪类选择器可实现
+        // 给第一个span标签添加提示文字
+        var spans = document.getElementsByTagName("span");
+        spans[0].setAttribute("title", "这是首页");
+        spans[1].setAttribute("title", spans[0].getAttribute("title"));
+        // 删除热点title
+        spans[3].removeAttribute("title");
+    </script>
+</body>
+
+</html>
+```
+
+
+
+
+
 3.标签属性都是元素节点对象的属性,可以使用点语法访问，例如：
 
 ```javascript
@@ -4232,6 +4315,34 @@ h1.id = null;		//remove 方法
 
 - 属性值以字符串表示
 - class属性需要更名为className，避免与关键字冲突，如：h1.className = "c1 c2 c3"。
+
+```javascript
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 定义类别名red */
+        
+        .red {
+            color: red;
+        }
+        /* 定义类别名为fontSize */
+        
+        .fontSize {
+            font-size: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="tip">你好</div>
+    <script>
+        document.getElementById("tip").className = "red fontSize";
+    </script>
+</body>
+```
 
 
 
@@ -4251,7 +4362,85 @@ p.style.fontSize = "20px";
 - 属性值以字符串形式给出，单位不能省略；
 - 如果css属性名包含连接符，使用JS访问时，一律去掉连接符，改为驼峰命名：font-size->fontSize。
 
+案例：
 
+<img src="JavaScript.assets/image-20220722111311408.png" alt="image-20220722111311408" style="zoom:67%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #fs {
+            width: 260px;
+            border: solid 1px red;
+            padding: 10px;
+        }
+        
+        .focus {
+            color: black;
+            /* 取消线 */
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 1.添加需求节点元素
+         2.添加元素样式
+         3.调整优化 -->
+    <div id="fs">
+        <div class="title">
+            <!-- javascript:void()让超链接不跳转，保持在当前页 -->
+            <a href="javascript:;">大</a>
+            <a href="javascript:;">中</a>
+            <a href="javascript:;" class="focus">小</a>
+        </div>
+        <p id="p1">操作元素的行内样式，访问元素节点的style属性，获取样式对象，样式对象中包含css属性，使用点语法操作</p>
+    </div>
+    <script>
+        // 获取点击的对象，并绑定对象的单击事件，在事件中设置内容大小
+        var as = document.getElementsByTagName("a");
+        var p1 = document.getElementById("p1");
+
+        // 使用函数移除全部链接样式-点击移除样式，称为focus样式
+        function clearFocus() {
+            // 遍历链接对象
+            for (var i = 0; i < as.length; i++) {
+                // 移除每一个链接对象的样式
+                as[i].removeAttribute("class");
+            }
+        }
+
+        as[0].onclick = function() {
+            p1.style.fontSize = "20px";
+            // 调用函数移除全部样式
+            clearFocus();
+            // 设置选中效果
+            this.className = "focus";
+        }
+        as[1].onclick = function() {
+            p1.style.fontSize = "18px";
+            // 调用函数移除全部样式
+            clearFocus();
+            // 设置选中效果
+            this.className = "focus";
+        }
+        as[2].onclick = function() {
+            p1.style.fontSize = "16px";
+            // 调用函数移除全部样式
+            clearFocus();
+            // 设置选中效果
+            this.className = "focus";
+        }
+    </script>
+</body>
+
+</html>
+```
 
 
 

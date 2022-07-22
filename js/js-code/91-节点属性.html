@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        span:hover {
+            color: white;
+            background-color: red;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <span class="focus">首页</span>
+        <span>新闻</span>
+        <span>图片</span>
+        <span title="这是热点">热点</span>
+    </div>
+    <script>
+        // 要求鼠标指向span标签，背景颜色变红-伪类选择器可实现
+        // 给第一个span标签添加提示文字
+        var spans = document.getElementsByTagName("span");
+        spans[0].setAttribute("title", "这是首页");
+        spans[1].setAttribute("title", spans[0].getAttribute("title"));
+        // 删除热点title
+        spans[3].removeAttribute("title");
+    </script>
+</body>
+
+</html>

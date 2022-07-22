@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.min.js"></script>
+</head>
+<body>
+    <div class="gf">
+        <div class="father">
+            <div class="son">儿子</div>
+        </div>
+    </div>
+    <div class="nav">
+        <p>p元素</p>
+        <div>
+            <p>这是第二个P元素</p>
+        </div>
+    </div>
+    <script>
+        $(function() {
+            // 1.获取父元素parent()，返回最近一级的父元素
+            console.log($(".son").parent());
+            // 2.获取子元素
+            $(".nav").children("p").css("color","red");
+            // 3.获取所有子元素，包括儿子孙子-find()
+            $(".nav").find("p").css("color","blue");
+
+
+        });
+    </script>
+</body>
+</html>

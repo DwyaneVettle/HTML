@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="div01">1</div>
+    <div>2</div>
+    <div class="div03">3</div>
+    <p class="p1">4</p>
+    <p class="p1">5</p>
+    <p class="p1">6</p>
+    <input type="text">
+    <span>1</span>
+    <span>2</span>
+    <script>
+        // 获取第2个div元素
+        var divs = document.getElementsByTagName("div");
+        console.log(divs[1]);
+        // 通过id获取
+        var div01 = document.getElementById("div01");
+        console.log(div01);
+        // 通过class获取
+        var div03 = document.getElementsByClassName("div03");
+        console.log(div03);
+
+        // 获取p集合
+        var ps = document.getElementsByClassName("p1");
+        // 控制台输出集合
+        console.log(ps);
+        // 在控制台输出第三个节点
+        console.log(ps[2]);
+
+        // 在文本框输入内容，内容在第一个span中显示
+        var inputs = document.getElementsByTagName("input");
+        var spans = document.getElementsByTagName("span");
+        inputs[0].oninput = function() {
+            spans[0].innerText = inputs[0].value;
+        }
+    </script>
+</body>
+
+</html>
