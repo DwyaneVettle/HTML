@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head>
+<script src="jquery.min.js">
+</script>
+
+</head>
+
+<body>
+    <script>
+      // 通过val()显示值
+        $(document).ready(function(){
+          $("button").click(function(){
+            alert("值为: " + $("#test").val());
+          });
+        });
+        // 通过attr()显示属性
+        $(document).ready(function(){
+          $("button").click(function(){
+            alert($("#baidu").attr("href"));
+          });
+      });
+    </script>
+    <p>名称: <input type="text" id="test" value="请输入名称"></p>
+    <button>显示值</button>
+    <p><a href="https://www.baidu.com" id="baidu">百度</a></p>
+    <button>显示 href 属性的值</button>
+</body>
+</html>
