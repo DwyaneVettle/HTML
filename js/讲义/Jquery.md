@@ -8,7 +8,7 @@ jQuery 是一个 JavaScript 库，它极大地简化了 JavaScript 编程，对�
 - 兼容多个浏览器；
 - 链式编程、隐式迭代；
 - 简化DOM操作；
-- 支持插件开发，如tree，日期控件、轮播图等；
+- 支持插件开发，如tree、日期控件、轮播图等；
 - 免费、开源。
 
 
@@ -2050,3 +2050,924 @@ empty() - 从被选元素中删除子元素
 
 
 ### 7.3.css类和方法
+
+jQuery拥有若干进行操作css的方法，如：
+
+- addClass()：向被选元素添加一个或多个类；
+- removeClass()：从被选元素删除一个或多个类；
+- toggleClass()：对被选元素进行添加/删除类的切换操作;
+- css()：设置或返回样式属性。
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.min.js"></script>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        // 操作css样式
+        $(function() {
+            console.log($("div").css("width")); // 200px
+            // 将宽设置为300px，必须有引号，或数字不加单位
+            // $("div").css("width",300)
+            // $("div").css("width","300px")
+            /*可更改多个样式,多个样式用{}包裹,
+            属性和属性值之间为k-v结构
+            多个属性之间用逗号间隔
+            纯数字不用加引号，复合属性必须用驼峰命名法
+            */
+            $("div").css({
+                width:400,
+                height:400,
+                backgroundColor: "yellow"
+            })
+        })
+    </script>
+</body>
+</html>
+```
+
+如上方式书写css样式太过冗余，在实际开发中我们尽量用增删类名的方式进行更改：
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 150px;
+            height: 150px;
+            background-color: pink;
+            margin: 100px auto;
+            /* 过渡效果-配合旋转 */
+            transition: all 0.5s;
+        }
+        
+        .current {
+            background-color: red;
+            /* 旋转 */
+            transform: rotate(360deg);
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="current"></div>
+    <script>
+        $(function() {
+            // 1. 添加类 addClass()
+            // $("div").click(function() {
+            //     // $(this).addClass("current");
+            // });
+            // 2. 删除类 removeClass()
+            // $("div").click(function() {
+            //     $(this).removeClass("current");
+            // });
+            // 3. 切换类 toggleClass()
+            $("div").click(function() {
+                $(this).toggleClass("current");
+            });
+        })
+    </script>
+</body>
+
+</html>
+```
+
+
+
+### 7.4.尺寸和位置的操作
+
+jQuery拥有众多操作尺寸和位置的方法
+
+| 语法                               | 用法                                                         |
+| ---------------------------------- | ------------------------------------------------------------ |
+| width()/height()                   | 取得匹配元素高度和宽度的值，只算width和height                |
+| innerWidth()/innerHeight()         | 取得匹配元素的高度和宽度的值，包含padding                    |
+| outerWidth()/outerHeight()         | 取得元素高度和宽度值，包含padding,border                     |
+| outerWidth(true)/outerHeight(true) | 取得元素高度和宽度值，包含padding,border,margin              |
+| offset()                           | 获取设置距离文档的位置偏移量，该方法有两个属性left,top是距离上，左的距离 |
+| position()                         | 获取距离带有定位父级位置的偏移量，如果没有定位父级则以文档为准，只能获取不能设置 |
+| scrollTop()/scrollLeft()           | 获取或设置被卷去的头部/左部                                  |
+
+<img src="Jquery.assets/image-20220724124850130.png" alt="image-20220724124850130" style="zoom:67%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: pink;
+            padding: 10px;
+            border: 15px solid red;
+            margin: 20px;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div></div>
+    <script>
+        $(function() {
+            // 1. width() / height() 获取设置元素 width和height大小 
+            console.log($("div").width());
+            // $("div").width(300);
+
+            // 2. innerWidth() / innerHeight()  获取设置元素 width和height + padding 大小 
+            console.log($("div").innerWidth());
+
+            // 3. outerWidth()  / outerHeight()  获取设置元素 width和height + padding + border 大小 
+            console.log($("div").outerWidth());
+
+            // 4. outerWidth(true) / outerHeight(true) 获取设置 width和height + padding + border + margin
+            console.log($("div").outerWidth(true));
+
+
+        })
+    </script>
+</body>
+
+</html>
+```
+
+<img src="Jquery.assets/2022-07-24_125818.png" style="zoom:50%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        .father {
+            width: 400px;
+            height: 400px;
+            background-color: pink;
+            margin: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .son {
+            width: 150px;
+            height: 150px;
+            background-color: purple;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="father">
+        <div class="son"></div>
+    </div>
+    <script>
+        $(function() {
+            // 1. 获取设置距离文档的位置（偏移） offset
+            console.log($(".son").offset());
+            console.log($(".son").offset().top);
+            // $(".son").offset({
+            //     top: 200,
+            //     left: 200
+            // });
+            // 2. 获取距离带有定位父级位置（偏移） position   如果没有带有定位的父级，则以文档为准
+            // 这个方法只能获取不能设置偏移
+            console.log($(".son").position());
+            // $(".son").position({
+            //     top: 200,
+            //     left: 200
+            // });
+        })
+    </script>
+</body>
+
+</html>
+```
+
+<img src="Jquery.assets/image-20220724130716010.png" alt="image-20220724130716010" style="zoom:50%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        body {
+            height: 2000px;
+        }
+        
+        .back {
+            position: fixed;
+            width: 50px;
+            height: 50px;
+            background-color: pink;
+            right: 30px;
+            bottom: 100px;
+            display: none;
+        }
+        
+        .container {
+            width: 900px;
+            height: 500px;
+            background-color: skyblue;
+            margin: 400px auto;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="back">返回顶部</div>
+    <div class="container">
+    </div>
+    <script>
+        $(function() {
+            $(document).scrollTop(100);
+            // 被卷去的头部 scrollTop()  / 被卷去的左侧 scrollLeft()
+            // 页面滚动事件
+            var boxTop = $(".container").offset().top;
+            $(window).scroll(function() {
+                // console.log(11);
+                console.log($(document).scrollTop());
+                if ($(document).scrollTop() >= boxTop) {
+                    $(".back").fadeIn();
+                } else {
+                    $(".back").fadeOut();
+                }
+            });
+            // 返回顶部
+            $(".back").click(function() {
+                // $(document).scrollTop(0);
+                $("body, html").stop().animate({
+                    scrollTop: 0
+                });
+                // $(document).stop().animate({
+                //     scrollTop: 0
+                // }); 不能是文档而是 html和body元素做动画
+            })
+        })
+    </script>
+</body>
+
+</html>
+```
+
+
+
+
+
+## 8.jQuery遍历
+
+jQuery 遍历，意为"移动"，用于根据其相对于其他元素的关系来"查找"（或选取）HTML 元素。以某项选择开始，并沿着这个选择移动，直到抵达您期望的元素为止。
+
+下图展示了一个家族树。通过 jQuery 遍历，您能够从被选（当前的）元素开始，轻松地在家族树中向上移动（祖先），向下移动（子孙），水平移动（同胞）。这种移动被称为对 DOM 进行遍历。
+
+<img src="Jquery.assets/image-20220724132128702.png" alt="image-20220724132128702" style="zoom:67%;" />
+
+图示解析：
+
+- <div> 元素是 <ul> 的父元素，同时是其中所有内容的祖先。
+- <ul> 元素是 <li> 元素的父元素，同时是 <div> 的子元素
+- 左边的 <li> 元素是 <span> 的父元素，<ul> 的子元素，同时是 <div> 的后代。
+- <span> 元素是 <li> 的子元素，同时是 <ul> 和 <div> 的后代。
+- 两个 <li> 元素是同胞（拥有相同的父元素）。
+- 右边的 <li> 元素是 <b> 的父元素，<ul> 的子元素，同时是 <div> 的后代。
+- <b> 元素是右边的 <li> 的子元素，同时是 <ul> 和 <div> 的后代。
+
+| 向上遍历树                                           | 向下遍历树                      | 中水平遍历树                                                 | 过滤                                                         |
+| ---------------------------------------------------- | ------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| parent()-父元素                                      | children()-返回所有子元素       | siblings()-返回选中元素所有同胞元素                          | first()-返回被选元素的首个元素                               |
+| parents()-所有祖先元素                               | find()-返回被选中元素直至下一代 | next()-返回下一个同胞元素                                    | last()-返回被选元素的最后一个元素                            |
+| parentsUtil()-返回介于两个给定元素之间的所有祖先元素 |                                 | nextAll()-返回所有跟随的同胞元素                             | eq(index)-返回带指定索引号的元素                             |
+|                                                      |                                 | nextUtil()-返回两个给定参数之间的所有跟随元素                | filter()-规定标准，不匹配元素会从这个集合中删除，匹配的元素会被返回 |
+|                                                      |                                 | prev(),prevAll(),prevUtil()-沿DOM树之前的元素遍历，而不是沿之后元素遍历，与上述方法相反 | not()-返回不匹配标准的所有元素，与filter()相反               |
+
+示例：
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+    .siblings *{ 
+        display: block;
+        border: 2px solid lightgrey;
+        color: lightgrey;
+        padding: 5px;
+        margin: 15px;
+    }
+</style>
+<script src="jquery.min.js">
+</script>
+<script>
+    $(document).ready(function(){
+        $("h2").parent().css({"color":"red","border":"2px solid red"});
+        $("h2").nextAll().css({"color":"red","border":"2px solid red"});
+        $("body").children().css({"color":"yellow","border":"2px solid red"});
+    });
+</script>
+</head>
+<body class="siblings">
+
+    <div>div (父元素)
+    <p>p</p>
+    <span>span</span>
+    <h2>h2</h2>
+    <h3>h3</h3>
+    <p>p</p>
+    </div>
+
+</body>
+</html>
+```
+
+
+
+**jQuery封装了一个遍历的方法each()，其语法结构为：**
+
+```javascript
+$("div").each(function(index,domElement){
+    代码块;
+})
+/*
+index表示每个元素的索引号，domElement是每个DOM元素对象，不是jquery对象
+所以要使用each()遍历，需要将DOM对象转换为jquery对象$(domElement)
+*/
+
+// 以下方式可以遍历任何对象
+$.each(function(index,domElement){
+    代码块;
+})
+```
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+
+    </style>
+    <script src="jquery.min.js"></script>
+</head>
+
+<body>
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <script>
+        // 要求将三个div内容变为红绿蓝
+        $(function() {
+            // 隐式迭代的方式只能让全部变红
+            // $("div").css("color", "red");
+            // 如果针对于同一类元素做不同操作，需要用到遍历元素（类似for，但是比for强大）
+            var sum = 0;
+            // 1. each() 方法遍历元素 
+            var arr = ["red", "green", "blue"];
+            $("div").each(function(i, domEle) {
+                // 回调函数第一个参数一定是索引号  可以自己指定索引号号名称
+                // console.log(index);
+                // console.log(i);
+                // 回调函数第二个参数一定是 dom元素对象 也是自己命名
+                // console.log(domEle);
+                // domEle.css("color"); // dom对象没有css方法
+                $(domEle).css("color", arr[i]);
+                sum += parseInt($(domEle).text());
+            })
+            console.log(sum);
+            // 2. $.each() 方法遍历元素 主要用于遍历数据，处理数据
+            // $.each($("div"), function(i, ele) {
+            //     console.log(i);
+            //     console.log(ele);
+
+            // });
+            // $.each(arr, function(i, ele) {
+            //     console.log(i);
+            //     console.log(ele);
+
+
+            // })
+            $.each({
+                name: "Micheal",
+                age: 18
+            }, function(i, ele) {
+                console.log(i); // 输出的是 name age 属性名
+                console.log(ele); // 输出的是 Micheal  18 属性值
+
+
+            })
+        })
+    </script>
+</body>
+
+</html>
+```
+
+
+
+## 9.noConflict()方法
+
+jQuery 使用 $ 符号作为 jQuery 的简写。**如果其他 JavaScript 框架也使用 $ 符号作为简写怎么办？**
+
+其他一些 JavaScript 框架包括：MooTools、Backbone、Sammy、Cappuccino、Knockout、JavaScript MVC、Google Web Toolkit、Google Closure、Ember、Batman 以及 Ext JS。
+
+其中某些框架也使用 $ 符号作为简写（就像 jQuery），如果您在用的两种不同的框架正在使用相同的简写符号，有可能导致脚本停止运行。
+
+jQuery 的团队考虑到了这个问题，并实现了 noConflict() 方法。
+
+noConflict() 方法会释放对 $ 标识符的控制，这样其他脚本就可以使用它了。当然，您仍然可以通过全名替代简写的方式来使用 jQuery：
+
+```javascript
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<script src="jquery.min.js">
+</script>
+    <script>
+        $.noConflict();
+        jQuery(document).ready(function(){
+        jQuery("button").click(function(){
+            jQuery("p").text("jQuery 仍然在工作!");
+        });
+        });
+    </script>
+</head>
+
+<body>
+    <p>这是一个段落。</p>
+    <button>点我</button>
+</body>
+</html>
+```
+
+你也可以创建自己的简写。noConflict() 可返回对 jQuery 的引用，您可以把它存入变量，以供稍后使用：
+
+```javascript
+var jq = $.noConflict();
+jq(document).ready(function(){
+  jq("button").click(function(){
+    jq("p").text("jQuery 仍然在工作!");
+  });
+});
+```
+
+
+
+## 10.Bootstrap框架
+
+前端常用的框架有：bootstrap,vue,angular,react等，他们既能开发PC端，也能开发移动端，而移动端常用的插件有：swiper,superslide,iscroll等。因插件小而专一，依靠它来解决某个功能没有问题，但如果有成套的问题出现，就得依靠框架了。
+
+Bootstrap框架是一个简洁、直观、强悍的前端开发框架，让web开发更迅速、简单。中文官网为：https://v3.bootcss.com/，点击进入下载使用Bootstrap。
+
+<img src="Jquery.assets/image-20220724145207381.png" alt="image-20220724145207381" style="zoom:50%;" />
+
+Bootstrap框架也是依赖jQuery开发的，因此里面的js插件使用也必须引入jQuery文件。在组件中找到任意你需要的组件复制粘贴到你的HTML文件中即可，但加入组件前需要一个盒子进行包裹，如以下代码，我们就是在组件中复制的导航条代码：
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 引入bootstrap的css,jquery,bootstrap组件 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/js/jquery.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="container">
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+              <!-- Brand and toggle get grouped for better mobile display -->
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Brand</a>
+              </div>
+          
+              <!-- Collect the nav links, forms, and other content for toggling -->
+              <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                  <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
+                  <li><a href="#">Link</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#">One more separated link</a></li>
+                    </ul>
+                  </li>
+                </ul>
+                <form class="navbar-form navbar-left">
+                  <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                  </div>
+                  <button type="submit" class="btn btn-default">Submit</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                  <li><a href="#">Link</a></li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Action</a></li>
+                      <li><a href="#">Another action</a></li>
+                      <li><a href="#">Something else here</a></li>
+                      <li role="separator" class="divider"></li>
+                      <li><a href="#">Separated link</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+          </nav>
+    </div>
+</body>
+</html>
+```
+
+
+
+Bootstrap的js组件也是可以直接复制过来使用的，使用方式和组件一样，如下代码，我们复制了模态框进行演示：
+
+```javascript
+ <!-- Large modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Large modal</button>
+
+        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    大的模态框
+                </div>
+            </div>
+        </div>
+```
+
+
+
+## 11.Echarts
+
+
+
+### 11.1.数据可视化
+
+数据可视化可以把数据从冰冷的数字转换成图形，揭示蕴含在数据中的规律和道理。数据可视化的树妖目的是：借助于图形化手段，清晰有效的传达和沟通信息。而Echarts就可以提供直观、交互丰富、可高度个性化的数据可视化图表。其官网为https://echarts.apache.org/zh/index.html或https://echartsjs.com/。Echarts最初由百度开发，现由阿帕奇软件基金会托管，所以是开源免费的。
+
+Echarts可以流畅的运行在PC和移动端，兼容大部分浏览器，底层依赖矢量图形库ZRender。
+
+
+
+### 11.2.Echarts快速入门
+
+Echarts使用的五个步骤：
+
+1. **下载并引入echarts.min.js文件；**
+2. **准备一个具备大小的DOM容器来装图标；**
+3. **初始化echarts实例；**
+4. **指定配置项和数据（option）；**
+5. **将配置项设置给echarts实例对象。**
+
+需求：做如下柱状图标：
+
+<img src="Jquery.assets/image-20220724154335107.png" alt="image-20220724154335107" style="zoom:50%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 1.引入echarts.min.js文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+    <!-- 2.必须是一个有大小的盒子 -->
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script>
+        // 3.实例化echarts对象
+        var myChart = echarts.init(document.querySelector("#main"));
+        // 4.指定配置项和数据 
+         // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: 'ECharts 入门示例'
+        },
+        tooltip: {},
+        legend: {
+          data: ['销量']
+        },
+        xAxis: {
+          data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
+        },
+        yAxis: {},
+        series: [
+          {
+            name: '销量',
+            type: 'bar',
+            data: [5, 20, 36, 10, 10, 20]
+          }
+        ]
+      };
+      // 5.使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+    </script>
+</body>
+</html>
+```
+
+
+
+除了上述示例外，官网https://echarts.apache.org/examples/zh/index.html#chart-type-pie示例中还有很多可以定义的图形，如折线图、柱状图、饼图、散点图等。如果我们要做如下圆角环形图，我们直接点击进去，按Echarts的5个步骤来操作就行了：
+
+<img src="Jquery.assets/image-20220724214038961.png" alt="image-20220724214038961" style="zoom:50%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 1.引入echarts.min.js -->
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+    <!-- 2.定义一个盒子 -->
+    <div id="container" style="width: 600px;height:600px;"></div>
+    <script>
+        // 3.实例化echarts对象
+        var myEcharts = echarts.init(document.querySelector("#container"));
+        // 4.指定配置项和数据
+       var option = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: '40',
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ]
+    }
+  ]
+};
+    // 5.将数据交给echarts对象
+    myEcharts.setOption(option);
+    </script>
+</body>
+</html>
+```
+
+
+
+### 11.3.Echarts配置
+
+在实际的开发中，我们的需求要比在官网中的示例多得多，并且复杂得多。所以我们必须学会自己来配置Echarts图表。配置的核心就是对option变量进行操作。option表示使用json数据格式的配置来绘制图标，步骤如下：
+
+- **标题：**为图标配置标题
+
+```json
+title: {
+    text: '第一个 ECharts 实例'
+}
+```
+
+- **提示信息：**鼠标经过时的配置提示信息
+
+```json
+tooltip: {},
+```
+
+- **图例组件：**展现不同类型的标记(symbool)，颜色和名字。可以通过点击图例控制哪些系列不显示。
+
+```json
+legend: {
+    data: [{
+        name: '系列1',
+        // 强制设置图形为圆。
+        icon: 'circle',
+        // 设置文本为红色
+        textStyle: {
+            color: 'red'
+        }
+    }]
+}
+```
+
+- **grid:**直角坐标系内绘图网格，单个grid内最多可以放置上下两个X轴，左右两个Y轴，并可以在网格上绘制折线图、柱状图、散点图等。
+
+```json
+grid:{
+    left:'x%',  // 距离左边的距离
+    right:'x%', // 距离右边的距离
+    bottom:'x%', // 距离下边的距离
+    top:'x%', // 距离上边的距离
+	containLabel:true // 要不要显示左侧和下侧刻度，防止标签设置0%后溢出
+}
+```
+
+
+
+- **X轴：**配置要在X轴显示的项
+
+```json
+xAxis: {
+    data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+}
+```
+
+- **Y轴：**配置要在Y轴显示的项
+
+```json
+yAxis: {}
+```
+
+- **toolbox:**工具栏，内置有导出图片，数据视图，动态类型切换，数据区域缩放，重置五个工具。
+
+```json
+toolbox:{
+   feature:{
+       saveAsImage:{} // 将图标保存为图片
+       
+   }
+}
+```
+
+
+
+- **系列列表：**每个系列通过type决定自己的图标类型
+
+```json
+series: [{
+    name: '销量',  // 系列名称
+    type: 'bar',  // 系列图表类型
+    data: [5, 20, 36, 10, 10, 20]  // 系列中的数据内容
+}]
+```
+
+type类型决定图标类型，常用的类型有：
+
+- **type: 'bar'**：柱状/条形图
+- **type: 'line'**：折线/面积图
+- **type: 'pie'**：饼图
+- **type: 'scatter'**：散点（气泡）图
+- **type: 'effectScatter'**：带有涟漪特效动画的散点（气泡）
+- **type: 'radar'**：雷达图
+- **type: 'tree'**：树型图
+- **type: 'treemap'**：树型图
+- **type: 'sunburst'**：旭日图
+- **type: 'boxplot'**：箱形图
+- **type: 'candlestick'**：K线图
+- **type: 'heatmap'**：热力图
+- **type: 'map'**：地图
+- **type: 'parallel'**：平行坐标系的系列
+- **type: 'lines'**：线图
+- **type: 'graph'**：关系图
+- **type: 'sankey'**：桑基图
+- **type: 'funnel'**：漏斗图
+- **type: 'gauge'**：仪表盘
+- **type: 'pictorialBar'**：象形柱图
+- **type: 'themeRiver'**：主题河流
+- **type: 'custom'**：自定义系列
+
+
+
+- **color:**调色盘颜色列表。如果系列没有设置颜色，则会依次循环从该列表中取颜色作为系列颜色。 默认为：
+
+```json
+color:['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc8452', '#9a60b4', '#ea7ccc']
+```
+
+
+
+**以上配置为常用配置，其余配置需要借助文档进行操作。文档在https://echarts.apache.org/文档--配置项手册中。**
+
+!<img src="Jquery.assets/image-20220724224711695.png" alt="image-20220724224711695" style="zoom:50%;" />()
+
+案例：请制作如下图标：
+
+<img src="Jquery.assets/image-20220724221415339.png" alt="image-20220724221415339" style="zoom:67%;" />
+
+```javascript
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 1.引入echarts.min.js文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+    <!-- 2.创建一个有大小的盒子 -->
+    <div class="myCharts" style="width: 300px;height: 300px;"></div>
+    <script>
+        // 3.实例化echarts对象
+        var myEcharts = echarts.init(document.querySelector(".myCharts"));
+        // 4.指定图标的配置项和数据
+        var option = {
+            title:{
+                text:"2021级同学身高比例"
+            },
+            tooltip:{
+            },
+            legend:{
+                data:["身高"]
+            },
+            xAxis:{
+                data:["张萍","张浩","张榕珊","张陈鑫","张昌伟","张红坪","张江淋"]
+            },
+            yAxis:{},
+            series:[{
+                name:"身高",
+                type:'bar',
+                data:[175,165,160,190,185,200,226]
+            }]
+        };
+        myEcharts.setOption(option);
+    </script>
+</body>
+</html>
+```
+

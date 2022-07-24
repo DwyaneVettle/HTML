@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery.min.js"></script>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        // 操作css样式
+        $(function() {
+            console.log($("div").css("width")); // 200px
+            // 将宽设置为300px，必须有引号，或数字不加单位
+            // $("div").css("width",300)
+            // $("div").css("width","300px")
+            /*可更改多个样式,多个样式用{}包裹,
+            属性和属性值之间为k-v结构
+            多个属性之间用逗号间隔
+            纯数字不用加引号，复合属性必须用驼峰命名法
+            */
+            $("div").css({
+                width:400,
+                height:400,
+                backgroundColor: "yellow"
+            })
+        })
+    </script>
+</body>
+</html>

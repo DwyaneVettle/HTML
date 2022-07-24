@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 1.引入echarts.min.js -->
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+    <!-- 2.定义一个盒子 -->
+    <div id="container" style="width: 600px;height:600px;"></div>
+    <script>
+        // 3.实例化echarts对象
+        var myEcharts = echarts.init(document.querySelector("#container"));
+        // 4.指定配置项和数据
+       var option = {
+  tooltip: {
+    trigger: 'item'
+  },
+  legend: {
+    top: '5%',
+    left: 'center'
+  },
+  series: [
+    {
+      name: 'Access From',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      avoidLabelOverlap: false,
+      itemStyle: {
+        borderRadius: 10,
+        borderColor: '#fff',
+        borderWidth: 2
+      },
+      label: {
+        show: false,
+        position: 'center'
+      },
+      emphasis: {
+        label: {
+          show: true,
+          fontSize: '40',
+          fontWeight: 'bold'
+        }
+      },
+      labelLine: {
+        show: false
+      },
+      data: [
+        { value: 1048, name: 'Search Engine' },
+        { value: 735, name: 'Direct' },
+        { value: 580, name: 'Email' },
+        { value: 484, name: 'Union Ads' },
+        { value: 300, name: 'Video Ads' }
+      ]
+    }
+  ]
+};
+    // 5.将数据交给echarts对象
+    myEcharts.setOption(option);
+    </script>
+</body>
+</html>

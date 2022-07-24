@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- 1.引入echarts.min.js文件 -->
+    <script src="echarts.min.js"></script>
+</head>
+<body>
+    <!-- 2.创建一个有大小的盒子 -->
+    <div class="myCharts" style="width: 300px;height: 300px;"></div>
+    <script>
+        // 3.实例化echarts对象
+        var myEcharts = echarts.init(document.querySelector(".myCharts"));
+        // 4.指定图标的配置项和数据
+        var option = {
+            title:{
+                text:"2021级同学身高比例"
+            },
+            tooltip:{
+            },
+            legend:{
+                
+            },
+            xAxis:{
+                data:["张萍","张浩","张榕珊","张陈鑫","张昌伟","张红坪","张江淋"]
+            },
+            yAxis:{},
+            series:[{
+                name:"身高",
+                type:'bar',
+                data:[175,165,160,190,185,200,226]
+            }]
+        };
+        myEcharts.setOption(option);
+    </script>
+</body>
+</html>
