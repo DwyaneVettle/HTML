@@ -1,0 +1,3 @@
+新接口地址：http://ajax-base-api-t.itheima.net
+使用时后面直接传参数即可
+原来的http://ajax.frontend.itheima.net:3006/XXX/XXXX都替换成https://ajax-base-api-t.itheima.net/XXX/XXXX

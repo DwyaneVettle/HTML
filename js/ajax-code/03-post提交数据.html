@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="lib/jquery.js"></script>
+</head>
+<body>
+    <button id="btnPOST">发起post请求</button>
+    <script>
+        $(function() {
+            $("#btnPOST").on('click',function() {
+                $.post('http://www.liulongbin.top:3006/api/addbook',
+                {bookname:'论语',author:'孔子',publisher:'四川城市出版社'},
+                function(res) {
+                    console.log(res);
+                })
+            })
+        })
+    </script>
+</body>
+</html>
