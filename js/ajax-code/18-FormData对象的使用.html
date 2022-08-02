@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1.创建FormData对象
+        var fd = new FormData();
+        // 2.添加表单项
+        fd.append('uname','zs');
+        fd.append('upwd','123456');
+        // 3.创建xhr对象
+        var xhr = new XMLHttpRequest();
+        // 4.指定请求类型与url
+        xhr.open('post','http://www.liulongbin.top:3006/api/formdata');
+        // 5.提交fd对象
+        xhr.send(fd);
+        // 6.监听onreadystatechange事件
+        xhr.onreadystatechange = function() {
+            // 以下判断为固定写法
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                // 获取服务器响应的数据
+                console.log(JSON.parse(xhr.responseText));
+            }
+        }
+    </script>
+</body>
+</html>

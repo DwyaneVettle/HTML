@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var str = '刘德华';
+        // 1.编码
+        var str2 = encodeURI(str);
+        console.log(str2); // %E5%88%98%E5%BE%B7%E5%8D%8E
+
+        console.log('---------------');
+
+        var str3 = decodeURI(str2);
+        console.log(str3); // 刘德华
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1.创建xhr对象
+        var xhr = new XMLHttpRequest();
+        // 2.调用open()函数
+        xhr.open('post','http://www.liulongbin.top:3006/api/addbook');
+        // 3.设置Content-Type属性
+        xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+        // 4.调用send()函数，同时将数据以查询字符串形式提交给服务器
+        xhr.send('bookname=道德经&author=老子&publisher=四川城市出版社');
+        // 5.监听onreadystatechange事件
+        xhr.onreadystatechange = function() {
+            // 以下判断为固定写法
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                // 获取服务器响应的数据
+                console.log(xhr.responseText);
+            }
+        }
+    </script>
+</body>
+</html>
