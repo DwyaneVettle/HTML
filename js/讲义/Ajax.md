@@ -1691,3 +1691,468 @@ axios({
 - **跨域：**只要有协议、域名或端口任意一项不一样就是跨域。出现跨域的根本原因是：浏览器不允许非同源的url之间进行资源交互。如：
   - 网页：http://www.test.com/index.html
   - 接口：http://www.api.com/userList
+
+
+
+### 7.1.如何实现跨域请求
+
+如果要实现跨域请求获取数据，肯定会因为同源策略而拦截。但这种现象还是可以被解决的，现如今最主要的两种解决方案分别是：JSONP和CORS。
+
+JSONP：出现的比较早，兼容性好。是前端常用的解决跨域的一种技术，但JSONP也有明显的缺点，就是只支持get请求，不支持post请求。
+
+CORS：出现的较晚，是W3C标准，属于跨域Ajax请求的根本解决方案，支持get和post请求，但不支持较低版本浏览器。
+
+
+
+JSONP(JSON with Padding)是JSON的一种使用模式，可用于解决主流浏览器的跨域数据访问问题。它的原理是通过<script>标签的src属性不受同源策略限制的特性，通过函数调用的形式接收跨域接口响应回来的数据。
+
+如下代码因和我们打开的Html文件所使用的file协议不同，所以是跨域的请求：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/jquery.js"></script>
+</head>
+
+<body>
+  <script>
+    $.ajax({
+      method: 'GET',
+      url: 'https://ajax.frontend.itheima.net:3006/api/jsonp',
+      data: {
+        name: 'zs',
+        age: 20
+      },
+      success: function (res) {
+        console.log(res)
+      }
+    })  
+  </script>
+</body>
+
+</html>
+```
+
+那么JSONP是怎么实现的呢？如下代码因出现两个script标签，他们之间的代码时共享的，所以他们能互相拿到数据：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function success(data) {
+      console.log('拿到了Data数据：')
+      console.log(data)
+    }
+  </script>
+
+  <script>
+    success({ name: 'zs', age: 20 })
+  </script>
+</body>
+
+</html>
+```
+
+无论出现多少个<script>标签，他们之间的数据都是共享的，所以我们将第二个<script>标签中的代码抽取到getdata.js中，通过src属性引入进来。
+
+getdata.js:
+
+```javascript
+success({ name: 'zs', age: 20 })
+```
+
+抽取后的代码：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    function success(data) {
+      console.log('拿到了Data数据：')
+      console.log(data)
+    }
+  </script>
+
+  <script src="lib/getdata.js"></script>
+</body>
+
+</html>
+```
+
+虽然以上方式也能实现，但如果getdata.js放在服务器中，而在我们自己的html文件中怎么知道该调用什么函数呢？我们可以使用查询字符串的形式来完成调用，当我们使用success函数，那就去getdata.js去查询success函数：
+
+```javascript
+<script src="lib/getdata.js?callback=success"></script>
+```
+
+
+
+**注意：**JSONP和Ajax之间是没有任何关系的，不能把JSONP请求数据的方式叫做Ajax，因为JSONP没有用到xhr这个对象。
+
+
+
+### 7.2.jQuery中的JSONP
+
+jQuery中不仅可以通过$.ajax()发起Ajax请求，还可以发起JSONP请求，请求方式如下：
+
+```javascript
+$.ajax({
+    url: 'http://www.liulongbin.top:3006/api/jsonp?name=zs&age=20',
+    // dataType的值必须为jsonp
+    dataType: 'jsonp',
+    success: function (res) {
+        console.log(res);
+    }
+})
+```
+
+默认情况下，使用Jquery发起JSONP请求，会自动携带一个callback=jQueryxxx的参数，jQueryxxx是随机生成的一个回调函数的名称。
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/jquery.js"></script>
+</head>
+
+<body>
+  <script>
+    $(function () {
+      // 发起JSONP的请求
+      $.ajax({
+        url: 'http://www.liulongbin.top:3006/api/jsonp?name=zs&age=20',
+        // 代表我们要发起JSONP的数据请求
+        dataType: 'jsonp',
+        jsonp: 'callback',
+        jsonpCallback: 'abc',
+        success: function (res) {
+          console.log(res)
+        }
+      })
+    })
+  </script>
+</body>
+
+</html>
+```
+
+![image-20220803212435024](Ajax.assets/image-20220803212435024.png)
+
+
+
+在jquery中如果想要自定义Jquery的回调函数名称及JSONP的参数，可通过以下两个参数来指定：
+
+```javascript
+$.ajax({
+    url: 'http://www.liulongbin.top:3006/api/jsonp?name=zs&age=20',
+    dataType: 'jsonp',
+    jsonp: 'callback', //自定义参数的名称  一般让它默认为callback 不会做修改
+    jsonpCallback: 'abc',   //自定义回调函数的名称
+    success: function (res) {
+        console.log(res);
+    }
+})
+```
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <script src="./lib/jquery.js"></script>
+</head>
+
+<body>
+  <button id="btnJSONP">发起JSONP数据请求</button>
+
+  <script>
+    $(function () {
+      $('#btnJSONP').on('click', function () {
+        $.ajax({
+          url: 'http://www.liulongbin.top:3006/api/jsonp?name=zs&age=20',
+          dataType: 'jsonp',
+          jsonpCallback: 'abc',
+          success: function (res) {
+            console.log(res)
+          }
+        })
+      })
+    })
+  </script>
+</body>
+
+</html>
+```
+
+
+
+jquery中JSONP的实现过程：
+
+jquery中的jsonp也是通过script标签的src属性来实现跨域数据访问的，只不过，jquery采用的是动态创建和移除script标签的方式，来发起JSONP数据请求。
+
+在发起JSONP请求的时候，动态向<header>中append一个script标签；
+
+在JSONP请求成功以后，动态地移除刚刚append进去的script标签。
+
+
+
+### 7.3.案例：淘宝搜索框
+
+- **UI效果：**
+
+<img src="Ajax.assets/image-20220803213322622.png" alt="image-20220803213322622" style="zoom:50%;" />
+
+- **主要代码：**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Document</title>
+  <!-- 导入页面的基本样式 -->
+  <link rel="stylesheet" href="./css/search.css" />
+  <!-- 导入 jQuery -->
+  <script src="./lib/jquery.js"></script>
+  <!-- 导入模板引擎 -->
+  <script src="./lib/template-web.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <!-- Logo -->
+    <img src="./images/taobao_logo.png" alt="" class="logo" />
+
+    <div class="box">
+      <!-- tab 栏 -->
+      <div class="tabs">
+        <div class="tab-active">宝贝</div>
+        <div>店铺</div>
+      </div>
+      <!-- 搜索区域（搜索框和搜索按钮） -->
+      <div class="search-box">
+        <input id="ipt" type="text" class="ipt" placeholder="请输入要搜索的内容" /><button class="btnSearch">
+          搜索
+        </button>
+      </div>
+      <!-- 搜索建议列表 -->
+      <div id="suggest-list"></div>
+    </div>
+  </div>
+
+  <!-- 模板结构 -->
+  <script type="text/html" id="tpl-suggestList">
+    {{each result}}
+      <!--搜索建议项-->
+      <div class="suggest-item">{{$value[0]}}</div>
+    {{/each}}
+  </script>
+
+  <script>
+    $(function () {
+      // 1. 定义延时器的Id
+      var timer = null
+      // 定义全局缓存对象
+      var cacheObj = {}
+
+      // 2. 定义防抖的函数
+      function debounceSearch(kw) {
+        timer = setTimeout(function () {
+          getSuggestList(kw)
+        }, 500)
+      }
+
+      // 为输入框绑定 keyup 事件
+      $('#ipt').on('keyup', function () {
+        // 3. 清空 timer
+        clearTimeout(timer)
+        var keywords = $(this).val().trim()
+        if (keywords.length <= 0) {
+          return $('#suggest-list').empty().hide()
+        }
+
+        // 先判断缓存中是否有数据
+        if (cacheObj[keywords]) {
+          return renderSuggestList(cacheObj[keywords])
+        }
+
+        // TODO:获取搜索建议列表
+        // console.log(keywords)
+        // getSuggestList(keywords)
+        debounceSearch(keywords)
+      })
+
+      function getSuggestList(kw) {
+        $.ajax({
+           // 淘宝提供的接口
+          url: 'https://suggest.taobao.com/sug?q=' + kw,
+          dataType: 'jsonp',
+          success: function (res) {
+            // console.log(res)
+            renderSuggestList(res)
+          }
+        })
+      }
+
+      // 渲染UI结构
+      function renderSuggestList(res) {
+        if (res.result.length <= 0) {
+          return $('#suggest-list').empty().hide()
+        }
+        var htmlStr = template('tpl-suggestList', res)
+        $('#suggest-list').html(htmlStr).show()
+
+        // 1. 获取到用户输入的内容，当做键
+        var k = $('#ipt').val().trim()
+        // 2. 需要将数据作为值，进行缓存
+        cacheObj[k] = res
+      }
+    })
+  </script>
+</body>
+
+</html>
+```
+
+
+
+### 7.4.防抖和节流
+
+- **防抖策略(debounce)：**当事件被触发后，延迟n秒后再执行回调，如果在这n秒内事件又被触发，则重新计时。
+
+<img src="Ajax.assets/image-20220803213920441.png" alt="image-20220803213920441" style="zoom: 67%;" />
+
+<img src="Ajax.assets/image-20220803214047229.png" alt="image-20220803214047229" style="zoom:67%;" />
+
+- 防抖的应用策略：用户在输入框中连续输入一串字符时，可以通过防抖策略，只在输入完后，才执行查询请求，这样可以减少请求次数，节约请求资源。如上案例的以下代码就是防抖的实现：
+
+```javascript
+// 2. 定义防抖的函数
+      function debounceSearch(kw) {
+        timer = setTimeout(function () {
+          getSuggestList(kw)
+        }, 500)
+      }
+
+      // 为输入框绑定 keyup 事件
+      $('#ipt').on('keyup', function () {
+        // 3. 清空 timer
+        clearTimeout(timer)
+        var keywords = $(this).val().trim()
+        if (keywords.length <= 0) {
+          return $('#suggest-list').empty().hide()
+        }
+
+        // 先判断缓存中是否有数据
+        if (cacheObj[keywords]) {
+          return renderSuggestList(cacheObj[keywords])
+        }
+
+        // TODO:获取搜索建议列表
+        // console.log(keywords)
+        // getSuggestList(keywords)
+        debounceSearch(keywords)
+      })
+```
+
+
+
+- **节流策略(throttle)：**可以减少事件一段时间内触发的频率。
+
+<img src="Ajax.assets/image-20220803214535543.png" alt="image-20220803214535543" style="zoom:67%;" />
+
+<img src="Ajax.assets/image-20220803214556363.png" alt="image-20220803214556363" style="zoom:67%;" />
+
+- 节流的应用场景：
+  - 鼠标连续不断的触发某事件（如点击），只在单位时间内触发一次；
+  - 懒加载时要监听计算滚动条的位置，但不必每次都触发，可以降低计算频率，而不必浪费CPU资源。
+
+案例：鼠标跟随按钮：图片跟随鼠标滑动：
+
+<img src="Ajax.assets/image-20220803214846475.png" alt="image-20220803214846475" style="zoom: 67%;" />
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <script src="./lib/jquery.js"></script>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #angel {
+      position: absolute;
+    }
+  </style>
+</head>
+
+<body>
+  <img src="./angel.gif" alt="" id="angel" />
+
+  <script>
+    $(function () {
+      // 1. 获取到图片
+      var angel = $('#angel')
+      // 步骤1. 定义节流阀
+      var timer = null
+      // 2. 绑定 mousemove 事件
+      $(document).on('mousemove', function (e) {
+        // 步骤3：判断节流阀是否为空
+        if (timer) { return }
+        // 3. 设置图片的位置
+        // 步骤2：开启延时器
+        timer = setTimeout(function () {
+          $(angel).css('top', e.pageY + 'px').css('left', e.pageX + 'px')
+          console.log('ok')
+          timer = null
+        }, 16)
+
+      })
+    })
+  </script>
+</body>
+
+</html>
+```
+
