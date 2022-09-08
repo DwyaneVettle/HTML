@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <style>
+        .box1 {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+        }
+        .box2 {
+            width: 300px;
+            height: 300px;
+            background-color: yellow;
+        }
+        .box3 {
+            width: 300px;
+            height: 300px;
+            background-color: green;
+        }
+    </style>
+    
+</head>
+<body>
+   
+    <!-- 第一种：行内引入（元素绑定事件）
+         根据你需要操作的事件来绑定
+        onclick-点击事件
+        优点：简单直接
+        缺点：结构混乱，代码没有复用性 -->
+    <div class="box1"  onclick="alert('Hello JavaScript!!!')" ></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+
+    <!-- 第二种：内部引入 <script></script> -->
+    <script>
+        // 这是单行注释
+        /*
+            这是多行注释
+            优点：结构分明，代码更加流畅
+            缺点：没有多个页面的复用性
+        */
+        document.querySelector(".box2").onclick =  function() {
+            alert("你好");
+        }
+    </script>
+
+    <!-- 第三种引入方式 
+            缺点：麻烦
+            优点：增加代码的复用性，文件分明-->
+    <script src="demo.js"></script>
+</body>
+</html>
