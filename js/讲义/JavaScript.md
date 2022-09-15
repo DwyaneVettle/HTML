@@ -313,12 +313,6 @@ btn.onclick = function (){
             font-size: 20px;
         }
         
-        #div1 {
-            width: 30%;
-            border: 1px solid red;
-            padding: 5px;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 
@@ -375,7 +369,7 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 	<body>
 		<div id="d1"><p id="p1">hello world </p></div>
 		<script>
-			var content = document.getElementById("d1");
+			var content = document.getElementById("p1");
 			alert(content.innerHTML);
 			alert(content.innerText)
 		</script>
@@ -429,7 +423,7 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 
 ```js
 var 变量名;
-let 变量名;
+let 变量名; // es6新增的特性
 ```
 
 ```js

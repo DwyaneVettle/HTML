@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <!-- js事件的绑定方式：内联绑定
+        在标签内部加入事件处理方式，作为属性传递
+        优点：简单直接
+        缺点：复用性不高，结构不分离 -->
+    <button onclick="alert('hello!')">点击</button>
+    <div id="div01"></div>
+
+    <script>
+        // 动态绑定事件
+        var divs = document.querySelector("#div01");
+        // 通过获取到的元素结点.事件 = function() {}
+        divs.onmousemove = function() {
+            alert("hello！！！！！");
+        }
+    </script>
+</body>
+</html>
