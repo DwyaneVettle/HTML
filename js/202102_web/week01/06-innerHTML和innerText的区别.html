@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <div id="d01">
+        <div>
+            你好
+            <p>hello JS</p>
+        </div>
+    </div>
+    <script>
+        /* 
+            innerHTML:获取到的元素包含HTML的标签(当前的元素除外)
+            innerText:只是获取纯文本信息
+            outerHTML:获取包含当前元素的所有文本信息和标签
+        */
+        // 获取目标元素结点
+        var div = document.getElementById("d01");
+        console.log(div.innerHTML);
+        alert(div.outerHTML);
+        console.log(div.innerText);
+        // 这是当行注释
+        // ctrl+/
+        /* 
+            多行注释快捷键
+            vscode:shift+alt+a
+            webstorm:ctrl+alt+/
+        */
+    </script>
+</body>
+</html>

@@ -167,6 +167,8 @@ document.querySelector('.box3').onclick = function() {
 
 DOM: Document Object Model，文档对象模型，其实就是JS专门为访问html元素提供的一套API。
 
+API:Application Programming Interface
+
 ### 4.1.事件函数分类
 
 1.鼠标事件
@@ -266,7 +268,7 @@ var elems = document.getElementsByName("");
 
 
 
-**除了以上方式获取元素目标外，还可通过一种通用的方式querySelector()**，querySelector()的参数为css选择器的形式，比如要选一个id属性为abc的标签出来，那么正确的处理方式是querySelector("#abc")。
+​	**除了以上方式获取元素目标外，还可通过一种通用的方式querySelector()**，querySelector()的参数为css选择器的形式，比如要选一个id属性为abc的标签出来，那么正确的处理方式是querySelector("#abc")。
 
 ### 4.3.事件绑定方式
 
@@ -381,7 +383,7 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 
 通过以上两个案例我们可以看出：
 
-- **innerHTML**指的是***\*从对象的起始位置到终止位置的全部内容,包括Html标签\****。
+- **innerHTML**指的是**从对象的起始位置到终止位置的全部内容,包括Html标签**。
 - **innerText**  指的是**从起始位置到终止位置的内容,但它去除Html标签**。
 
 
@@ -394,7 +396,7 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 
  通过浏览器可以看到弹出框为<p id="p1">hello world </p>和 <divid="d1"><p id="p1">hello world</p></div>
 
-**outerHTML指的是\**除了包含innerHTML的全部内容外, 还包含对象标签本身\****。
+**outerHTML指的是除了包含innerHTML的全部内容外, 还包含对象标签本身**。
 
 
 
