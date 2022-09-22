@@ -369,7 +369,11 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 <html>
 	<head><title>innerHTML</title></head>
 	<body>
-		<div id="d1"><p id="p1">hello world </p></div>
+		<div id="d1">
+            <p id="p1">
+                hello world 
+            </p>
+	</div>
 		<script>
 			var content = document.getElementById("p1");
 			alert(content.innerHTML);

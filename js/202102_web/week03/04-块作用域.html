@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 在一对{}具有块作用域
+        // var定义的变量具有全局性，let定义的变量只在代码块中有效
+        {
+            var a = 100;
+            console.log(a);  // 100
+            let b = 200;
+            console.log(b); // 200
+        }
+        console.log(a); // 100
+        // console.log(b);  // b is not defined
+
+        // 常量的声明 const
+        // 常量一旦声明，将不能被更改值，而且声明的时候必须同时赋值
+        const PI = 3.1415926;
+        // toFixed()方法是用来截取小数点的位数的
+        console.log(PI.toFixed(3));
+        // PI = 100;
+        // console.log(PI);  // Assignment to constant variable.
+    </script>
+</body>
+</html>

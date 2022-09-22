@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 交换两个变量的值
+        // 1.声明两个变量
+        var a = 100;
+        var b = 200;
+        // 2.声明一个中间变量，做值的传递
+        var c;
+        // 3.将a的值给c保存
+        var c = a;
+        console.log(c); // 100
+        // 4.将b的值交给a
+        a = b;
+        console.log(a); // 200
+        // 5.让b等于100-就是将c的值给b
+        b = c;
+        console.log(b);  // 100
+    </script>
+</body>
+</html>
