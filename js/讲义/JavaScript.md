@@ -373,7 +373,7 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
             <p id="p1">
                 hello world 
             </p>
-	</div>
+		</div>
 		<script>
 			var content = document.getElementById("p1");
 			alert(content.innerHTML);
@@ -412,8 +412,8 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 2. 分号可以作为语句结束的标志，也可以省略
 3. JavaScript严格区分大小写
 4. 注释语法
-   单行注释使用 //
-   多行注释使用 /* */
+   单行注释使用 //  -> ctrl+/
+   多行注释使用 /* */  ->webstorm:ctrl+shift+/;      vscode:alt+shift+/
 
 
 
@@ -450,7 +450,7 @@ let 变量名; // es6新增的特性
 **命名规范：**
 
 - 变量名，常量名，函数名，方法名自定义，可以由数字，字母，下划线，$组成，禁止以数字开头；
-- 禁止与关键字冲突(var const function if else for while do break case switch return class)；
+- 禁止与关键字冲突(如：var const function if else for while do break case switch return class)；
 - 变量名严格区分大小写；
 - 变量名尽量见名知意，多个单词组成采用小驼峰,例如："userName"
 
@@ -741,9 +741,10 @@ console.log(typeof(n)); // string
   console.log(a); // "100"
   var b = true;
   b = b.toString(); // "true"
+  // null不能转换
   ```
 
-  - 转换number类型：Number(param)。参数是待转换的变量或值，返回转换后的结果，如果转换成功，返回Number值，如果转换失败，返回NaN(Not a Number)，是非Number字符。
+  - 转换number类型：Number(param)。参数是待转换的变量或值，返回转换后的结果，如果转换成功，返回Number值，如果转换失败，返回NaN(Not a Number)，是非Number字符。NaN也是一个Number类型的数据。
   - parseInt(param)：将数据解析成整数值，如果参数为非字符串类型会转换成字符串，从左向右一次对每位字符转成Number，转换失败则停止向后解析，并返回结果；
   - parseFloat(param)：将参数转换成小数类型。
 
@@ -801,6 +802,8 @@ console.log(typeof(n)); // string
 如果表达式1不成立，执行表达式3；
 ```
 
+<img src="JavaScript.assets/2022-09-23_094123.png" style="zoom:50%;" />
+
 注意：
 
 + 自增或自减运算符在单独与变量结合时，放前和放后没有区别
@@ -835,6 +838,18 @@ var b = 'A',
     c = 'a';
 console.log(b.charCodeAt(0)); // 查询Unicode编码对应值 65
 console.log(b > c); // false
+
+// 关系运算符 > < >= <= == != === !==  得到布尔类型的值
+        // == != 只比较值是否相等，无关类型
+        // === 不仅要比较值是否相等，还要比较类型
+        var a = "100";
+        var b = 100;
+        var c = 1;
+        var d = true;
+        console.log(a == b); // true
+        console.log(a === b); // false
+        console.log(c == d); // true
+        console.log(c === d); // false
 
 var x = 10,
     y = 20,

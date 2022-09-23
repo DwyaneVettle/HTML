@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+        1.通过+号连接字符串和其他任何类型的数据都是字符串
+        2.布尔类型和数值类型做数学运算都是数值类型
+        */
+       var a = 100;
+       var b = true;
+       var c = "99.99";
+       var d = "a";
+       var e = false;
+       // 数值类型+字符串a+c
+       console.log(a+c);  // 10099.99
+       // 布尔类型和字符串拼接b+c
+       console.log(b+c);  // true99.99
+        // 字符串+字符串
+        console.log(c+d);  // 99.99a
+
+        // 直接拼接空字符串也会成为字符串
+        console.log(a+"");  // 100
+        console.log(typeof(b+"")); // string
+
+        console.log(typeof(a*b));  // number
+        console.log(typeof(a+b));  // number
+        console.log(b+e); // 1
+    </script>
+</body>
+</html>

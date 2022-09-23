@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // ++ --  在前 先改变再使用
+        // ++ --  在后 先使用再改变
+        var a = 2;
+        console.log(a++);  // 2--->3
+        console.log(++a);  // 4
+        console.log(++a);  // 5
+        console.log("------------");
+        var b = 5;
+        console.log(--b); // 4
+        console.log(b++); // 4
+        console.log(++b); // 6
+        console.log("------------");
+        // 关系运算符 > < >= <= == != === !==  得到布尔类型的值
+        // == != 只比较值是否相等，无关类型
+        // === 不仅要比较值是否相等，还要比较类型
+        var a = "100";
+        var b = 100;
+        var c = 1;
+        var d = true;
+        console.log(a == b); // true
+        console.log(a === b); // false
+        console.log(c == d); // true
+        console.log(c === d); // false
+
+        console.log("------------");
+        var a = "abcABC012";
+        // charCodeAt()-unicode编码对应的十进制信息
+        console.log(a.charCodeAt(0));  // 97
+        console.log(a.charCodeAt(4)); // 66
+        console.log(a.charCodeAt(7)); // 49
+    </script>
+</body>
+</html>

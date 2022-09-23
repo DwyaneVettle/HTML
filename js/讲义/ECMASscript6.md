@@ -27,7 +27,7 @@ ES6 是 ECMAScript 标准十余年来变动最大的一个版本，为其添加�
 - 2009 年 12 月，ECMAScript 5.0 版正式发布。ECMA 专家组预计 ECMAScript 的第五个版本会在 2013 年中期到 2018 年作为主流的开发标准。2011年6月，ES 5.1 版发布，并且成为 ISO 国际标准。
 - 2013 年，ES6 草案冻结，不再添加新的功能，新的功能将被放到 ES7 中；2015年6月， ES6 正式通过，成为国际标准。
 
-![](C:\Users\HP\Desktop\es6-tutorial.jpg)
+![](ECMASscript6.assets/es6-tutorial.jpg)
 
 ## 2.let和const
 
@@ -785,3 +785,1030 @@ Proxy 与 Reflect 是 ES6 为了操作对象引入的 API 。
 Proxy 可以对目标对象的读取、函数调用等操作进行拦截，然后进行操作处理。它不直接操作对象，而是像代理模式，通过对象的代理对象进行操作，在进行这些操作时，可以添加一些需要的额外操作。
 
 Reflect 可以用于获取目标对象的行为，它与 Object 类似，但是更易读，为操作对象提供了一种更优雅的方式。它的方法与 Proxy 是对应的。
+
+
+
+### 6.1.Proxy
+
+- **Proxy**：一个 Proxy 对象由两个部分组成： target 、 handler 。在通过 Proxy 构造函数生成实例对象时，需要提供这两个参数。 target 即目标对象， handler 是一个对象，声明了代理 target 的指定行为。
+
+```javascript
+let target = {
+    name: 'Tom',
+    age: 24
+}
+let handler = {
+    get: function(target, key) {
+        console.log('getting '+key);
+        return target[key]; // 不是target.key
+    },
+    set: function(target, key, value) {
+        console.log('setting '+key);
+        target[key] = value;
+    }
+}
+let proxy = new Proxy(target, handler)
+proxy.name     // 实际执行 handler.get
+proxy.age = 25 // 实际执行 handler.set
+// getting name
+// setting age
+// 25
+ 
+// target 可以为空对象
+let targetEpt = {}
+let proxyEpt = new Proxy(targetEpt, handler)
+// 调用 get 方法，此时目标对象为空，没有 name 属性
+proxyEpt.name // getting name
+// 调用 set 方法，向目标对象中添加了 name 属性
+proxyEpt.name = 'Tom'
+// setting name
+// "Tom"
+// 再次调用 get ，此时已经存在 name 属性
+proxyEpt.name
+// getting name
+// "Tom"
+ 
+// 通过构造函数新建实例时其实是对目标对象进行了浅拷贝，因此目标对象与代理对象会互相
+// 影响
+targetEpt
+// {name: "Tom"}
+ 
+// handler 对象也可以为空，相当于不设置拦截操作，直接访问目标对象
+let targetEmpty = {}
+let proxyEmpty = new Proxy(targetEmpty,{})
+proxyEmpty.name = "Tom"
+targetEmpty // {name: "Tom"}
+```
+
+**实例方法：**
+
+```javascript
+get(target, propKey, receiver)
+```
+
+用于 target 对象上 propKey 的读取操作。
+
+```javascript
+let exam ={
+    name: "Tom",
+    age: 24
+}
+let proxy = new Proxy(exam, {
+  get(target, propKey, receiver) {
+    console.log('Getting ' + propKey);
+    return target[propKey];
+  }
+})
+proxy.name 
+// Getting name
+// "Tom"
+```
+
+get() 方法可以继承。
+
+```javascript
+let proxy = new Proxy({}, {
+  get(target, propKey, receiver) {
+      // 实现私有属性读取保护
+      if(propKey[0] === '_'){
+          throw new Erro(`Invalid attempt to get private     "${propKey}"`);
+      }
+      console.log('Getting ' + propKey);
+      return target[propKey];
+  }
+});
+ 
+let obj = Object.create(proxy);
+obj.name
+// Getting name
+```
+
+
+
+```javascript
+set(target, propKey, value, receiver)
+```
+
+用于拦截 target 对象上的 propKey 的赋值操作。如果目标对象自身的某个属性，不可写且不可配置，那么set方法将不起作用。
+
+```javascript
+let validator = {
+    set: function(obj, prop, value) {
+        if (prop === 'age') {
+            if (!Number.isInteger(value)) {
+                throw new TypeError('The age is not an integer');
+            }
+            if (value > 200) {
+                throw new RangeError('The age seems invalid');
+            }
+        }
+        // 对于满足条件的 age 属性以及其他属性，直接保存
+        obj[prop] = value;
+    }
+};
+let proxy= new Proxy({}, validator)
+proxy.age = 100;
+proxy.age           // 100
+proxy.age = 'oppps' // 报错
+proxy.age = 300     // 报错
+```
+
+第四个参数 receiver 表示原始操作行为所在对象，一般是 Proxy 实例本身。
+
+```javascript
+const handler = {
+    set: function(obj, prop, value, receiver) {
+        obj[prop] = receiver;
+    }
+};
+const proxy = new Proxy({}, handler);
+proxy.name= 'Tom';
+proxy.name=== proxy // true
+ 
+const exam = {}
+Object.setPrototypeOf(exam, proxy)
+exam.name = "Tom"
+exam.name === exam // true
+```
+
+注意，严格模式下，set代理如果没有返回true，就会报错。
+
+**apply(target,ctx,args)：**用于拦截函数的调用、call 和 reply 操作。target 表示目标对象，ctx 表示目标对象上下文，args 表示目标对象的参数数组。
+
+```javascript
+function sub(a, b){
+    return a - b;
+}
+let handler = {
+    apply: function(target, ctx, args){
+        console.log('handle apply');
+        return Reflect.apply(...arguments);
+    }
+}
+let proxy = new Proxy(sub, handler)
+proxy(2, 1) 
+// handle apply
+// 1
+```
+
+```javascript
+has(target, propKey)
+```
+
+用于拦截 HasProperty 操作，即在判断 target 对象是否存在 propKey 属性时，会被这个方法拦截。此方法不判断一个属性是对象自身的属性，还是继承的属性。
+
+```javascript
+let  handler = {
+    has: function(target, propKey){
+        console.log("handle has");
+        return propKey in target;
+    }
+}
+let exam = {name: "Tom"}
+let proxy = new Proxy(exam, handler)
+'name' in proxy
+// handle has
+// true
+```
+
+注意：此方法不拦截 for ... in 循环。
+
+```javascript
+construct(target, args)
+```
+
+用于拦截 new 命令。返回值必须为对象。
+
+```javascript
+let handler = {
+    construct: function (target, args, newTarget) {
+        console.log('handle construct')
+        return Reflect.construct(target, args, newTarget)  
+    }
+}
+class Exam { 
+    constructor (name) {  
+        this.name = name 
+    }
+}
+let ExamProxy = new Proxy(Exam, handler)
+let proxyObj = new ExamProxy('Tom')
+console.log(proxyObj)
+// handle construct
+// exam {name: "Tom"}
+```
+
+```javascript
+deleteProperty(target, propKey)
+```
+
+用于拦截 delete 操作，如果这个方法抛出错误或者返回 false ，propKey 属性就无法被 delete 命令删除。
+
+
+
+```javascript
+defineProperty(target, propKey, propDesc)
+```
+
+用于拦截 Object.definePro若目标对象不可扩展，增加目标对象上不存在的属性会报错；若属性不可写或不可配置，则不能改变这些属性。
+
+```javascript
+let handler = {
+    defineProperty: function(target, propKey, propDesc){
+        console.log("handle defineProperty");
+        return true;
+    }
+}
+let target = {}
+let proxy = new Proxy(target, handler)
+proxy.name = "Tom"
+// handle defineProperty
+target
+// {name: "Tom"}
+ 
+// defineProperty 返回值为false，添加属性操作无效
+let handler1 = {
+    defineProperty: function(target, propKey, propDesc){
+        console.log("handle defineProperty");
+        return false;
+    }
+}
+let target1 = {}
+let proxy1 = new Proxy(target1, handler1)
+proxy1.name = "Jerry"
+target1
+// {}
+```
+
+**erty 操作:**
+
+```javascript
+getOwnPropertyDescriptor(target, propKey)
+```
+
+用于拦截 Object.getOwnPropertyD() 返回值为属性描述对象或者 undefined 。
+
+```javascript
+let handler = {
+    getOwnPropertyDescriptor: function(target, propKey){
+        return Object.getOwnPropertyDescriptor(target, propKey);
+    }
+}
+let target = {name: "Tom"}
+let proxy = new Proxy(target, handler)
+Object.getOwnPropertyDescriptor(proxy, 'name')
+// {value: "Tom", writable: true, enumerable: true, configurable: 
+// true}
+```
+
+**ptor 属性:**
+
+```javascript
+getPrototypeOf(target)
+```
+
+主要用于拦截获取对象原型的操作。包括以下操作：
+
+```javascript
+- Object.prototype._proto_
+- Object.prototype.isPrototypeOf()
+- Object.getPrototypeOf()
+- Reflect.getPrototypeOf()
+- instanceof
+```
+
+```javascript
+let exam = {}
+let proxy = new Proxy({},{
+    getPrototypeOf: function(target){
+        return exam;
+    }
+})
+Object.getPrototypeOf(proxy) // {}
+```
+
+注意，返回值必须是对象或者 null ，否则报错。另外，如果目标对象不可扩展（non-extensible），getPrototypeOf 方法必须返回目标对象的原型对象。
+
+```javascript
+let proxy = new Proxy({},{
+    getPrototypeOf: function(target){
+        return true;
+    }
+})
+Object.getPrototypeOf(proxy)
+// TypeError: 'getPrototypeOf' on proxy: trap returned neither object // nor null
+```
+
+```javascript
+isExtensible(target)
+```
+
+用于拦截 Object.isExtensible 操作。该方法只能返回布尔值，否则返回值会被自动转为布尔值。
+
+```javascript
+let proxy = new Proxy({},{
+    isExtensible:function(target){
+        return true;
+    }
+})
+Object.isExtensible(proxy) // true
+```
+
+注意：它的返回值必须与目标对象的isExtensible属性保持一致，否则会抛出错误。
+
+```javascript
+let proxy = new Proxy({},{
+    isExtensible:function(target){
+        return false;
+    }
+})
+Object.isExtensible(proxy)
+// TypeError: 'isExtensible' on proxy: trap result does not reflect 
+// extensibility of proxy target (which is 'true')
+```
+
+```javascript
+ownKeys(target)
+```
+
+用于拦截对象自身属性的读取操作。主要包括以下操作：
+
+```javascript
+- Object.getOwnPropertyNames()
+- Object.getOwnPropertySymbols()
+- Object.keys()
+- or...in
+```
+
+方法返回的数组成员，只能是字符串或 Symbol 值，否则会报错。
+
+若目标对象中含有不可配置的属性，则必须将这些属性在结果中返回，否则就会报错。
+
+若目标对象不可扩展，则必须全部返回且只能返回目标对象包含的所有属性，不能包含不存在的属性，否则也会报错。
+
+```javascript
+let proxy = new Proxy( {
+  name: "Tom",
+  age: 24
+}, {
+    ownKeys(target) {
+        return ['name'];
+    }
+});
+Object.keys(proxy)
+// [ 'name' ]f返回结果中，三类属性会被过滤：
+//          - 目标对象上没有的属性
+//          - 属性名为 Symbol 值的属性
+//          - 不可遍历的属性
+ 
+let target = {
+  name: "Tom",
+  [Symbol.for('age')]: 24,
+};
+// 添加不可遍历属性 'gender'
+Object.defineProperty(target, 'gender', {
+  enumerable: false,
+  configurable: true,
+  writable: true,
+  value: 'male'
+});
+let handler = {
+    ownKeys(target) {
+        return ['name', 'parent', Symbol.for('age'), 'gender'];
+    }
+};
+let proxy = new Proxy(target, handler);
+Object.keys(proxy)
+// ['name']
+```
+
+```javascript
+preventExtensions(target)
+```
+
+拦截 Object.preventExtensions 操作。
+
+该方法必须返回一个布尔值，否则会自动转为布尔值。
+
+```javascript
+// 只有目标对象不可扩展时（即 Object.isExtensible(proxy) 为 false ），
+// proxy.preventExtensions 才能返回 true ，否则会报错
+var proxy = new Proxy({}, {
+  preventExtensions: function(target) {
+    return true;
+  }
+});
+// 由于 proxy.preventExtensions 返回 true，此处也会返回 true，因此会报错
+Object.preventExtensions(proxy) 被// TypeError: 'preventExtensions' on proxy: trap returned truish but // the proxy target is extensible
+ 
+// 解决方案
+ var proxy = new Proxy({}, {
+  preventExtensions: function(target) {
+    // 返回前先调用 Object.preventExtensions
+    Object.preventExtensions(target);
+    return true;
+  }
+});
+Object.preventExtensions(proxy)
+// Proxy {}
+```
+
+```javascript
+setPrototypeOf
+```
+
+主要用来拦截 Object.setPrototypeOf 方法。
+
+返回值必须为布尔值，否则会被自动转为布尔值。
+
+若目标对象不可扩展，setPrototypeOf 方法不得改变目标对象的原型。
+
+```javascript
+let proto = {}
+let proxy = new Proxy(function () {}, {
+    setPrototypeOf: function(target, proto) {
+        console.log("setPrototypeOf");
+        return true;
+    }
+}
+);
+Object.setPrototypeOf(proxy, proto);
+// setPrototypeOf
+```
+
+```javascript
+Proxy.revocable()
+```
+
+用于返回一个可取消的 Proxy 实例。
+
+```javascript
+let {proxy, revoke} = Proxy.revocable({}, {});
+proxy.name = "Tom";
+revoke();
+proxy.name 
+// TypeError: Cannot perform 'get' on a proxy that has been revoked
+```
+
+
+
+### 6.2.Reflect
+
+ES6 中将 Object 的一些明显属于语言内部的方法移植到了 Reflect 对象上（当前某些方法会同时存在于 Object 和 Reflect 对象上），未来的新方法会只部署在 Reflect 对象上。
+
+Reflect 对象对某些方法的返回结果进行了修改，使其更合理。
+
+Reflect 对象使用函数的方式实现了 Object 的命令式操作。
+
+- **静态方法**
+
+```javascript
+Reflect.get(target, name, receiver)
+```
+
+查找并返回 target 对象的 name 属性。
+
+```javascript
+let exam = {
+    name: "Tom",
+    age: 24,
+    get info(){
+        return this.name + this.age;
+    }
+}
+Reflect.get(exam, 'name'); // "Tom"
+ 
+// 当 target 对象中存在 name 属性的 getter 方法， getter 方法的 this 会绑定 // receiver
+let receiver = {
+    name: "Jerry",
+    age: 20
+}
+Reflect.get(exam, 'info', receiver); // Jerry20
+ 
+// 当 name 为不存在于 target 对象的属性时，返回 undefined
+Reflect.get(exam, 'birth'); // undefined
+ 
+// 当 target 不是对象时，会报错
+Reflect.get(1, 'name'); // TypeError
+```
+
+```javascript
+Reflect.set(target, name, value, receiver)
+```
+
+将 target 的 name 属性设置为 value。返回值为 boolean ，true 表示修改成功，false 表示失败。当 target 为不存在的对象时，会报错。
+
+```javascript
+let exam = {
+    name: "Tom",
+    age: 24,
+    set info(value){
+        return this.age = value;
+    }
+}
+exam.age; // 24
+Reflect.set(exam, 'age', 25); // true
+exam.age; // 25
+ 
+// value 为空时会将 name 属性清除
+Reflect.set(exam, 'age', ); // true
+exam.age; // undefined
+ 
+// 当 target 对象中存在 name 属性 setter 方法时，setter 方法中的 this 会绑定 // receiver , 所以修改的实际上是 receiver 的属性,
+let receiver = {
+    age: 18
+}
+Reflect.set(exam, 'info', 1, receiver); // true
+receiver.age; // 1
+ 
+let receiver1 = {
+    name: 'oppps'
+}
+Reflect.set(exam, 'info', 1, receiver1);
+receiver1.age; // 1
+```
+
+```javascript
+Reflect.has(obj, name)
+```
+
+是 name in obj 指令的函数化，用于查找 name 属性在 obj 对象中是否存在。返回值为 boolean。如果 obj 不是对象则会报错 TypeError。
+
+```javascript
+let exam = {
+    name: "Tom",
+    age: 24
+}
+Reflect.has(exam, 'name'); // true
+```
+
+```javascript
+Reflect.deleteProperty(obj, property)
+```
+
+是 delete obj[property] 的函数化，用于删除 obj 对象的 property 属性，返回值为 boolean。如果 obj 不是对象则会报错 TypeError。
+
+```javascript
+let exam = {
+    name: "Tom",
+    age: 24
+}
+Reflect.deleteProperty(exam , 'name'); // true
+exam // {age: 24} 
+// property 不存在时，也会返回 true
+Reflect.deleteProperty(exam , 'name'); // true
+```
+
+```javascript
+Reflect.construct(obj, args)
+```
+
+等同于 new target(...args)。
+
+```javascript
+function exam(name){
+    this.name = name;
+}
+Reflect.construct(exam, ['Tom']); // exam {name: "Tom"}
+```
+
+```javascript
+Reflect.getPrototypeOf(obj)
+```
+
+用于读取 obj 的 _proto_ 属性。在 obj 不是对象时不会像 Object 一样把 obj 转为对象，而是会报错。
+
+```javascript
+class Exam{}
+let obj = new Exam()
+Reflect.getPrototypeOf(obj) === Exam.prototype // true
+```
+
+```javascript
+Reflect.setPrototypeOf(obj, newProto)
+```
+
+用于设置目标对象的 prototype。
+
+```javascript
+let obj ={}
+Reflect.setPrototypeOf(obj, Array.prototype); // true
+```
+
+```javascript
+Reflect.apply(func, thisArg, args)
+```
+
+等同于 Function.prototype.apply.call(func, thisArg, args) 。func 表示目标函数；thisArg 表示目标函数绑定的 this 对象；args 表示目标函数调用时传入的参数列表，可以是数组或类似数组的对象。若目标函数无法调用，会抛出 TypeError 。
+
+```javascript
+Reflect.apply(Math.max, Math, [1, 3, 5, 3, 1]); // 5
+```
+
+```javascript
+Reflect.defineProperty(target, propertyKey, attributes)
+```
+
+用于为目标对象定义属性。如果 target 不是对象，会抛出错误。
+
+```javascript
+let myDate= {}
+Reflect.defineProperty(MyDate, 'now', {
+  value: () => Date.now()
+}); // true
+ 
+const student = {};
+Reflect.defineProperty(student, "name", {value: "Mike"}); // true
+student.name; // "Mike"
+```
+
+```javascript
+Reflect.getOwnPropertyDescriptor(target, propertyKey)
+```
+
+用于得到 target 对象的 propertyKey 属性的描述对象。在 target 不是对象时，会抛出错误表示参数非法，不会将非对象转换为对象。
+
+```javascript
+var exam = {}
+Reflect.defineProperty(exam, 'name', {
+  value: true,
+  enumerable: false,
+})
+Reflect.getOwnPropertyDescriptor(exam, 'name')
+// { configurable: false, enumerable: false, value: true, writable:
+// false}
+ 
+ 
+// propertyKey 属性在 target 对象中不存在时，返回 undefined
+Reflect.getOwnPropertyDescriptor(exam, 'age') // undefined
+```
+
+```javascript
+Reflect.isExtensible(target)
+```
+
+用于判断 target 对象是否可扩展。返回值为 boolean 。如果 target 参数不是对象，会抛出错误。
+
+```javascript
+let exam = {}
+Reflect.isExtensible(exam) // true
+```
+
+```javascript
+Reflect.preventExtensions(target)
+```
+
+用于让 target 对象变为不可扩展。如果 target 参数不是对象，会抛出错误。
+
+```javascript
+let exam = {}
+Reflect.preventExtensions(exam) // true
+```
+
+```javascript
+Reflect.ownKeys(target)
+```
+
+用于返回 target 对象的所有属性，等同于 Object.getOwnPropertyNames 与Object.getOwnPropertySymbols 之和。
+
+```javascript
+var exam = {
+  name: 1,
+  [Symbol.for('age')]: 4
+}
+Reflect.ownKeys(exam) // ["name", Symbol(age)]
+```
+
+
+
+### 6.3.组合使用
+
+Reflect 对象的方法与 Proxy 对象的方法是一一对应的。所以 Proxy 对象的方法可以通过调用 Reflect 对象的方法获取默认行为，然后进行额外操作。
+
+```javascript
+let exam = {
+    name: "Tom",
+    age: 24
+}
+let handler = {
+    get: function(target, key){
+        console.log("getting "+key);
+        return Reflect.get(target,key);
+    },
+    set: function(target, key, value){
+        console.log("setting "+key+" to "+value)
+        Reflect.set(target, key, value);
+    }
+}
+let proxy = new Proxy(exam, handler)
+proxy.name = "Jerry"
+proxy.name
+// setting name to Jerry
+// getting name
+// "Jerry"
+```
+
+
+
+- **使用场景拓展**
+
+  - **实现观察者模式**
+
+  ```javascript
+  // 定义 Set 集合
+  const queuedObservers = new Set();
+  // 把观察者函数都放入 Set 集合中
+  const observe = fn => queuedObservers.add(fn);
+  // observable 返回原始对象的代理，拦截赋值操作
+  const observable = obj => new Proxy(obj, {set});
+  function set(target, key, value, receiver) {
+    // 获取对象的赋值操作
+    const result = Reflect.set(target, key, value, receiver);
+    // 执行所有观察者
+    queuedObservers.forEach(observer => observer());
+    // 执行赋值操作
+    return result;
+  }
+  ```
+
+  
+
+- **拓展：**
+
+```javascript
+fn => queuedObservers.add(fn)
+```
+
+等于=>：
+
+```javascript
+function(fn){ 
+    return queuedObservers.add(fn) ;
+};
+```
+
+```javascript
+obj => new Proxy(obj, {set})
+```
+
+等于=>：
+
+```javascript
+function(obj){
+    return new Proxy(obj, {set});
+}
+```
+
+```javascript
+observer => observer()
+```
+
+等于=>：
+
+```javascript
+function(observer ){
+    return observer()
+}
+```
+
+
+
+
+
+## 7.ES6中的字符串
+
+ES6中关于字符串的操作，相比于之前的版本拓展了一些方法，我们依次来了解下有哪些方法。
+
+- **字串的识别**
+
+  ES6 之前判断字符串是否包含子串，用 indexOf 方法，ES6 新增了子串的识别方法。
+
+  -  includes()：返回布尔值，判断是否找到参数字符串；
+  -  startsWith()：返回布尔值，判断参数字符串是否在原字符串的头部；
+  - endsWith()：返回布尔值，判断参数字符串是否在原字符串的尾部。
+
+  以上三个方法都可以接受两个参数，需要搜索的字符串，和可选的搜索起始位置索引。
+
+  ```javascript
+  xxxxxxxxxx let string = "apple,banana,orange";string.includes("banana");     // truestring.startsWith("apple");    // truestring.endsWith("apple");      // falsestring.startsWith("banana",6)  // true	javascript
+  ```
+
+  - **注意点：**
+    - 这三个方法只返回布尔值，如果需要知道子串的位置，还是得用 indexOf 和 lastIndexOf 。
+    - 这三个方法如果传入了正则表达式而不是字符串，会抛出错误。而 indexOf 和 lastIndexOf 这两个方法，它们会将正则表达式转换为字符串并搜索它。
+
+- **字符串重复**
+
+repeat()：返回新的字符串，表示将字符串重复指定次数返回。
+
+```javascript
+console.log("Hello,".repeat(2));  // "Hello,Hello,"
+```
+
+如果参数是小数，向下取整：
+
+```javascript
+console.log("Hello,".repeat(3.2));  // "Hello,Hello,Hello,"
+```
+
+如果参数是 0 至 -1 之间的小数，会进行取整运算，0 至 -1 之间的小数取整得到 -0 ，等同于 repeat 零次：
+
+```javascript
+console.log("Hello,".repeat(-0.5));  // "" 
+```
+
+如果参数是 NaN，等同于 repeat 零次：
+
+```javascript
+console.log("Hello,".repeat(NaN));  // "" 
+```
+
+如果参数是负数或者 Infinity ，会报错：
+
+```javascript
+console.log("Hello,".repeat(-1));  
+// RangeError: Invalid count value
+
+console.log("Hello,".repeat(Infinity));  
+// RangeError: Invalid count value
+```
+
+如果传入的参数是字符串，则会先将字符串转化为数字：
+
+```javascript
+console.log("Hello,".repeat("hh")); // ""
+console.log("Hello,".repeat("2"));  // "Hello,Hello,"
+```
+
+
+
+- **字符串补全**
+  - padStart：返回新的字符串，表示用参数字符串从头部（左侧）补全原字符串。
+  - padEnd：返回新的字符串，表示用参数字符串从尾部（右侧）补全原字符串。
+
+以上两个方法接受两个参数，第一个参数是指定生成的字符串的最小长度，第二个参数是用来补全的字符串。如果没有指定第二个参数，默认用空格填充。
+
+```javascript
+console.log("h".padStart(5,"o"));  // "ooooh"
+console.log("h".padEnd(5,"o"));    // "hoooo"
+console.log("h".padStart(5));      // "    h"
+```
+
+如果指定的长度小于或者等于原字符串的长度，则返回原字符串：
+
+```javascript
+console.log("hello".padStart(5,"A"));  // "hello"
+```
+
+如果原字符串加上补全字符串长度大于指定长度，则截去超出位数的补全字符串:
+
+```javascript
+console.log("hello".padEnd(10,",world!"));  // "hello,worl"
+```
+
+常用于补全位数：
+
+```javascript
+console.log("123".padStart(10,"0"));  // "0000000123"
+```
+
+
+
+- **模板字符串**
+
+  模板字符串相当于加强版的字符串，用反引号 **`**,除了作为普通字符串，还可以用来定义多行字符串，还可以在字符串中加入变量和表达式。
+
+  -  **基本用法**
+
+    - 普通字符串
+
+    ```javascript
+    let string = `Hello'\n'world`;
+    console.log(string); 
+    // "Hello'
+    // 'world"
+    ```
+
+    
+
+    - 多行字符串
+
+    ```javascript
+    let string1 =  `Hey,
+    can you stop angry now?`;
+    console.log(string1);
+    // Hey,
+    // can you stop angry now?
+    ```
+
+    字符串插入变量和表达式。
+
+    变量名写在 ${} 中，${} 中可以放入 JavaScript 表达式。
+
+    ```javascript
+    let name = "Mike";
+    let age = 27;
+    let info = `My Name is ${name},I am ${age+1} years old next year.`
+    console.log(info);
+    // My Name is Mike,I am 28 years old next year.
+    ```
+
+    字符串中调用函数：
+
+    ```javascript
+    function f(){
+      return "have fun!";
+    }
+    let string2= `Game start,${f()}`;
+    console.log(string2);  // Game start,have fun!
+    ```
+
+    
+
+  - **注意要点**
+
+  模板字符串中的换行和空格都是会被保留的。
+
+  ```javascript
+  innerHtml = `<ul>
+    <li>menu</li>
+    <li>mine</li>
+  </ul>
+  `;
+  console.log(innerHtml);
+  // 输出
+  <ul>
+   <li>menu</li>
+   <li>mine</li>
+  </ul>
+  ```
+
+  
+
+- **标签模板**
+
+标签模板，是一个函数的调用，其中调用的参数是模板字符串。
+
+```javascript
+alert`Hello world!`;
+// 等价于
+alert('Hello world!');
+```
+
+当模板字符串中带有变量，会将模板字符串参数处理成多个参数。
+
+```javascript
+function f(stringArr,...values){
+ let result = "";
+ for(let i=0;i<stringArr.length;i++){
+  result += stringArr[i];
+  if(values[i]){
+   result += values[i];
+        }
+    }
+ return result;
+}
+let name = 'Mike';
+let age = 27;
+f`My Name is ${name},I am ${age+1} years old next year.`;
+// "My Name is Mike,I am 28 years old next year."
+ 
+f`My Name is ${name},I am ${age+1} years old next year.`;
+// 等价于
+f(['My Name is',',I am ',' years old next year.'],'Mike',28);
+```
+
+- **应用场景**：过滤 HTML 字符串，防止用户输入恶意内容。
+
+```javascript
+function f(stringArr,...values){
+ let result = "";
+ for(let i=0;i<stringArr.length;i++){
+  result += stringArr[i];
+   if(values[i]){
+     result += String(values[i]).replace(/&/g, "&amp;")
+               .replace(/</g, "&lt;")
+               .replace(/>/g, "&gt;");
+    }
+ }
+ return result;
+}
+name = '<Amy&MIke>';
+f`<p>Hi, ${name}.I would like send you some message.</p>`;
+// <p>Hi, &lt;Amy&amp;MIke&gt;.I would like send you some message.</p>
+```
+
+
+
+- **国际化处理（转换多国语言）**
+
+```javascript
+i18n`Hello ${name}, you are visitor number ${visitorNumber}.`;  
+// 你好**，你是第**位访问者
+```
+
+
+
+
+
+​	

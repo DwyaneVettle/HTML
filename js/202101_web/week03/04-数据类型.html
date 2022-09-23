@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+        js中基础的数据类型有：
+        string,number,bool,null,undefined,symbol
+        js是弱类型的语言，解释器根据=右边的值判断对象的类型
+        typeof()可以检测对象的数据类型
+        */
+       var a = 100;
+       console.log(typeof(a)); // number
+       var b = "代旭松";
+       console.log(typeof(b)); // string
+       var c = true;
+       console.log(typeof(c));  // boolean
+
+       var d = 0101; // 八进制
+       console.log(d); // 65
+
+       var e = 1.5e3;
+       console.log(e); // 1500
+       console.log("我说你很好('hello')");
+
+       // boolean true=1,false=0
+        var f = true;
+        console.log(f + 100); // 101
+        var g = false;
+        console.log(g - 100); // -100
+
+        var h = 100;
+        h = null;
+        console.log(h);  // null
+    </script>
+</body>
+</html>

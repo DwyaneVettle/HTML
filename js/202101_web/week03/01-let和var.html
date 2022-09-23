@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            let和var的区别
+            1.let具有代码块的作用域
+            2.var声明的变量可以重复声明，let不行
+        */
+        {
+            var a = 100;
+            var a = 10;
+            let b = 200;
+            // let b = 20;
+            console.log("a=" +a);  // 100
+            console.log("b="+b); // b=200
+        }
+        console.log("a=" +a); // 100
+        // console.log("b="+b);  // b is not defined
+
+        // 通过var关键字声明的变量，在声明时没有赋值，那么会输出undefined
+        // 如果没有var关键字声明的变量并没有赋值，会报错
+        var c;
+        console.log(c); // undefined
+        d;
+        console.log(d); // d is not defined
+    </script>
+</body>
+</html>
