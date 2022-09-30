@@ -793,7 +793,7 @@ console.log(typeof(n)); // string
 逻辑运算符
 && 逻辑与 表达式同时成立，最终结果才为true；1则1
 || 逻辑或 表达式中只要有一个成立，最终结果即为true；有1则1
-! 逻辑非  对已有表达式的结果取反，除零值以外，所有值都为真
+! 逻辑非  对已有表达式的结果取反，除零值以外，所有值都为false
 
 三元运算符
 表达式1 ? 表达式2 : 表达式3;
@@ -854,7 +854,7 @@ console.log(b > c); // false
 var x = 10,
     y = 20,
     z = 30;
-// 运算优先级() ! && ||
+// 运算优先级() ! && || 
 console.log(!(x > y && y > z || x < y && z > y)); // false
 // 三元运算符
 var result = x > y ? x : y
@@ -952,22 +952,23 @@ try {
   if(条件表达式) {
       表达式成立时执行的代码块;
   }
+  代码
   ```
-
-  注意 : 除零值以外，其他值都为真，以下条件为假值false:
-
-  ```javascript
+```javascript
+  
+注意 : 除零值以外，其他值都为真，以下条件为假值false:
+  
   if(0){}
   if(0.0){}
   if(""){} //空字符串
   if(undefined){}
   if(NaN){}
   if(null){}
-  ```
+```
 
-  特殊写法：{}可以省略，但一旦省略，if条件语句只控制其后的第一行代码。
+特殊写法：{}可以省略，但一旦省略，if条件语句只控制其后的第一行代码。
 
-  **案例：如果获取当前时间，如果时间小于20小时，输出Good Day**
+**案例：如果获取当前时间，如果时间小于20小时，输出Good Day**
 
   ```javascript
   <head>
@@ -995,20 +996,21 @@ try {
   
   ```
 
+
+
+
+
+- **if-else结构**
   
-
-  
-
-  - **if-else结构**
-
   ```javascript
   if(条件表达式){
   	//条件成立时执行
   }else{
   	//条件不成立时选择执行
   }
-  ```
 
+  ```
+  
   ```javascript
   <head>
       <meta charset="utf-8">
@@ -1033,14 +1035,15 @@ try {
           }
       </script>
   
-  </body>
   ```
 
-  
+</body>
+  ```javascript
 
+  
+  
   - **多重条件语句**
 
-```javascript
  if(条件1){
   	//条件1成立时执行
   }else if(条件2){
@@ -1050,7 +1053,7 @@ try {
   }...else{
   	//条件不成立时执行
   }
-```
+  ```
 
 ![image-20220624220251728](JavaScript.assets/image-20220624220251728.png)
 
@@ -1117,7 +1120,7 @@ try {
             console.log(this.value);
             var _val = this.value;
             if (_val == 1) {
-                console.log("A")
+                console.log("A") 
             } else if (_val == 2) {
                 console.log("B");
             } else if (_val == 3) {

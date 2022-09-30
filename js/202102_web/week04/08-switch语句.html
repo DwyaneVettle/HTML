@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>点击按钮，显示今天是星期几</p>
+    <button id="btn" onclick="">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        /* 
+            点击按钮，根据今天是星期几，然后在浏览器中写入内容
+            今天是xxx
+            switch(value){
+                    case value1: 
+                        代码块
+                    break;
+                    case value2:
+                        代码块
+                    break;
+                    default:
+                        代码块
+                    break;
+                }
+        value是去匹配case语句中的值，如果匹配，执行
+        当前case里的代码块，通过break结束匹配
+        如果不匹配当前case，那么接着往下面匹配，直到找到default
+        都不匹配，那么执行default代码块
+        break结束当前匹配
+        */
+       var x ;
+       var date = new Date().getDay(); // 获取星期几，从0-6
+       // console.log(date); 4
+        switch(date) {
+            case 0:
+                x = "今天是星期天";
+                break;
+            case 1:
+                x = "今天是星期一";
+                break;
+            case 2:
+                x = "今天是星期二";
+                break;
+            case 3:
+                x = "今天是星期三";
+                break;
+            case 4:
+                x = "今天是星期四";
+                break;
+            case 5:
+                x = "今天是星期五";
+                break;
+            case 6:
+                x = "今天是星期六";
+                break;
+            default:
+                x = "啥也不是";
+                break;
+        }
+        var demo = document.getElementById("demo");
+        demo.innerText = x;
+    </script>
+</body>
+</html>

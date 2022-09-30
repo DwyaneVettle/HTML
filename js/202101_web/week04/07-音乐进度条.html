@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <!-- onchange表示输入框两次变化的事件发生 -->
+    <input type="range" min="1" max="10" value="1" id="rng" onchange="fun01()">
+    <script>
+        /* 
+            根据音乐进度条的位置进行拉动
+            位置1输出A，位置2输出B。。。4
+            5以上输出不合格
+        */
+       function fun01() {
+        // 1.找到进度条的位置
+        var rng = document.getElementById("rng");
+        // 取值对象.value
+        var val = rng.value;
+        // console.log(val);
+        // == 不管类型，只比较值
+        if (val == 1) {
+            console.log("A");
+        } else if (val == 2) {
+            console.log("B");
+        } else if (val ==3) {
+            console.log("C");
+        } else if (val == 4) {
+            console.log("D");
+        } else {
+            console.log("不合格");
+        }
+       }
+    </script>
+</body>
+</html>

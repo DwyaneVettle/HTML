@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>如果时间早于 20:00，会获得问候 "Good day"。</p>
+    <button onclick="myFun()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        /* 判断当前时间是否小于20：00，如果小于，向
+        客户问候"美好的一天"
+        new Data().getHours() */
+        function myFun() {
+            var txt = "";
+            var time = new Date().getHours()
+            // console.log(time);
+            if (time < 10) {
+                txt = "Good morning";
+            } else if (10 < time < 20) {
+                txt = "Good Day";
+            } else {
+                txt = "Good evening";
+            }
+            var demo = document.getElementById("demo");
+            demo.innerText = txt;
+        }
+    </script>
+</body>
+</html>
