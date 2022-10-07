@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>点击按钮，只要小于5就循环代码块</p>
+    <button onclick="myFun()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        /* 
+            1.定义初始化变量
+            2.do {
+                代码块
+                3.变量变化
+            4.}while(条件)
+        */
+       function myFun() {
+            // 1.定义初始化变量
+            var i = 0;
+            var x = "";
+            // 2.执行代码块
+            do {
+                x = x + "该数字为" + i + "<br/>";
+                // 3.变量变化
+                i++;
+            // 判断条件
+            } while(i < 5);
+            document.getElementById("demo").innerHTML =x;
+       }
+    </script>
+</body>
+</html>

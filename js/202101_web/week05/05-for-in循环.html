@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>点击按钮，将person的属性值输出到页面中</p>
+    <button onclick="myFun()">点击按钮</button>
+    <p id="demo"></p>
+    <script>
+        /* for (var in 对象) {} 
+            如果一个对象有多个属性，用{}包裹，
+            多个属性之间用逗号隔开，最后一个属性不需要分隔
+            属性和属性值是k-v结构的，但获取属性值用对象[index]
+        */
+        function myFun() {
+            var x;
+            var txt = "";
+            var person = {
+                name: "刘德华",
+                age: 60,
+                sex: "man"
+            }
+            for(x in person) {
+                // console.log(person[x]);
+                txt = txt + person[x] + "<br/>";
+            }
+            document.getElementById("demo").innerHTML = txt;
+        }
+    </script>
+</body>
+</html>

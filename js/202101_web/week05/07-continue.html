@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>点击按钮，遍历0-9，当i=3的时候终止循环</p>
+    <button onclick="myFun()">点击按钮</button>
+    <p id="demo"></p>
+    <script>
+        function myFun() {
+            var i = 0;
+            var x = "";
+            // 遍历0-9,当遍历到数字3时终止程序，不再向下遍历
+            while(i < 10) {
+                if(i == 3) {
+                    i++;
+                    continue;
+                }
+                x = x + "数字:" + i + "<br/>";
+                i++;
+            }
+            document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+</body>
+</html>

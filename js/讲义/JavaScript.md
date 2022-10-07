@@ -1039,9 +1039,6 @@ try {
 
 </body>
   ```javascript
-
-  
-  
   - **多重条件语句**
 
  if(条件1){
@@ -1092,7 +1089,7 @@ try {
 
     <p id="demo"></p>
     <script>
-        var r = Math.random();
+        var r = Math.random();//随机生成的是0-1
         var x = document.getElementById("demo")
         if (r > 0.5) {
             x.innerHTML = "<a href='https://www.baidu.com'>访问百度</a>";
@@ -1245,12 +1242,14 @@ function myFunction()
 	var d=new Date().getDay();
 	switch (d)
     {
-  		case 6:x="今天是星期六";
-    	break;
-  		case 0:x="今天是星期日";
-    	break;
+  		case 6:
+            x="今天是星期六";
+    		break;
+  		case 0:
+            x="今天是星期日";
+    		break;
   		default:
-    	x="期待周末";
+    		x="期待周末";
   	}
 	document.getElementById("demo").innerHTML=x;
 }
@@ -1264,13 +1263,13 @@ function myFunction()
 
 ### 6.2.循环结构
 
-循环结构的作用是根据条件重复执行某段代码，分为while循环、do-while循环、for循环
+循环结构的作用是根据条件重复执行某段代码，分为while循环、do-while循环、for循环。
 
 - **while循环**
 
 ```javascript
 定义循环变量;
-   while(循环条件){
+while(循环条件){
    条件满足时执行的代码段
    更新循环变量;
 }
@@ -1364,6 +1363,12 @@ while循环和do-while循环的区别：
 ```javascript
 for(定义循环变量;循环条件;更新循环变量){
 	循环体;
+}
+
+定义循环变量;
+while(循环条件){
+   条件满足时执行的代码段
+   更新循环变量;
 }
 ```
 
@@ -1579,16 +1584,16 @@ continue语句-while:
     //函数的定义
     function show99() {
         //ul和li
-        document.write("<ul>")
+        document.write("<ul>");
         for (let i = 1; i <= 9; i++) {
             document.write("<li>")
             for (let j = 1; j <= i; j++) {
-                document.write("<span>" + i + "*" + j + "=" + i * j + "&emsp;</span>")
+                document.write("<span>" + i + "*" + j + "=" + i * j + "&emsp;</span>");
             }
-            document.write("</li>")
+            document.write("</li>");
 
         }
-        document.write("</ul>")
+        document.write("</ul>");
     }
     show99(); //函数的调用
 </script>

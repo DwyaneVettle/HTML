@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>点击按钮,显示今天是星期几</p>
+    <button onclick="myFun()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        /* 
+            switch语句
+            switch(value){
+                case value1:
+                    代码1
+                    break;
+                case value2:
+                    代码2
+                    break;
+                default:
+                    代码3
+            }
+            用value逐一与value1,value2....进行匹配，如果匹配上
+            执行对应匹配代码，如果都没有匹配上，执行default语句
+        */
+       //1.定义函数
+       function myFun() {
+            var x = "";
+            // 2.获取今天是星期几
+            // new Date().getDay()返回值是0-6，其中0表示星期天，1-6表示周一到周六
+            var day = new Date().getDay();
+            // console.log(day); 4
+            switch(day) {
+                case 0:
+                    x = "今天是星期天";
+                    break;
+                case 1:
+                    x = "今天是星期一";
+                    break;
+                case 2:
+                    x = "今天是星期二";
+                    break;
+                case 3:
+                    x = "今天是星期三";
+                    break;
+                case 4:
+                    x = "今天是星期四";
+                    break;
+                case 5:
+                    x = "今天是星期五";
+                    break;
+                case 6:
+                    x = "今天是星期六";
+                    break;
+                // default是当所有的值都不匹配时，那么执行此代码
+                default:
+                    x = "找不到今天是星期几";
+            }
+            document.getElementById("demo").innerText = x;
+       }
+    </script>
+</body>
+</html>

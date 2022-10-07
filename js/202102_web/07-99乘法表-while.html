@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 使用do-while循环定义99乘法表
+        function show99() {
+            // 1.定义初始化变量
+            var i = 0;
+            // 2.执行循环体（外循环控制行，内循环控制列）
+            do{
+                i++;
+                j = 0;
+                do{
+                    j++;
+                    document.write(j + "*" + i + "=" + i*j + "&emsp;");
+                }while(j < i);
+                document.write("<br/>");
+            }while(i < 9);
+            // 3.定义循环条件
+        }
+        show99();
+    </script>
+</body>
+</html>
