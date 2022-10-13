@@ -11,17 +11,17 @@
 <body>
 
     <script>
-        var sum = 0; // 求和
-        var average = 0; // 平均值 
-        var num = prompt("请输入班级总人数：");
-        for (var i = 1; i < num; i++) {
-            var score = prompt("请输入" + i + "个学生成绩");
-            sum = sum + parseFlaot(score); // 将字符型转换为数字
-        }
-        average = sum / num;
-        alert("班级的总成绩是：" + sum);
-        alert("班级的平均成绩是：" + average);
-    </script>
+    var num = prompt('请输入班级的总人数:');
+    var sum =0;
+    var averg =0;
+    for(var i=1;i<=num;i++){
+        var score =prompt('请您输入第'+i+'个学生成绩');
+        sum =sum +parseFloat(score);
+    }
+    averg =sum/num;
+    alert("班级总的成绩是:"+sum);
+    alert("班级平均分是:"+averg);
+</script>
 </body>
 
 </html>

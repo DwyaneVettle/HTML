@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>调用会将结果返回给调用者</p>
+    <p id="demo"></p>
+    <script>
+        /* 
+            函数的返回值，将函数内部执行的结果返回给调用者
+            只要函数有return，立即返回给调用者，函数内部return后
+            的代码不会执行
+        */
+       function mul(num01,num02) {
+            return num01*num02;
+            // return后的代码不会执行
+            console.log(123);
+       }
+       var demo = document.getElementById("demo");
+       demo.innerText = mul(10,10);
+    </script>
+</body>
+</html>

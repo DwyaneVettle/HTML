@@ -1863,10 +1863,8 @@ document.getElementById('demo').innerHTML = fun();
 仅仅是希望退出函数时，也可以使用return语句，返回值是可选的：
 
 ```javascript
-function myFunction(a,b)
-{
-    if (a>b)
-    {
+function myFunction(a,b) {
+    if (a>b){
         return;
     }
     x=a+b

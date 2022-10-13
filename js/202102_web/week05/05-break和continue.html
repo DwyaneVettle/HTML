@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <p>点击按钮，尝试break和continue的区别</p>
+    <button onclick="myFun()">点击按钮</button>
+    <p id="demo"></p>
+    <script>
+        /* 
+            break表示终止当前程序
+            continue表示终止当前循环体，继续下一循环
+        */
+        // function myFun() {
+        //     var i;
+        //     var x = "";
+        //     for(i=0;i<10;i++) {
+        //         // console.log(i);
+        //         if(i == 3) {
+        //             // 终止程序继续循环break
+        //             // break;
+        //             // 继续下面的循环
+        //             continue;
+        //         }
+        //         x = x + "数值" + i + "<br/>";
+        //     }
+        //     document.getElementById("demo").innerHTML = x;
+        // }
+        // 练习：把以上案例改造成while循环
+        function myFun() {
+            /* 
+                1.定义初始化变量
+                2.定义循环条件
+                3.执行循环体
+                4.变量变化
+            */
+           var i = 0;
+           var x = "";
+           while(i < 10) {
+                // 循环体：循环到3的时候触发终止程序
+                // console.log(i);
+                
+                if(i == 3) {
+                    // 终止程序break
+                    i++;
+                    break;
+                }
+                x = x + "数值" + i + "<br/>";
+                i++;
+           }
+           document.getElementById("demo").innerHTML = x;
+        }
+    </script>
+</body>
+</html>

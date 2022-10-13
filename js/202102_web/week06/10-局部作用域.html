@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            当变量只在函数内部声明时，只在函数内有
+            作用，在外面没有作用。
+        */
+        function jubu() {
+            var name = "姚明";
+            console.log(name);  // 姚明
+        }
+        console.log(name);
+        jubu();
+    </script>
+</body>
+</html>

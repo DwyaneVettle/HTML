@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            闰年：能被4/400整除；不能被100整除
+        */
+       // 1.定义函数
+       function runYear() {
+        // 2.取出所有的年份
+        for(var i = 1000; i <= 2000;i++) {
+            // console.log(i);
+            // 判断哪年是闰年
+            if(i % 4 == 0  && i % 100 != 0 || i % 400 == 0){
+                console.log(i);
+            }
+        }
+
+       }
+       runYear();
+    </script>
+</body>
+</html>

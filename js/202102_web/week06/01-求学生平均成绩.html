@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        求学生的总成绩和平均成绩
+            1.总成绩
+            2.总人数
+     -->
+     <script>
+        // prompt()接收的变量是一个字符串类型
+        var num = prompt("请输入班级总人数:");
+        // console.log(num);
+        // 定义求总成绩和平均成绩的初始化变量
+        var sum = 0;// 总成绩
+        var avr = 0;// 平均成绩
+        for(var i = 1;i <= num;i++) {
+            // 学生输入成绩
+            var score = prompt("请输入每个同学的成绩：");
+            // 总成绩
+            sum = sum + parseFloat(score);
+        }
+        alert("学生的总成绩为：" + sum);
+        alert("学生的平均成绩为：" + (sum / num));
+     </script>
+</body>
+</html>
