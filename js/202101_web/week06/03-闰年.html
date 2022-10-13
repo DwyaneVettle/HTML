@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            打印除1000--2000年之间所有的闰年
+            闰年：
+                能被4整除，不能被100整除，还能被400整除
+        */
+       // 1.取出1000-2000年份
+       for(var i = 1000;i <= 2000;i++) {
+            // console.log(i);
+            // 2.判断这个年份是否是闰年
+            if(i % 4 == 0 && i % 100 !=0 || i % 400 == 0) {
+                    console.log(i);
+            }
+       }
+    </script>
+</body>
+</html>
