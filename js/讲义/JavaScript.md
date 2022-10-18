@@ -1766,7 +1766,7 @@ function myFunction(var1,var2) {
 
     <p>点击这个按钮，来调用带参数的函数。</p>
     <button onclick="myFunction('龟叔','Python创始人')">点击这里</button>
-    <button onclick="myFunction('贝奇','JS创始人')">点击这里</button>
+    <button onclick="myFunction('艾奇','JS创始人')">点击这里</button>
     <script>
         function myFunction(name, job) {
             alert("Welcome " + name + ", the " + job);

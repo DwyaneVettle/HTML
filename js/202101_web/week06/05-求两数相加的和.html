@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 通过参数的传递求两数之和
+        /* 
+            parseFloat把其他类型的数据解析成小数，直至遇到
+            不是数字为止，小数点除外
+            parseInt()
+            当实参个数小于形参时，参数不匹配,要么返回NaN,Undifined
+            如果实参个数大于形参，只按位置匹配形参
+
+        */
+        function sum(num01,num02) {
+            alert(parseFloat(num01) +parseFloat(num02));
+        }
+        sum(12,12,12);
+
+        // 求任意两个数之间所有数的和-正整数
+        function getSum(num01,num02) {
+            var sum = 0;
+            for(var i = num01;i <= num02;i++) {
+                // console.log(i);
+                sum = sum + i;
+                
+            }
+            console.log(sum);
+        }
+        getSum(1,100);
+    </script>
+</body>
+</html>
