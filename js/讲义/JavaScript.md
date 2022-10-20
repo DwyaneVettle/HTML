@@ -1971,8 +1971,7 @@ fun(1, 2, 4, 5, 6, 7, 8);
 <script>
 var carName = "Volvo";
 myFunction();
-function myFunction() 
-{
+function myFunction() {
     document.getElementById("demo").innerHTML =
 		"我可以显示 " + carName;
 }
@@ -2487,7 +2486,19 @@ var name=myCars[0];
 myCars[0]="BYD";
 ```
 
+- **遍历数组：**
+
+```javascript
+var arr = ['a', 'b', 'c', 'd'];
+for(var i = 0;i < arr.length;i++) {
+    console.log(arr[i]);
+}
+```
+
+
+
 - **属性和方法：**
+  
   - 属性：length表示数组的长度，可读可写
   
   - 方法：
@@ -2497,7 +2508,7 @@ myCars[0]="BYD";
     - **shift()**：移除数组的第一个元素，返回被移除的元素；
     - **splice()**：删除指定位置和长度的元素，返回被删除的元素；
     - **toString()**：将数组转换成字符串类型，返回字符串结果；
-    - **join(param)**：将数组传承字符串，可以指定元素之间的连接符，如果参数省略，默认按逗号隔开，返回 字符串；
+    - **join(param)**：将数组转成字符串，可以指定元素之间的连接符，如果参数省略，默认按逗号隔开，返回 字符串；
     - **reverse()**：反转数组，倒序重排，返回重排的数组，注意**该方法会修改原数组的结构**；
     - **sort()**：对数组中的元素进行排序，默认按照Unicode编码升序排列，返回重排后的数组，直接修改原有数组，参数是自定义排序的算法（可选）。
     
@@ -2523,6 +2534,35 @@ myCars[0]="BYD";
             console.log(arr2.toString());
         </script>
     ```
+    
+    **案例：计算数组[2,6,1,7,4]中所有元素的和以及平均值**
+    
+    ```javascript
+    var arr = [2,6,1,7,4];
+    var sum = 0;
+    var average = 0;
+    for(var i = 0;i < arr.length;i++) {
+        sum += arr[i]
+    }
+    console.log(sum);
+    average = sum / arr.length;
+    console.log(average);
+    ```
+    
+    **案例：求数组[2,6,1,77,52,25,7]的最大值**
+    
+    ```javascript
+    var arr = [2,6,1,77,52,25,7];
+    var max = arr[0];
+    for(var i = 0;i < arr.length;i++) {
+        if(arr[i] > max) {
+            max = arr[i];
+        }
+    }
+    console.log(max);
+    ```
+    
+    
     
     
     
@@ -2796,6 +2836,35 @@ var str2 = new String("hello");
         }
     </script>
 </body>
+```
+
+```javascript
+var str = 'efgabcde';
+        // 1.定义正则对象/中表示要查找的内容/,下面表示查找a，i表示全局
+        var reg = /a/i
+        // 2.使用对象来定义正则表达式-a表示要查找的内容，ig表示全局忽略大小写的模式查找
+        var reg2 = new RegExp("a", "ig");
+        // 开始匹配
+        console.log(reg.test(str)); // true
+        console.log(reg2.test(str)); // true
+        // 查看下一次匹配的索引位置
+        console.log(reg2.lastIndex); // 4
+        // 第二次查询是false，因为上次查询到4的位置，如果要查询得到，需要重置下次查询位置
+        // reg2.lastIndex = 0; // 重置到起始索引
+        console.log(reg2.test(str)); //false
+
+        // match()和replace()方法
+        var str3 = "aacdefga";
+        var reg3 = /a/ig;
+        var arr = str3.match(reg3); // 定义数组，查找保存
+        console.log(arr.toString()); // a,a,a
+        // 将查找后的元素a替换成i
+        str3.replace(reg3, "i");
+        // 输出替换后的str3值
+        console.log(str3); // 返回替换前的字符串aacdefga
+        // 如果要替换输出，需要保存到变量中
+        var s = str3.replace(reg3, "z");
+        console.log(s); // zzcdefgz
 ```
 
 

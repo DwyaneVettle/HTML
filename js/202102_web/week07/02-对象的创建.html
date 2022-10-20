@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1.通过new 创建对象，顶级对象Object可以创建任意类型的对象
+        var person = new Object();
+        // 设置对象的属性，通过.属性
+        // person.fname = "程";
+        // person.lname = "东林";
+        // person.age = 20;
+        // 当对象的属性比较多时，可以不同调用设置
+        // 采用{k:v},属性和值之间用逗号隔开
+        person = {
+            fname: "刘",
+            lname: "德华",
+            age: 60
+        }
+        // 每一个对象都有一个prototype的属性，
+        // 封装了所有属性和方法，通过for循环遍历
+        // in 通过prototype获取的是一个伪数组
+        for(x in person) {
+            console.log(person[x]);
+        }
+
+    </script>
+</body>
+</html>

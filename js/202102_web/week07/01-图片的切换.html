@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #pic {
+            margin: 0 auto;
+            border: solid 1px red;
+        }
+
+        #pic input {
+            margin-right: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="pic">
+        <div class="img">
+            <img src="imgs/1.png" alt="" id="img">
+        </div>
+        <fieldset>
+            <legend>选择元素</legend>
+            <input type="radio" checked="checked" id="pic1" name="pic">
+            <input type="radio" id="pic2" name="pic">
+            <input type="radio" id="pic3" name="pic">
+            <input type="radio" id="pic4" name="pic">
+        </fieldset>
+    </div>
+    <script>
+        var pic1 = document.getElementById("pic1");
+        var pic2 = document.getElementById("pic2");
+        var pic3 = document.getElementById("pic3");
+        var pic4 = document.getElementById("pic4");
+        var img = document.getElementById("img");
+        console.log(img);
+        pic1.onclick = function() {
+            // 修改图片的src属性setAttribute("属性","修改后的值")
+            img.setAttribute("src","imgs/1.png");
+            console.log(img.getAttribute("src"));
+        }
+        pic2.onclick = function() {
+            img.setAttribute("src","imgs/2.png");
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function person(fname,lname,age) {
+            // this表示当前对象
+            // 也可以指向window
+            this.fname = fname;
+            this.lname = lname;
+            this.age = age;
+            return [this.fname,this.lname,this.age];
+        }
+        var myFriend01 = new person("张","学友",60);
+        var myFriend02 = person("刘","德华",61);
+        /* 
+            new创建的对象，this会返回指向这个对象person
+            不new创建对象，this会指向窗口window
+        */
+        console.log(myFriend01);
+        console.log(myFriend02);
+    </script>
+</body>
+</html>
