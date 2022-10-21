@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        fieldset {
+            width: 200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body id="body">
+    <!-- 分组/模块 -->
+    <fieldset>
+        <!-- 分组标题 -->
+        <legend>控制页面颜色</legend>
+        <div>
+            <button id="red">红色</button>
+            <button id="green">绿色</button>
+            <button id="blue">蓝色</button>
+        </div>
+    </fieldset>
+    <img src="imgs/1.png" alt="" id="img">
+    <script>
+       var red =document.getElementById("red");
+       var green =document.getElementById("green");
+       var blue =document.getElementById("blue");
+       var body = document.getElementById("body");
+       var img = document.getElementById("img");
+       red.onclick = function() {
+            /* 
+            body改变背景颜色
+            元素结点.style.属性=属性值
+            js中的属性使用驼峰命名法
+            */
+           // body.style.backgroundColor = "red";
+           // body.style.backgroundImage = "imgs/1.png";
+           // 修改属性setAttribute()
+            img.setAttribute("src","imgs/2.png");
+
+       }
+       green.onclick = function() {
+        // body.style.backgroundColor = "green"
+        img.setAttribute("src","imgs/1.png");
+       }
+       blue.onclick = function() {
+        body.style.backgroundColor = "blue"
+       }
+    </script>
+</body>
+</html>

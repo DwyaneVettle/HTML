@@ -15,10 +15,16 @@
         // 1. 局部变量--只在函数内部有作用的变量
         function hello() {
             var name = "王海洋";
+            // 2.函数内部的变量没有var关键字声明时，具有
+            // 全局作用域
+            age = 20;
             console.log(name);
+            console.log(age);
         }
-        console.log(name);
+            
         hello();
+        console.log(age);
+        console.log(name);
     </script>
 </body>
 </html>

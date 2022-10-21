@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            js不适用类，基于的是一个原型对象prototype
+            for(var in object) -将每个属性进行遍历
+        */
+       var person = new Object();
+       person = {
+        name: "张学友",
+        age: 61,
+        sex: "男"
+       }
+       for(name in person) {
+            console.log(person);
+       }
+    </script>
+</body>
+</html>

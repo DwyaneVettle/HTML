@@ -1995,8 +1995,7 @@ function myFunction() {
     myFunction();
 document.getElementById("demo").innerHTML =
     "我可以显示 " + carName;
-function myFunction() 
-{
+function myFunction() {
     carName = "Volvo";
 }
 </script>

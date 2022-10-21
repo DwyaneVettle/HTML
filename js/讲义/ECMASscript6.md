@@ -1590,7 +1590,8 @@ ES6中关于字符串的操作，相比于之前的版本拓展了一些方法�
   以上三个方法都可以接受两个参数，需要搜索的字符串，和可选的搜索起始位置索引。
 
   ```javascript
-  xxxxxxxxxx let string = "apple,banana,orange";string.includes("banana");     // truestring.startsWith("apple");    // truestring.endsWith("apple");      // falsestring.startsWith("banana",6)  // true	javascript
+  xxxxxxxxxx let string = "apple,banana,orange";
+  string.includes("banana");     // truestring.startsWith("apple");    // truestring.endsWith("apple");      // falsestring.startsWith("banana",6)  // true	javascript
   ```
 
   - **注意点：**
