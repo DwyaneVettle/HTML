@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 随机生成a-z,A-Z,0-9之间的随机4个值
+        //  Math.random()随机生成0-1之间的数
+        var arr = [0,1,2,3,4,5,6,7,8,9,"a","b","c","d","A","B","C","D"];
+        var str = "";
+        for(var i = 1;i < 5;i++) {
+            // index - 0-arr.lendth-1
+            var index = Math.floor(Math.random() * arr.length);
+            // 把4个字符进行拼接
+            str += arr[index];
+        }
+        console.log(str);
+    </script>
+</body>
+</html>

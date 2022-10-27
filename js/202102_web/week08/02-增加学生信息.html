@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 260px;
+            border: solid 1px red;
+        }
+        
+        ul>li:nth-child(1) {
+            font-weight: 700;
+            background-color: #ddd;
+            border: 0;
+        }
+        
+        ul>li {
+            border-bottom: dashed 1px blue;
+            padding: 5px 10px;
+        }
+        
+        ul>li>span {
+            display: inline-block;
+            width: 80px;
+        }
+        
+        #add {
+            padding: 5px 10px;
+        }
+        
+        #add>div>span {
+            display: inline-block;
+            width: 60px;
+            text-align: right;
+        }
+        
+        #add>div {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="stu">
+        <ul id="ul">
+            <!--
+            <li>
+                <span>姓名</span>
+                <span>年龄</span>
+            </li>
+             <li>
+                <span>张三</span>
+                <span>20</span>
+            </li> 
+            <li>
+                <span>李四</span>
+                <span>22</span>
+            </li>
+            -->
+        </ul>
+        <div id="add">
+            <div>
+                <span>姓名:</span>
+                <input type="text" id="name">
+            </div>
+            <div>
+                <span>年龄:</span>
+                <input type="text" id="age">
+            </div>
+            <div>
+                <span></span>
+                <button id="btnAdd">增加</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 搭建初始数据-json
+        var stu =[{
+            name: "张三",
+            age: 20,
+        },
+        {
+            name: "李四",
+            age: 22,
+        },
+        {
+            name: "王五",
+            age: 30,
+        },
+        
+    ]
+    function loadStu() {
+        var html = "<li><span>姓名</span><span>年龄</span></li>";
+        // 遍历stu数组，取出元素
+        for(var i = 0;i < stu.length;i++) {
+            // console.log(stu[i]);
+            // console.log(stu[i].name);
+            html += "<li>";
+            html += "<span>" + stu[i].name +"</span>"; 
+            html += "<span>" + stu[i].age +"</span>";
+            html += "</li>";
+        }
+        var h = document.getElementById("ul")
+        h.innerHTML = html;
+    }
+    loadStu();
+    document.getElementById("btnAdd").onclick = function() {
+        var _name = document.getElementById("name").value;
+        var _age = document.getElementById("age").value;
+        // console.log(name);
+        // 声明object对象
+        var obj = {};
+        obj.name = _name;
+        obj.age = _age;
+        stu.push(obj);
+        // console.log(stu);
+        // 再次加载写入函数
+        loadStu();
+    }
+    </script>
+</body>
+</html>

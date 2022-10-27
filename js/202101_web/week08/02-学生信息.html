@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 260px;
+            border: solid 1px red;
+        }
+        
+        ul>li:nth-child(1) {
+            font-weight: 700;
+            background-color: #ddd;
+            border: 0;
+        }
+        
+        ul>li {
+            border-bottom: dashed 1px blue;
+            padding: 5px 10px;
+        }
+        
+        ul>li>span {
+            display: inline-block;
+            width: 80px;
+        }
+        
+        #add {
+            padding: 5px 10px;
+        }
+        
+        #add>div>span {
+            display: inline-block;
+            width: 60px;
+            text-align: right;
+        }
+        
+        #add>div {
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="stu">
+        <ul id="ul">
+<!--             
+            <li>
+                <span>姓名</span>
+                <span>年龄</span>
+            </li>
+             <li>
+                <span>张三</span>
+                <span>20</span>
+            </li> 
+            <li>
+                <span>李四</span>
+                <span>22</span>
+            </li>
+            -->
+        </ul>
+        <div id="add">
+            <div>
+                <span>姓名:</span>
+                <input type="text" id="name">
+            </div>
+            <div>
+                <span>年龄:</span>
+                <input type="text" id="age">
+            </div>
+            <div>
+                <span></span>
+                <button id="btnAdd">增加</button>
+            </div>
+        </div>
+    </div>
+    <script>
+        // 初始化一些数据到斜面中-json
+        // json不仅是前后端数据传递的一种常用数据格式，还是一个类似数组和字符串
+        // 结合的数据，可以按组别创建
+        // 组别之间用{}表示，逗号隔开
+        var stu = [
+            {
+                name: "张三",
+                age: 20
+            },
+            {
+                name: "李四",
+                age: 22
+            },
+            {
+                name: "王五",
+                age: 18
+            }
+        ]
+        function loadStu() {
+            // 写入表头
+            var html = "<li><span>姓名</span><span>年龄</span></li>";
+            // 遍历json数据获取姓名和年龄
+            for(var i = 0;i < stu.length;i++) {
+                //console.log(stu[i].age);
+                html += "<li>";
+                html += "<span>"+ stu[i].name +"</span>";
+                html += "<span>"+ stu[i].age +"</span>";
+                html += "</li>";
+            }
+            document.getElementById("ul").innerHTML = html;
+        }
+        loadStu();
+        // 1.获取文本输入框的内容
+        var _name = document.getElementById("name");
+        var _age = document.getElementById("age");
+        var btn = document.getElementById("btnAdd");
+        // 2.给按钮增加点击事件
+        btn.onclick = function() {
+            // 3.往页面添加值
+            var obj = {};
+            obj.name = _name.value;
+            obj.age = _age.value;
+            stu.push(obj);
+            loadStu();
+        }
+    </script>
+</body>
+</html>

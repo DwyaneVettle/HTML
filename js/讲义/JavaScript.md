@@ -2839,7 +2839,7 @@ var str2 = new String("hello");
 
 ```javascript
 var str = 'efgabcde';
-        // 1.定义正则对象/中表示要查找的内容/,下面表示查找a，i表示全局
+        // 1.定义正则对象/中表示要查找的内容/,下面表示查找a，g表示全局
         var reg = /a/i
         // 2.使用对象来定义正则表达式-a表示要查找的内容，ig表示全局忽略大小写的模式查找
         var reg2 = new RegExp("a", "ig");

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var str01 = "abcdABCD";
+        // 创建正则表达式对象 
+        // 1.var reg = /匹配对象/匹配规则 i-忽略大小写，g-全局
+        // 3.new RegExp("匹配对象","匹配规则");
+        var reg01 = /abc/ig;
+        var reg02 = new RegExp("a","ig");
+        // test(str)测试，true表示匹配成功，否则不成功
+        console.log(reg01.test(str01));;
+        
+        /* 
+            match()-将匹配到的内容放入新的数组内
+            replace(reg,newStr)-将匹配内容进行替换
+            replace()返回一个新的对象
+        */
+       var str02 = "dfhdaskljfdigjajfdk";
+       // 1.定义正则表达式对象
+       var reg = /d/ig;
+       var arr = str02.match(reg);
+       console.log(arr);
+       var str03 = str02.replace(reg, 1);
+       console.log(str03);
+
+    </script>
+</body>
+</html>
