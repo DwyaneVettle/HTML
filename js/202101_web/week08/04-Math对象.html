@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            Math是一个内置对象，不需要通过new创建
+            方法和属性直接调用就可以
+        */
+       // 圆周率PI
+       console.log(Math.PI); // 3.141592653589793
+       // max()-零-多个数的最大值/ min()
+       console.log(Math.max()); // -Infinity
+       console.log(Math.max(12,34,56,77,88)); // 88
+       console.log(Math.max(12,34,56,"abc")); // NaN
+       // ceil()-向上取整 / floor()-向下取整
+       var num = 12.34;
+       console.log(Math.ceil(num)); // 13
+       console.log(Math.floor(num)); // 12
+       // random()-生成0-1之间的随机数，包含0，不包含1
+       console.log(Math.random());
+    </script>
+</body>
+</html>

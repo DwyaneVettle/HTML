@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1.没有参数-表示当前时间
+        var date01 = new Date();
+        console.log(date01);  // Fri Oct 28 2022 09:36:53 GMT+0800 (GMT+08:00)
+        // 获取年份getFullYear()
+        console.log("今年是：" + date01.getFullYear());
+        // 获取月份getMonth() -返回的值是0-11
+        console.log("现在是：" + (date01.getMonth()+1 )+ "月");
+        // 获取星期几getDay()-0-6,0表示星期天
+        console.log(date01.getDay());
+        // 获取几号getDate()
+        console.log(date01.getDate());
+        // 获取70-1-1到现在的毫秒值
+        console.log(date01.getTime());
+
+        // 2.创建具有参数的Date对象
+        // 毫秒值表示从70-1-1到此毫秒值的时间
+        var date02 = new Date(1666921470082); // Fri Oct 28 2022 09:44:30 GMT+0800 (GMT+08:00)
+        console.log(date02);
+        var date03 = new Date("2003-10-28 09:51:00");
+        var num = date01 -date03;
+        console.log(num); // 599616137337
+        console.log(num / 1000 / 60 / 60 / 24 / 365);
+    </script>
+</body>
+</html>
