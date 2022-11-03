@@ -3002,14 +3002,13 @@ var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
 
 ### 8.8.练习
 
-**练习1：模拟百度，将搜索到的关键字以红色显示。**(效果待优化)
+**练习1：模拟百度，将搜索到的关键字以红色显示。**
 
 <img src="JavaScript.assets/2022-07.png" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -3023,43 +3022,33 @@ var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
             padding: 20px 15px;
         }
         
-        #p1>span {
+        #p1 > span {
             color: red;
         }
     </style>
 </head>
-
 <body>
     <div id="search">
         <input type="text" id="key">
-        <button id="btnSearch">查找</button>
+        <button id="btnSearch" onclick="abc()">查找</button>
     </div>
     <p id="p1">
         今天是个好天气，明天可能会下雨，后天还会晴起来，每天都有好心情。 白日依山尽，黄河入海流。天气好不好，代码不会少。
     </p>
     <script>
-        // 根据id获取对象
-        function $$(id) {
-            document.getElementById(id);
-        }
-        // 获取按钮
-        var btnSearch = $$("btnSearch");
-        // 获取文本框对象
-        var key = $$("key");
-        // 获取内容p元素
-        var p1 = $$("p1");
-        // 点击查找
-        btnSearch.onclick = function() {
-            // 定义正则对象
-            var reg = new RegExp(key.value, "ig");
-            // 获取内容
-            var newStr = p1.innerHTML.replace(reg, "<span>" + key.value + "</span>");
-            // 更新新的字符内容
+        // 获取按钮、文本、输入内容的对象
+        var btn = document.getElementById("btnSearch");
+        var p1 = document.getElementById("p1");
+        var key = document.getElementById("key");
+        function abc(newStr) {
+            var reg = new RegExp(key.value,"ig");
+             // 获取内容
+             var newStr = p1.innerHTML.replace(reg, "<span>" + key.value + "</span>");
+             // 更新新的字符内容
             p1.innerHTML = newStr;
         }
     </script>
 </body>
-
 </html>
 ```
 
@@ -3087,7 +3076,7 @@ var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
         }
         
         #tabs>.nav {
-            overflow: hidden;
+            overflow: hidden; // 溢出隐藏
         }
         
         #tabs>.nav>div {
@@ -4136,8 +4125,8 @@ clearTimeout(timerId);
 <script>
     //定义一个初始的变量
     var i=0;
-//绑定事件
-document.getElementById("btn").onclick=function(){
+    //绑定事件
+    document.getElementById("btn").onclick=function(){
     //i增加1
     i++;
     //找到元素并赋值

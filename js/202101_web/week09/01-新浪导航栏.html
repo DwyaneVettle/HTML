@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        #tabs {
+            /* 根据图片设置宽高 */
+            width: 416px;
+            height: 218px;
+            border: solid 1px red;
+        }
+        
+        #tabs>.nav {
+            overflow: hidden; 
+        }
+        
+        #tabs>.nav>div {
+            float: left;
+            text-align: center;
+            padding: 5px 0;
+            /*4个*/
+            width: 104px;
+        }
+        /* 焦点背景色为蓝色，其他导航栏颜色改变 */
+        /* #tabs>.nav>div:nth-child(1),
+        #tabs>.nav>div:nth-child(2),
+        #tabs>.nav>div:nth-child(3) {
+            background-color: #c5c5c5;
+        } */
+        /* 隐藏和显示，很多元素调用，因切换导航栏需要 */
+        
+        .hid {
+            display: none;
+        }
+        
+        .show {
+            display: block;
+        }
+        /* 焦点颜色，当点击导航栏背景变为蓝色，字体为白色 */
+        
+        .focus {
+            background-color: blue;
+            color: white;
+        }
+        /* 背景样式 */
+        
+        .bg {
+            border-color: #c5c5c5;
+        }
+    </style>
+</head>
+<body>
+    <!-- 模拟新浪导航栏 -->
+    <div id="tabs">
+        <div class="nav">
+            <div class="bg" id="div1">热点新闻</div>
+            <div class="bg" id="div2">合作播报</div>
+            <div class="bg" id="div3">行业资讯</div>
+            <div id="div4" class="focus">运营攻略</div>
+        </div>
+        <div class="con">
+            <div id="div1_1" class="hid">111</div>
+            <div id="div1_2" class="hid">222</div>
+            <div id="div1_3" class="hid">333</div>
+            <div id="div1_4">444</div>
+        </div>
+    </div>
+    <script>
+        // 提取公共方法获取结点对象
+        function getId(id) {
+            return document.getElementById(id);
+        }
+        // 1.点击div1切换导航栏以及显示内容
+        getId("div1").onclick = function() {
+            // 点击div1，让它的class=focus
+            // 改变元素的class属性值，元素.className = ""
+            getId("div1").className = "focus";
+            getId("div2").className = "bg";
+            getId("div3").className = "bg";
+            getId("div4").className = "bg";
+
+            // 点击改变内容
+            getId("div1_1").className = "show";
+            getId("div1_2").className = "hid";
+            getId("div1_3").className = "hid";
+            getId("div1_4").className = "hid";
+        }
+        getId("div2").onclick = function() {
+            // 点击div1，让它的class=focus
+            // 改变元素的class属性值，元素.className = ""
+            getId("div1").className = "bg";
+            getId("div2").className = "focus";
+            getId("div3").className = "bg";
+            getId("div4").className = "bg";
+             // 点击改变内容
+             getId("div1_1").className = "hid";
+            getId("div1_2").className = "show";
+            getId("div1_3").className = "hid";
+            getId("div1_4").className = "hid";
+        }
+        getId("div3").onclick = function() {
+            // 点击div1，让它的class=focus
+            // 改变元素的class属性值，元素.className = ""
+            getId("div1").className = "bg";
+            getId("div2").className = "bg";
+            getId("div3").className = "focus";
+            getId("div4").className = "bg";
+
+            // 点击改变内容
+             getId("div1_1").className = "hid";
+            getId("div1_2").className = "hid";
+            getId("div1_3").className = "show";
+            getId("div1_4").className = "hid";
+        }
+        getId("div4").onclick = function() {
+            // 点击div1，让它的class=focus
+            // 改变元素的class属性值，元素.className = ""
+            getId("div1").className = "bg";
+            getId("div2").className = "bg";
+            getId("div3").className = "bg";
+            getId("div4").className = "focus";
+
+             // 点击改变内容
+             getId("div1_1").className = "hid";
+            getId("div1_2").className = "hid";
+            getId("div1_3").className = "hid";
+            getId("div1_4").className = "show";
+        }
+    </script>
+</body>
+</html>
