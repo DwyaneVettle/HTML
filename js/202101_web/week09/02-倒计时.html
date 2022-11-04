@@ -118,8 +118,8 @@
            var minute = document.querySelector(".minute");
            var second = document.querySelector(".second");
            // 定义目标日期
-           var inputTime = new Date("2023-01-22 00:00:00");
-          
+           var inputTime = new Date("2022-11-12 00:00:00");
+           count(); // 先调用函数，获取当前时间，避免出现黑点
            // 定时器setInterval(fun,ms)
             // fun 表示要设置定时器的函数
             // ms表示隔多长时间跳动，单位毫秒
@@ -132,13 +132,25 @@
                 console.log(times);
                 // 得到天数
                 var d = parseInt(times / 3600 / 24);
+                // if(d < 10) {
+                //   d = "0" + d;
+                // }
+                d = d < 10 ? "0" + d : d;
                 day.innerHTML = d;
                 // 得到小时数
                 var h = parseInt(times / 3600 % 24);
+                // if(h < 10) h = "0" + h;
+                h = h < 10 ? "0" + h : h;
                 hour.innerHTML = h;
                 var m = parseInt(times / 60 % 60);
+                if(m < 10) {
+                  m = "0" + m;
+                }
                 minute.innerHTML = m;
                 var s = parseInt(times %60);
+                if(s < 10) {
+                  s = "0" + s;
+                }
                 second.innerHTML = s;
            }
       </script>
