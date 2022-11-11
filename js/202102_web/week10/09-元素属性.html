@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        span:hover {
+            color: white;
+            background-color: orangered;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <span>首页</span>
+        <span>新闻</span>
+        <span>图片</span>
+        <span title="这是选中的">热点</span>
+    </div>
+    <script>
+        var spans = document.getElementsByTagName("span");
+        /* 
+        属性：
+        setAttribute("attr","value")-设置属性
+        getAttribute("attr")-获取属性
+        removeAttribute("attr")-删除属性
+        */
+       spans[0].setAttribute("title","这是首页");
+       console.log(spans[0].getAttribute("title"));;
+       spans[3].removeAttribute("title");
+    </script>
+</body>
+</html>

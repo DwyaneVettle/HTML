@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">点击按钮</button>
+    <div id="tip"></div>
+    <script>
+        var i = 0;
+        // 点击增加即增加，不点击则自动隔1秒加1
+        var btn = document.getElementById("btn");
+        btn.onclick = function() {
+            i++;
+            var tip =document.getElementById("tip")
+            tip.innerText = i;
+        }
+        var taskID = window.setInterval(add,1000);
+        function add() {
+           // 完成功能
+           i++;
+           document.getElementById("tip").innerText = i;
+        }
+        
+    </script>
+</body>
+</html>

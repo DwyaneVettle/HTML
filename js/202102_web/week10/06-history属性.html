@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    <script>
+        /* 
+            history属性：保存浏览器访问的url地址
+            back()-回退
+            forward()-前进
+            go(number)-一次跳转Number个页面
+            +代表往前，-代表往后
+        */
+        //   1.获取history对象
+        var his = window.history;
+        console.log(his);
+    </script>
+    <a href="https://www.baidu.com">点击跳转百度</a>
+    <button onclick="window.history.forward()">点击向前跳转</button>
+    <button onclick="window.history.back()">点击向后跳转</button>
+</body>
+</html>

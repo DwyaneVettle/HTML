@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            执行一次性的任务：setTimeout(fun,ms)
+            5秒钟之后输出"你好"
+            清除一次性任务：clearTimeout(task)
+        */
+       var taskID = setTimeout(function(){
+            console.log("你好！");
+       },5000);
+       var taskID02 = setTimeout(function(){
+            console.log("你好！");
+       },10000);
+       clearTimeout(taskID02);
+    </script>
+</body>
+</html>

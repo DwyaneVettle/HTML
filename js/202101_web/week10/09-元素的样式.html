@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #fs {
+            width: 260px;
+            border: solid 1px red;
+            padding: 10px;
+        }
+        
+        .focus {
+            color: black;
+            /* 取消线 */
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+     <!-- 1.添加需求节点元素
+         2.添加元素样式
+         3.调整优化 -->
+         <div id="fs">
+            <div class="title">
+                <!-- javascript:void()让超链接不跳转，保持在当前页 -->
+                <a href="javascript:void();">大</a>
+                <a href="javascript:;">中</a>
+                <a href="javascript:;" class="focus">小</a>
+            </div>
+            <p id="p1">操作元素的行内样式，访问元素节点的style属性，获取样式对象，样式对象中包含css属性，使用点语法操作</p>
+        </div>
+        <script>
+            /* 
+            结点名.style.样式
+            */
+            // 1.获取结点元素
+            var as = document.getElementsByTagName("a");
+            var p1 = document.getElementById("p1");
+            // 2.遍历所有的a标签结点，取消默认的focus属性值
+            function clearFocus() {
+                    for(var i = 0;i < as.length;i++) {
+                    as[i].removeAttribute("class");
+                }
+            }
+            // 添加点击事件，使得字体变成对应大小
+            as[0].onclick = function() {
+                // 设置字体为最大
+                p1.style.fontSize = "50px";
+                clearFocus();
+                this.className = "focus";
+            }
+
+        </script>
+</body>
+</html>
