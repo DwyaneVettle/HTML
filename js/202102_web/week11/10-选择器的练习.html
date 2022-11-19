@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <div class="nav">
+        <p>hello</p>
+        <p>hello</p>
+        <p>hello</p>
+        <p>hello</p>
+        <p>hello</p>
+        <span>jquery</span>
+        <span>jquery</span>
+        <span>jquery</span>
+        <span>jquery</span>
+        <span>jquery</span>
+        <div>
+            123
+            <div>
+                234
+            </div>
+        </div>
+    </div>
+    <script>
+        /* 
+            1.将最后一个p颜色变成红色
+            2.将第三个p标签的字体设置为30px
+            3.将span标签的单数个字体设置为25px
+            4.nav类值得div的孙子元素设置为粉色
+            5.设置偶数个数的p标签设置边框,border:1
+        */
+       $("p:odd()").css("border","1 solid red");
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <div class="gf">
+        123
+        <div class="fat">
+            1234
+            <p class="son">你好</p>
+            <p class="son1">hello</p>
+        </div>
+    </div>
+    <script>
+        // parent()表示父级关系和自己一起
+        $("p.son").parent().css("color","red");
+        // children()表示选择子级元素
+        $("div.fat").children().css("color","yellow");
+        // find()表示找某一组（个）元素
+        $("div.fat").find("p.son1").css("color","pink");
+    </script>
+</body>
+</html>

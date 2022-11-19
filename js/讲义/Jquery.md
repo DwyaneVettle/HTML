@@ -1,6 +1,6 @@
 # jQuery
 
-jQuery 是一个 JavaScript 库，它极大地简化了 JavaScript 编程，对原生JS中的DOM操作、事件处理、包括数据处理和Ajax技术等进行封装,提供更完善，更便捷的方法。jQuery的核心思想就是“写得更少，做得更多”。
+​	jQuery 是一个 JavaScript 库（Library），它极大地简化了 JavaScript 编程，对原生JS中的DOM操作、事件处理、包括数据处理和Ajax技术等进行封装,提供更完善，更便捷的方法。jQuery的核心思想就是“**写得更少，做得更多**”。
 
 **优点：**
 
@@ -153,6 +153,7 @@ $("#test").hide() - 隐藏 id="test" 的元素
 ```javascript
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Document</title>
@@ -161,16 +162,28 @@ $("#test").hide() - 隐藏 id="test" 的元素
         div {
             width: 200px;
             height: 200px;
-            background-color: red;
+            background-color: pink;
         }
     </style>
 </head>
+
 <body>
-    <div></div>
     <script>
-        $("div").hide();
+        // $('div').hide();
+        // 1. 等着页面DOM加载完毕再去执行js 代码
+        // $(document).ready(function() {
+        //     $('div').hide();
+        // })
+        // 2.  等着页面DOM加载完毕再去执行js 代码
+        $(function() {
+            $('div').hide();
+
+        })
     </script>
+    <div></div>
+
 </body>
+
 </html>
 ```
 
@@ -295,6 +308,53 @@ jQuery(function() {
     // vidio01.get(0).play();
     </script>
 </body>
+</html>
+```
+
+
+
+### 3.5.jQuery对象和JS对象
+
+JS对象通过选择获取，jQuery对象通过顶级对象$获取：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="jquery.min.js"></script>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: pink;
+        }
+    </style>
+</head>
+
+<body>
+    <div></div>
+    <span></span>
+    <script>
+        // 1. DOM 对象：  用原生js获取过来的对象就是DOM对象
+        var myDiv = document.querySelector('div'); // myDiv 是DOM对象
+        var mySpan = document.querySelector('span'); // mySpan 是DOM对象
+        console.dir(myDiv);
+        // 2. jQuery对象： 用jquery方式获取过来的对象是jQuery对象。 本质：通过$把DOM元素进行了包装
+        $('div'); // $('div')是一个jQuery 对象
+        $('span'); // $('span')是一个jQuery 对象
+        console.dir($('div'));
+        // 3. jQuery 对象只能使用 jQuery 方法，DOM 对象则使用原生的 JavaScirpt 属性和方法
+        // myDiv.style.display = 'none';
+        // myDiv.hide(); myDiv是一个dom对象不能使用 jquery里面的hide方法
+        // $('div').style.display = 'none'; 这个$('div')是一个jQuery对象不能使用原生js 的属性和方法
+    </script>
+</body>
+
 </html>
 ```
 
@@ -436,7 +496,7 @@ $(".test")
 | $("a[target='_blank']")  | 选取所有 target 属性值等于 "_blank" 的 <a> 元素         |
 | $("a[target!='_blank']") | 选取所有 target 属性值不等于 "_blank" 的 <a> 元素       |
 | $(":button")             | 选取所有 type="button" 的 <input> 元素 和 <button> 元素 |
-| $("tr:even")             | 选取偶数位置的 <tr> 元素                                |
+| $("tr:even")             | 选取偶数位置的 <tr> 元素，从下标0开始，实际单数         |
 | $("tr:odd")              | 选取奇数位置的 <tr> 元素                                |
 
 
@@ -697,6 +757,142 @@ jQuery可以实现隐式迭代，因为其DOM元素内部是以伪数组的形�
             });
         })
     </script>
+</body>
+
+</html>
+```
+
+
+
+**练习：淘宝案例：**
+
+
+
+```html
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-size: 12px;
+        }
+        
+        ul {
+            list-style: none;
+        }
+        
+        a {
+            text-decoration: none;
+        }
+        
+        .wrapper {
+            width: 250px;
+            height: 248px;
+            margin: 100px auto 0;
+            border: 1px solid pink;
+            border-right: 0;
+            overflow: hidden;
+        }
+        
+        #left,
+        #content {
+            float: left;
+        }
+        
+        #left li {
+            background: url(images/lili.jpg) repeat-x;
+        }
+        
+        #left li a {
+            display: block;
+            width: 48px;
+            height: 27px;
+            border-bottom: 1px solid pink;
+            line-height: 27px;
+            text-align: center;
+            color: black;
+        }
+        
+        #left li a:hover {
+            background-image: url(images/abg.gif);
+        }
+        
+        #content {
+            border-left: 1px solid pink;
+            border-right: 1px solid pink;
+        }
+    </style>
+    <script src="jquery.min.js"></script>
+    <script>
+        $(function() {
+            // 1. 鼠标经过左侧的小li 
+            $("#left li").mouseover(function() {
+                // 2. 得到当前小li 的索引号
+                var index = $(this).index();
+                console.log(index);
+                // 3. 让我们右侧的盒子相应索引号的图片显示出来就好了
+                // $("#content div").eq(index).show();
+                // 4. 让其余的图片（就是其他的兄弟）隐藏起来
+                // $("#content div").eq(index).siblings().hide();
+                // 链式编程
+                $("#content div").eq(index).show().siblings().hide();
+
+            })
+        })
+    </script>
+</head>
+
+<body>
+    <div class="wrapper">
+        <ul id="left">
+            <li><a href="#">女靴</a></li>
+            <li><a href="#">雪地靴</a></li>
+            <li><a href="#">冬裙</a></li>
+            <li><a href="#">呢大衣</a></li>
+            <li><a href="#">毛衣</a></li>
+            <li><a href="#">棉服</a></li>
+            <li><a href="#">女裤</a></li>
+            <li><a href="#">羽绒服</a></li>
+            <li><a href="#">牛仔裤</a></li>
+        </ul>
+        <div id="content">
+            <div>
+                <a href="#"><img src="images/女靴.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/雪地靴.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/冬裙.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/呢大衣.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/毛衣.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/棉服.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/女裤.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/羽绒服.jpg" width="200" height="250" /></a>
+            </div>
+            <div>
+                <a href="#"><img src="images/牛仔裤.jpg" width="200" height="250" /></a>
+            </div>
+
+        </div>
+
+
+    </div>
 </body>
 
 </html>

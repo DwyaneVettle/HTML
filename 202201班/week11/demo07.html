@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* 1.标签选择器：标签名{} */
+        p {
+            color:aqua;
+        }
+        div {
+            color: red;
+        }
+        /* 2.class选择器：将class属性值选出来前面加.
+            class选择器往往可以选择一组 */
+        .p3 {
+            color: yellow;
+        }
+        /* 
+            3.id选择器：一组相同的元素只能具有唯一一个id
+            #id
+        */
+        #p1 {
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+    <p id="p1">hello css01</p>
+    <p id="p2">hello css02</p>
+    <p class="p3">hello css03</p>
+    <p class="p3">hello css04</p>
+    <p>hello css05</p>
+    <!-- 练习：将div标签内的内容变红 -->
+    <div>
+        123
+        <div>123</div>
+    </div>
+</body>
+</html>

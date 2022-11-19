@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <p>hello jquery1</p>
+    <p class="a">hello jquery2</p>
+    <p>hello jquery3</p>
+    <p>hello jquery4</p>
+    <p>hello jquery5</p>
+    <p>hello jquery6</p>
+    <p>hello jquery7</p>
+    <p>hello jquery8</p>
+    <p>hello jquery9</p>
+    <p>hello jquery10</p>
+    <div class="a">123</div>
+    <div class="a">123</div>
+    <script>
+        // 所有p变成红色
+        // DOM.style.属性=value
+        // jq中设置样式:jq对象.css("属性", value)
+        // $("p").css("color","red");
+        // 标签+class
+        $("p.a").css("color","red");
+        // 第一个元素:first
+        $("p:first").css("color","green");
+        // 最后一个元素:last
+        $("div:last").css("color","yellow")
+        // 指定某一个元素:eq(index)
+        $("p:eq(4)").css("color","pink");
+        // 单数odd-下标奇数
+        $("p:odd()").css("fontSize","50px");
+        // 双数even-下标偶数
+        $("p:even()").css("fontSize","20px");
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="jquery-3.6.1.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <p class="p02">hello1</p>
+    <p id="p01">hello2</p>
+    <p class="p02">hello3</p>
+    <button>点击</button>
+    <ul>
+        <li>123</li>
+        <li>234</li>
+        <li>345</li>
+        <li>456</li>
+        <li>567</li>
+        <li>678</li>
+        <li>789</li>
+        <li>890</li>
+    </ul>
+    <ul>
+        <li>123</li>
+        <li>234</li>
+        <li>345</li>
+        <li>456</li>
+        <li>567</li>
+        <li>678</li>
+        <li>789</li>
+        <li>890</li>
+    </ul>
+    <ol>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+        <li>4</li>
+        <li>5</li>
+        <li>6</li>
+        <li class="a">7</li>
+        <li class="a">8</li>
+    </ol>
+    <a href="">百度</a>
+    <a href="">新浪</a>
+    <a href="">腾讯</a>
+    <script>
+        /* 
+        jq选择器：
+            > 表示层级关系
+            1.id选择器：#id
+            2.class选择器：.class 可以选择多个
+            3.通配符选择器：*所有
+            4.选择第一个：元素:fist    last
+            5.选择所有相同元素的第一个：fist-child
+            6.选择某一个单一元素:元素:eq(index)
+            7.属性值选择器：[属性值],class,id除外
+            8.奇数选择器：:odd,按下标的奇偶设置
+            9.偶数选择器：:even
+            10.返回值::nth-child()查询某一个，不按下标
+        */
+        $("button").click(function() {
+            // $("#p01").hide();
+            //$(".p02").hide();
+            $("*p").hide();
+        })
+        // jq对象.css("样式属性","样式值")
+       $("ul > li:last").css("color","red");
+        //$("ul > li:first-child").css("color","red");
+        // $("ul > li:eq(4)").css("color","blue");
+        $("[href]").css("color","green");
+        $("ol > li:odd").css("border","1px solid red");
+        $("ol > li:even").css("border","1px solid blue");
+        $("ul > li:nth-child(3)").css("border","1px solid red");
+    </script>
+</body>
+</html>

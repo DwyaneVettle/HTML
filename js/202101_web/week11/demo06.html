@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.1.js"></script>
+</head>
+<body>
+    <p>aa</p>
+    <p>aa</p>
+    <p id="a">aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <p>aa</p>
+    <script>
+        // 需求：让20个p标签中文字变色
+        // 原生js，逐个遍历
+        // var p = document.getElementsByTagName("p");
+        // for(var i = 0; i < p.length;i++) {
+        //     p[i].style.color = "red";
+        // }
+        // jq具有隐式迭代的功能-jq对象是一个伪数组
+        // $("p").css("color", "blue");
+        // 其他兄弟siblings()-排他性
+        
+        $("#a").css("color", "blue").siblings("p").css("color", "red");
+    </script>
+</body>
+</html>

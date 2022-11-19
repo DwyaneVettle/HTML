@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <p class="p02">Hello Jquery01</p>
+    <p class="p02">Hello Jquery02</p>
+    <p id="p01">Hello Jquery03</p>
+    <button>点击</button>
+    <script>
+        // 1.文档加载
+        // $(document).ready(function() {
+        //     // 标签选择器-通过标签名
+        //     $("button").click(function() {
+        //         // 通过id选择 #id
+        //         $("#p01").hide();
+        //     })
+        // })
+
+        $(document).ready(function() {
+            // 标签选择器-通过标签名
+            $("button").click(function() {
+                // 通过class选择 .class
+                $(".p02").hide();
+                // *表示匹配所有
+                // $("*").hide();
+            })
+        })
+       
+    </script>
+</body>
+</html>
