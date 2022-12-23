@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <p>鼠标点击，元素就消失了</p>
+    <p>鼠标点击，元素就消失了</p>
+    <p>鼠标点击，元素就消失了</p>
+    <button>点击</button>
+    <script>
+        /* 
+        jq事件：$(jq).事件(function())
+        ready()：文档就绪事件，当所有文档加载完毕
+        之后再执行这个方法里的代码
+        click():鼠标单击事件，当鼠标点击元素时
+        触发该事件
+        dblclick():鼠标双击触发，当鼠标双击元素时
+        触发该事件
+        */
+       $(document).ready(function() {
+            // 鼠标点击元素，元素消失
+            $("p").click(function() {
+                $(this).hide();
+            });
+            // 鼠标点击按钮，p元素显示:show()
+            $("button").dblclick(function() {
+                $("p").show();
+            })
+       })
+    </script>
+</body>
+</html>

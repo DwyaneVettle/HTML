@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        div{
+            width: 1200px;
+            margin: auto;
+            background: #eee;
+        }
+        div li{
+            width: 250px;
+            height: 250px;
+            background: red;
+            float: left;
+            margin: 10px;
+        }
+        .t1{
+            width: 600px;
+            height: 520px;
+            float: right;
+        }
+        cf::after{
+            content: '';
+            display: block;
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <ul class="cf">
+            <li></li>
+            <li></li>
+            <li class="t1"></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    
+</body>
+</html>

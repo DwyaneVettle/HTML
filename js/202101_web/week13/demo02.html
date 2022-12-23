@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.1.js"></script>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: #ff0000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        /* 
+        fadeIn(speed,easing,callback)-淡入效果
+        fadeOut()-淡出
+        fadeTogglt()-淡入淡出效果的切换
+        fadeTo(speed,opacity，callback)-淡入淡出的透明夫
+            opacity：表示透明度，0-1
+        */
+        // 1.点击按钮，让div盒子淡入
+        $(function() {
+            $("button").eq(0).click(function() {
+                $("div").fadeIn(5000);
+            });
+            $("button").eq(1).click(function() {
+                $("div").fadeOut(5000);
+            });
+            $("button").eq(2).click(function() {
+                $("div").fadeToggle(5000);
+            });
+            $("button").eq(3).click(function() {
+                $("div").fadeTo(5000,0.5);
+            });
+        })
+    </script>
+    <div></div>
+    <button>淡入</button>
+    <button>淡出</button>
+    <button>淡入/淡出</button>
+    <button>透明度设置</button>
+    
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.1.js"></script>
+    <style>
+       #flip,#panel {
+        background-color: yellow;
+        padding: 5px;
+        text-align: center;
+        border: 1px solid black;
+       } 
+       #panel {
+        display: none;
+        padding: 50px;
+       }
+    </style>
+</head>
+<body>
+    <button id="stop">点击停止滑动</button>
+    <div id="flip">点我向下滑动面板</div>
+    <div id="panel">Hello World!</div>
+    <script>
+        /* 
+        1.点击第一个div
+        2.实现第二个div下滑
+        3.点击按钮，可以停止滑动
+        */
+       $(function() {
+        $("#flip").click(function() {
+            $("#panel").slideDown(5000);
+            $("#panel").slideUp(5000);
+        });
+
+        $("#stop").click(function() {
+            // stop()能实现动画的停止
+            $("#panel").stop();
+        })
+       })
+    </script>
+</body>
+</html>

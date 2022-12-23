@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jquery-3.6.1.js"></script>
+    <style>
+        div {
+            width: 200px;
+            height: 50px;
+            padding: 20px;
+            margin: 20px;
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <button class="hid">隐藏</button>
+    <button class="show">显示</button>
+    <button class="toggle">隐藏/显示</button>
+    <div>点击按钮，隐藏该盒子</div>
+    <script>
+        /* 
+        hide(speed,easing,callback)-表示隐藏
+        speed:表示隐藏/显示的时间
+            slow-缓慢
+            normal-正常速度
+            fast-快速
+            毫秒值
+        easing:表示隐藏/显示的过渡效果
+            默认swing-快慢结合
+            linear-匀速
+        callback:表示这个隐藏/显示动作完成之后实现
+        的功能
+        toggle():表示在显示和隐藏之间进行切换 */
+        $(function() {
+            // 点击按钮隐藏div
+            $(".hid").click(function() {
+                $("div").hide(5000,"linear",function() {
+                    alert("hide()方法执行了！");
+                });
+            })
+            // 需求，添加一个另外的按钮，
+            // 点击把隐藏的div显示出来 - show()
+            $(".show").click(function() {
+                $("div").show(1000);
+            });
+
+            $(".toggle").click(function() {
+                $("div").toggle(1000,function() {
+                    alert("haha~");
+                });
+            })
+
+        })
+    </script>
+</body>
+</html>

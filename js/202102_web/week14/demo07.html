@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <p>
+        名称：<input type="text" id="test" value="请输入...">
+    </p>
+    <button id="btn01">显示输入的值</button>
+    <a href="https://www.baidu.com" id="baidu">百度</a>
+    <button id="btn02">显示href属性</button>
+    <script>
+        /* 
+        获取元素的值：val()
+        获取属性:attr(arg)
+        */
+       $(function() {
+        $("#btn01").click(function() {
+            alert("获取到:"+$("#test").val());
+        });
+        $("#btn02").click(function() {
+            alert("href属性为:" + $("#baidu").attr("href"));
+        })
+       })
+    </script>
+</body>
+</html>

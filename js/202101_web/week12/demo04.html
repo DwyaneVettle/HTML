@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/jquery-3.6.1.js"></script>
+</head>
+<body>
+    姓名：<input type="text">
+    邮箱：<input type="text">
+    <script>
+        /* 
+        获取焦点的位置:focus()
+        当鼠标选中元素或者通过tab定位时，触发focus事件
+        失去焦点位置:blur()
+        当元素失去焦点时触发
+        */
+       $(document).ready(function() {
+            // 当焦点位置在输入框时背景颜色变为红色
+            $("input").focus(function() {
+                // 元素.css("属性","属性值")
+                // dom结点.style.属性(驼峰)
+                $(this).css("background-color","red");
+            });
+            // 当失去焦点时背景颜色变为黄色
+            $("input").blur(function() {
+                // 元素.css("属性","属性值")
+                // dom结点.style.属性(驼峰)
+                $(this).css("background-color","yellow");
+            });
+       })
+    </script>
+</body>
+</html>

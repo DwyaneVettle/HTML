@@ -1012,7 +1012,7 @@ click() 方法是当按钮点击事件被触发时会调用一个函数。该函
 
 #### 5.1.4.mouseenter()
 
-当鼠标指针穿过元素时，会发生 mouseenter 事件。mouseenter() 方法触发 mouseenter 事件，或规定当发生 mouseenter 事件时运行的函数。
+当鼠标指针**穿过**元素时，会发生 mouseenter 事件。mouseenter() 方法触发 mouseenter 事件，或规定当发生 mouseenter 事件时运行的函数。
 
 ```javascript
 <!DOCTYPE html>

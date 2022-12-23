@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+    <style>
+        #flip, #panel {
+            text-align: center;
+            background-color: antiquewhite;
+            border: solid 1px yellow;
+            padding: 5px;
+        }
+
+        #panel {
+            display: none;
+            padding: 50px;
+        }
+    </style>
+</head>
+<body>
+    <button id="stop">停止滑动</button>
+    <div id="flip">点我向下滑动面板</div>
+    <div id="panel">Hello World!</div>
+    <script> 
+        $(function() {
+            // 1.点击面板，向下滑动显示panel
+            $("#flip").click(function() {
+                $("#panel").slideDown(5000);
+                $("#panel").slideUp(5000);
+            });
+            // 2.点击按钮，停止动画效果
+            // stop()-停止动画、滑动、淡入淡出。。
+            $("#stop").click(function(){
+                $("#panel").stop();
+            })
+        })
+    </script>
+</body>
+</html>

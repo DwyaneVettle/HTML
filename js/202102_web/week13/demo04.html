@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="jqeury-3.6.1.js"></script>
+</head>
+<body>
+    <p id="p01">
+        按下光标字体变大，抬起光标变小
+    </p>
+    <br><br><br>
+    <button>点击按钮</button>
+    <script>
+        /* 
+        mousedown:鼠标按下的那一刻，触发该事件
+        mouseup:鼠标抬起来那一刻，触发该事件
+        */
+        $(document).ready(function() {
+            $("button").mousedown(function() {
+                $("#p01").css("color","red");
+            });
+            $("button").mouseup(function() {
+                $("#p01").css("color","yellow");
+            })
+        })
+    </script>
+</body>
+</html>
