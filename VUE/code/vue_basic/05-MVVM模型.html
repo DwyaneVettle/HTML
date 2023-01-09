@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        1.data中所有的属性，最后都出现在了vm身上。
+		2.vm身上所有的属性 及 Vue原型上所有属性，在Vue模板中都可以直接使用。
+     -->
+    <!-- 准备一个容器 -->
+    <div id="root">
+        <h2>球队：{{name}}</h2>
+        <h2>球员：{{player}}</h2>
+        <h2>测试：{{$options}}</h2>
+    </div>
+
+    <script>
+        // 设置为 false 以阻止 vue 在启动时生成生产提示
+        Vue.config.productionTip = false;
+        // 创建Vue对象,官方文档中说用vm接收Vue实例
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                name: '皇家马德里',
+                player: '莫德里奇'
+            }
+        })
+        console.log(vm);
+    </script>
+</body>
+</html>

@@ -388,7 +388,17 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 </html>
 ```
 
+**总结：**
 
+ Vue模板语法有2大类：
+					1.插值语法：
+							功能：用于解析标签体内容。
+							写法：{{xxx}}，xxx是js表达式，且可以直接读取到data中的所有属性。
+					2.指令语法：
+							功能：用于解析标签（包括：标签属性、标签体内容、绑定事件.....）。
+							举例：v-bind:href="xxx" 或  简写为 :href="xxx"，xxx同样要写js表达式，
+									 且可以直接读取到data中的所有属性。
+							备注：Vue中有很多的指令，且形式都是：v-????，此处我们只是拿v-bind举个例子。
 
 ### 1.5.数据绑定
 
@@ -542,9 +552,184 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 ### 1.7.理解MVVM
 
+​	MVVM模型：
+
+- M：模型（Model），即data中的数据；
+- V：视图（View），即模板代码；
+- VM：视图模型（ViewModel），即Vue实例。
+
+<img src="images/image-20230108210509349.png" alt="image-20230108210509349" style="zoom:33%;" />
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        1.data中所有的属性，最后都出现在了vm身上。
+		2.vm身上所有的属性 及 Vue原型上所有属性，在Vue模板中都可以直接使用。
+     -->
+    <!-- 准备一个容器 -->
+    <div id="root">
+        <h2>球队：{{name}}</h2>
+        <h2>球员：{{player}}</h2>
+        <h2>测试：{{$options}}</h2>
+    </div>
+
+    <script>
+        // 设置为 false 以阻止 vue 在启动时生成生产提示
+        Vue.config.productionTip = false;
+        // 创建Vue对象,官方文档中说用vm接收Vue实例
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                name: '皇家马德里',
+                player: '莫德里奇'
+            }
+        })
+        console.log(vm);
+    </script>
+</body>
+</html>
+```
+
+**总结：**
+
+1.data中所有的属性，最后都出现在了vm身上。
+2.vm身上所有的属性 及 Vue原型上所有属性，在Vue模板中都可以直接使用。
 
 
 
+### 1.8.Vue数据代理
+
+#### 1.8.1.什么是数据代理
+
+​	在此前我们对一个对象的属性进行赋值时，是直接通过`属性:属性值`的方式进行赋值的，并且默认是可以**枚举**的，即通过`for (const key in obj1) 或 obj1.keys()`均可访问到属性（遍历）。如果我们想在新增属性后不允许再更改属性值或者将该属性设置为非枚举属性，那我们该如何处理呢？
+
+​	在ES6中出现了一个方法`Object.defineproperty(obj, prop, descriptor)`，它可以灵活动态的为一个对象添加或修改新的属性，并可以通过定义属性的元数据信息精确地控制属性的行为。。它有三个参数：obj--表示在哪个对象上添加或修改属性；prop--表示要添加或修改的属性名；desc--是一个配置项，一般是一个对象{}，它有**数据描述符**和**存取描述符**两种形式。**数据描述符**是一个Boolean类型的元数据属性，值为true或false，用于定义对属性的某种操作行为是允许还是禁止的。**存取描述符**是由getter-setter函数对描述的属性。desc必须是这两种形式，且不能同时包含数据描述符和存取描述符。
+
+- **数据描述符**：
+
+```text
+value:18, // 表示要添加或修改的属性的值
+enumerable:true, //控制属性是否可以枚举，默认值是false
+writable:true, //控制属性是否可以被修改，默认值是false
+configurable:true //控制属性是否可以被删除，默认值是false
+```
+
+- **存取描述符**：
+
+```text
+get:一个给属性提供getter方法，如果没有getter则定义为默认的undefined
+set:一个给属性提供 setter 的方法，如果没有setter则为默认的undefined
+```
+
+- **示例**：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 准备一个容器 -->
+    <div id="root">
+
+    </div>
+
+    <script>
+        let person = {
+            name: 'Micheal',
+            sex: '男',
+            // age: 18
+        }
+        /* 
+            Object.defineProperty()的作用是直接在一个对象上定义一个新的属性
+            传递三个参数分别为：
+                obj:在哪个对象上添加或修改属性
+                prop:要添加或修改的属性名
+                desc:配置项，一般是一个对象
+        */
+        Object.defineProperty(person,'age',{
+				// value:18,
+				// enumerable:true, //控制属性是否可以枚举，默认值是false
+				// writable:true, //控制属性是否可以被修改，默认值是false
+				// configurable:true //控制属性是否可以被删除，默认值是false
+
+				//当有人读取person的age属性时，get函数(getter)就会被调用，且返回值就是age的值
+				get(){
+					console.log('有人读取age属性了')
+					return number
+				},
+
+				//当有人修改person的age属性时，set函数(setter)就会被调用，且会收到修改的具体值
+				set(value){
+					console.log('有人修改了age属性，且值是',value)
+					number = value
+				}
+
+			})
+
+			// console.log(Object.keys(person))
+
+			console.log(person)
+    </script>
+</body>
+</html>
+```
+
+​	那么什么是**数据代理**呢？通过一个对象代理对另一个对象中的属性的操作（读/写）就是**数据代理**。如现有obj和obj2两个对象，其中obj有一个属性x，属性值为100，obj2有一个属性y，属性值为200。我们要想实现obj2对x属性进行读写操作，可以用以下方式进行：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        let obj = {x: 100}
+        let obj2 = {y: 200}
+        /* 
+        设置obj2的x属性，获取到obj的x属性并返回给obj2的x
+        也可以通过set(value)进行设置
+        */
+        Object.defineProperty(obj2, 'x', {
+            get() {
+                return obj.x
+            },
+            set(value) {
+                obj.x = value
+            }
+        })
+    </script>
+</body>
+</html>
+```
+
+​	我们在控制台操作可以看到既可以得到obj2的x属性，也可以修改obj2的x属性值：
+
+<img src="images/image-20230109214834725.png" alt="image-20230109214834725" style="zoom:33%;" />
+
+
+
+#### 1.8.2.Vue中的数据代理
 
 
 
