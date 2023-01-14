@@ -1,3 +1,11 @@
+导读：
+
+JavaScript2022年度报告：https://csdnnews.blog.csdn.net/article/details/128668479?spm=1000.2115.3001.5927
+
+JavaScript相关框架、构建工具、测试工具等（排名来源于JS年度报告中的调查）：
+
+![](images/js相关框架png.png)
+
 # VUE
 
 ## 1.vue基础
@@ -731,9 +739,161 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 #### 1.8.2.Vue中的数据代理
 
+​	Vue中的数据代理是：**通过Object.defineProperty()把data对象中所有的属性添加到vm上，且数据从data到vm中的过程，又为每一个属性添加上getter和setter方法，用户修改或者读取时，也是通过getter或setter方法访问_data，_data返回或操作data中的数据实现的**。
+
+<img src="images/2023-01-14_205407.png" style="zoom:50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        总结：
+				1.Vue中的数据代理：
+							通过vm对象来代理data对象中属性的操作（读/写）
+				2.Vue中数据代理的好处：
+							更加方便的操作data中的数据
+				3.基本原理：
+							通过Object.defineProperty()把data对象中所有属性添加到vm上。
+							为每一个添加到vm上的属性，都指定一个getter/setter。
+							在getter/setter内部去操作（读/写）data中对应的属性。
+		 -->
+    <!-- 准备一个容器 -->
+    <div id="root">
+        <h3>学校名称：{{name}}</h3>
+        <h3>学校地址：{{addr}}</h3>
+    </div>
+
+    <script>
+        // 设置为 false 以阻止 vue 在启动时生成生产提示
+        Vue.config.productionTip = false;
+        // 创建Vue对象
+        const vm = new Vue({
+            el: '#root',
+            data: {
+                name: '四川城市职业学院',
+                addr: '四川成都龙泉驿'
+            }
+        })
+    </script>
+</body>
+</html>
+```
+
+<img src="images/2023-01-14_203454.png" style="zoom:50%;" />
+
+**总结：**
+
+​        1.Vue中的数据代理：
+
+​              通过vm对象来代理data对象中属性的操作（读/写）
+
+​        2.Vue中数据代理的好处：
+
+​              更加方便的操作data中的数据
+
+​        3.基本原理：
+
+​              通过Object.defineProperty()把data对象中所有属性添加到vm上。
+
+​              为每一个添加到vm上的属性，都指定一个getter/setter。
+
+​              在getter/setter内部去操作（读/写）data中对应的属性。
 
 
 
+### 1.9.事件处理
+
+​	Vue中的事件处理是一个非常重要的技术点，因为用户操作页面通常是通过例如点击事件、键盘事件等事件来操作的。
+
+#### 1.9.1.事件的基本处理
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- 引入vue -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        总结：
+				事件的基本使用：
+							1.使用v-on:xxx 或 @xxx 绑定事件，其中xxx是事件名；
+							2.事件的回调需要配置在methods对象中，最终会在vm上；
+							3.methods中配置的函数，不要用箭头函数！否则this就不是vm了；
+							4.methods中配置的函数，都是被Vue所管理的函数，this的指向是vm 或 组件实例对象；
+							5.@click="demo" 和 @click="demo($event)" 效果一致，但后者可以传参；
+		-->
+    <div id="root">
+        <h3>
+            欢迎来到{{name}}
+        </h3>
+        <!-- <button v-on:click='showInfo'>点我弹出同学你好</button> -->
+        <!-- 以上方式可以简写成下面格式，用@替代v-on: -->
+        <button @click='showInfo01'>点我弹出同学你好</button>
+        <!-- $event是vue保留event，66是传递的参数 -->
+        <button @click='showInfo02($event,666)'>点我接收参数666</button>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#root",
+            data: {
+                name: "四川城院"
+                },
+            methods: {
+                // event是一个事件对象，比如点击事件，它有一些属性如target-发生事件的目标
+                showInfo01(event) {
+                    // console.log(event.target.innerText);
+                    // 此处this表示vm对象
+                    // console.log(this);
+                    alert('同学你好！！！');
+                },
+                showInfo02(event,number) {
+                    // console.log(event.target.innerText);
+                    // 此处this表示vm对象
+                    // console.log(this);
+                    alert(number);
+                }
+            }
+        })
+    </script>
+</body>
+</html>
+```
+
+
+
+**总结：**
+
+​        事件的基本使用：
+
+​              1.使用`v-on:xxx` 或` @xxx` 绑定事件，其中xxx是事件名；
+
+​              2.事件的回调需要配置在`methods`对象中，最终会在vm上；
+
+​              3.`methods`中配置的函数，不要用箭头函数！否则`this`就不是vm了；
+
+​              4.`method`中配置的函数，都是被Vue所管理的函数，`this`的指向是vm 或 组件实例对象；
+
+​              5.`@click="demo"` 和` @click="demo($event)"` 效果一致，但后者可以传参；
+
+
+
+#### 1.9.2.事件修饰符  
 
 
 

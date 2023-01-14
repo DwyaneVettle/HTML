@@ -1,0 +1,38 @@
+<!--
+	复制以下内容，在vscode中打开“设置”--“配置用户代码片段”--粘贴到“html.json”中
+-->
+"vue demo": {
+	 	"prefix": "vue",
+	 	"body": [
+	 		"<!DOCTYPE html>",
+			"<html lang='en'>",
+			"<head>",
+    		"\t<meta charset='UTF-8'>",
+    		"\t<meta http-equiv='X-UA-Compatible' content='IE=edge'>",
+    		"\t<meta name='viewport' content='width=device-width, initial-scale=1.0'>",
+    		"\t<title>vue使用模板</title>",
+    		"\t<!-- 引入vue -->",
+    		"\t<script src='../js/vue.js'></script>",
+			"</head>",
+			"<body>",
+    		"\t\t<!-- 准备一个容器 -->",
+    		"\t\t<div id='root'>",
+
+    		"\t\t</div>",
+
+    		"\t\t<script>",
+        	"\t\t\t\t// 设置为 false 以阻止 vue 在启动时生成生产提示",
+        	"\t\t\t\tVue.config.productionTip = false;",
+        	"\t\t\t\t// 创建Vue对象",
+        	"\t\t\t\tnew Vue({",
+            "\t\t\t\t\t\tel: '#root',",
+			"\t\t\t\t\t\tdata: {}",
+			"\t\t\t\t\t\t",
+			
+        	"\t\t\t\t})",
+    		"\t\t</script>",
+			"</body>",
+			"</html>"
+	 	],
+	 	"description": "vue 模板"
+	 }
