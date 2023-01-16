@@ -1,4 +1,4 @@
-导读：
+ 导读：
 
 JavaScript2022年度报告：https://csdnnews.blog.csdn.net/article/details/128668479?spm=1000.2115.3001.5927
 
@@ -467,7 +467,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 </html>
 ```
 
-总结：
+**总结：**
 
 ```text
 1.语法：v-bind:href ="xxx" 或简写为 :href
@@ -502,18 +502,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
     <script src="../js/vue.js"></script>
 </head>
 <body>
-    <!-- 
-			data与el的2种写法
-					1.el有2种写法
-									(1).new Vue时候配置el属性。
-									(2).先创建Vue实例，随后再通过vm.$mount('#root')指定el的值。
-					2.data有2种写法
-									(1).对象式
-									(2).函数式
-									如何选择：目前哪种写法都可以，以后学习到组件时，data必须使用函数式，否则会报错。
-					3.一个重要的原则：
-									由Vue管理的函数，一定不要写箭头函数，一旦写了箭头函数，this就不再是Vue实例了。
-		-->
+   
     <!-- 准备一个容器 -->
     <div id="root">
         <h1>你好,{{name}}</h1>
@@ -556,8 +545,18 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 </html>
 ```
 
+**总结：**
 
-
+	data与el的2种写法
+				1.el有2种写法
+								(1).new Vue时候配置el属性。
+								(2).先创建Vue实例，随后再通过vm.$mount('#root')指定el的值。
+				2.data有2种写法
+								(1).对象式
+								(2).函数式
+								如何选择：目前哪种写法都可以，以后学习到组件时，data必须使用函数式，否则会报错。
+				3.一个重要的原则：
+								由Vue管理的函数，一定不要写箭头函数，一旦写了箭头函数，this就不再是Vue实例了。
 ### 1.7.理解MVVM
 
 ​	MVVM模型：
@@ -755,17 +754,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
     <script src="../js/vue.js"></script>
 </head>
 <body>
-    <!-- 
-        总结：
-				1.Vue中的数据代理：
-							通过vm对象来代理data对象中属性的操作（读/写）
-				2.Vue中数据代理的好处：
-							更加方便的操作data中的数据
-				3.基本原理：
-							通过Object.defineProperty()把data对象中所有属性添加到vm上。
-							为每一个添加到vm上的属性，都指定一个getter/setter。
-							在getter/setter内部去操作（读/写）data中对应的属性。
-		 -->
+    
     <!-- 准备一个容器 -->
     <div id="root">
         <h3>学校名称：{{name}}</h3>
@@ -828,15 +817,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
     <script src="../js/vue.js"></script>
 </head>
 <body>
-    <!-- 
-        总结：
-				事件的基本使用：
-							1.使用v-on:xxx 或 @xxx 绑定事件，其中xxx是事件名；
-							2.事件的回调需要配置在methods对象中，最终会在vm上；
-							3.methods中配置的函数，不要用箭头函数！否则this就不是vm了；
-							4.methods中配置的函数，都是被Vue所管理的函数，this的指向是vm 或 组件实例对象；
-							5.@click="demo" 和 @click="demo($event)" 效果一致，但后者可以传参；
-		-->
+    
     <div id="root">
         <h3>
             欢迎来到{{name}}
@@ -895,6 +876,910 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 #### 1.9.2.事件修饰符  
 
+​	事件修饰符表示对事件的阻止、触发和捕获等操作。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <style>
+        * {
+                margin-top: 20px;
+        }
+
+        .demo01 {
+                height: 50px;
+                background-color: red;
+        }
+        .box1{
+		padding: 5px;
+		background-color: skyblue;
+	}
+	.box2{
+		padding: 5px;
+		background-color: orange;
+	}
+	.list{
+	        width: 200px;
+		height: 200px;
+		background-color: peru;
+		overflow: auto;
+	}
+	li{
+		height: 100px;
+	}
+    </style>
+</head>
+<body>
+       
+        <!-- 准备一个容器 -->
+        <div id='root'>
+                <h3>欢迎来到{{name}}学习</h3>
+                <!-- prevent相当于preventDefault()，阻止事件 -->
+                <a href="https://www.baidu.com" @click.prevent="showInfo">点击弹出你好</a>
+                <!-- stop：阻止事件冒泡（常用） -->
+                <div class="demo01" @click="showInfo">
+                        <button @click.stop="showInfo">点击弹出同学你好！</button>
+                </div>
+                <!-- once：事件只触发一次（常用） -->
+                <button @click.once="showInfo">点击弹出同学你好！</button>
+                <!-- capture：使用事件的捕获模式
+                        点击box1输出1，box2输出2，如果不使用capture
+                        点击box2输出21，加了capture输出12
+                -->
+                <div class="box1" @click.capture="showMsg(1)">
+                        div01
+                        <div class="box2" @click="showMsg(2)">
+                                div02
+                        </div>
+                </div>
+                <!-- self：只有event.target是当前操作的元素时才触发事件 -->
+                <div class="demo01" @click.self="showInfo">
+                        <button @click="showInfo">点击弹出同学你好！</button>
+                </div>
+                <!-- passive：事件的默认行为立即执行，无需等待事件回调执行完毕 
+                        scroll是滚动条滚动事件
+                        wheel是鼠标滚轮滚动事件
+                -->
+                <ul class="list" @wheel.passive="showList">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                                name:'四川城市职业学院'
+                        },
+                        methods: {
+                                showInfo(e) {
+                                        // e.preventDefault()表示不要执行与事件关联的默认动作
+                                        // e.preventDefault();
+                                        // e.stopPropagation()表示阻止事件冒泡执行
+                                        // e.stopPropagation();
+                                        alert('同学你好！！！');
+                                        // console.log(e.target);
+                                },
+                                showMsg(msg) {
+                                        console.log(msg);
+                                },
+                                showList() {
+                                        // console.log('==');
+                                        for (let i = 0; i < 100000; i++) {
+                                                console.log('#');;       
+                                        }
+                                        console.log('终于结束了！');
+                                }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+​	Vue中的事件修饰符：
+
+​                        1.prevent：阻止默认事件（常用）；
+
+​                        2.stop：阻止事件冒泡（常用）；
+
+​                        3.once：事件只触发一次（常用）；
+
+​                        4.capture：使用事件的捕获模式；
+
+​                        5.self：只有event.target是当前操作的元素时才触发事件；
+
+​                        6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕；
+
+
+
+#### 1.9.3.键盘事件
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>欢迎来到{{name}}学习</h3>
+            <!-- 
+                keydown事件是按下未抬起时的操作
+                keyup事件是抬起来时的操作-常用
+                enter键盘事件别名表示按下回车才执行，如果没有，在输入框
+                没输入一个字符就会输出
+             -->
+            <input type="text" placeholder="按下回车提示输入" @keyup.huiche="showInfo">
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.config.keyCodes.huiche = 13 //定义了一个回车别名按键
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            name: '四川城市职业学院'
+                        },
+                        methods: {
+                            showInfo(e) {
+                                // e.target.value获取输入框的内容
+                                // e.keyCode表示输出键盘的字符编码,e.key表示键盘的键名
+                                console.log(e.key,e.keyCode);
+                                // if(e.keyCode !==13) return
+                                console.log(e.target.value);
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+**总结：**
+
+​	1.Vue中常用的按键别名：
+
+​              回车 => enter
+
+​              删除 => delete (捕获“删除”和“退格”键)
+
+​              退出 => esc
+
+​              空格 => space
+
+​              换行 => tab (特殊，必须配合keydown去使用)
+
+​              上 => up
+
+​              下 => down
+
+​              左 => left
+
+​              右 => right
+
+**注意：**
+
+- Vue未提供别名的按键，可以使用按键原始的key值去绑定，但注意要转为kebab-case（短横线命名）
+
+- 系统修饰键（用法特殊）：ctrl、alt、shift、meta
+
+​              (1).配合keyup使用：按下修饰键的同时，再按下其他键，随后释放其他键，事件才被触发。
+
+​              (2).配合keydown使用：正常触发事件。
+
+- 也可以使用keyCode去指定具体的按键（不推荐）
+
+- Vue.config.keyCodes.自定义键名 = 键码，可以去定制按键别名
+
+
+
+### 1.10.计算属性
+
+​	要想了解计算属性，我们现通过以下案例来观察：在第一个输入框中动态接收姓，第二个输入框中动态接收名，然后用`-`分隔进行显示。常用的有两种实现的方式：①插值语法；②methods方法。
+
+<img src="images/image-20230115195526767.png" alt="image-20230115195526767" style="zoom:33%;" />
+
+
+
+#### 1.10.1.插值语法实现
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            姓: <input type="text" v-model="firstName"><br/><br/>
+            名：<input type="text" v-model="lastName"><br/><br/>
+            <!-- 姓名：<span>{{firstName + '-' + lastName}}</span> -->
+            <!-- slice(0,3)表示截取包括下标0，不包括下标3 -->
+            姓名：<span>{{firstName.slice(0,3)}} - {{lastName}}</span>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            firstName: '张',
+                            lastName: '三'
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 1.10.2.methods实现
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            姓: <input type="text" v-model="firstName"><br/><br/>
+            名：<input type="text" v-model="lastName"><br/><br/>
+            姓名：<span>{{fullName()}}</span>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            firstName: '张',
+                            lastName: '三'
+                        },
+                        methods: {
+                            fullName() {
+                                console.log('=='); // 修改一次执行一次
+                                return this.firstName + '-' + this.lastName;
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 1.10.3.计算属性实现
+
+​	除此之外，最常用是用**计算属性**来实现。计算属性通过vm对象的`computed`属性来实现，`computed`里配置的就是你要返回的通过计算得到的返回结果，但如果要获取或修改这个结果，还需要使用`get()`方法和`set()`方法来实现。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            姓: <input type="text" v-model="firstName"><br/><br/>
+            名：<input type="text" v-model="lastName"><br/><br/>
+            <!-- 此处虽然有多个fullName，但get只被调用一次，因为当第一次读取fullName时会保存缓存 -->
+            姓名：<span>{{fullName}}</span> <br/><br/>
+            姓名：<span>{{fullName}}</span> <br/><br/>
+            姓名：<span>{{fullName}}</span> <br/><br/>
+            姓名：<span>{{fullName}}</span>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            firstName: '张',
+                            lastName: '三'
+                        },
+                        computed: {
+                            fullName: {
+                                // get的作用是：当有人读取fullName时，get就会被调用，且返回值就作为fullName的值
+                                /* 
+                                get调用的情况：
+                                    1.初次读取fullName时，get被调用；
+                                    2.所依赖的数据发生变化时。
+                                */
+                                get() {
+                                    console.log('get被调用了');
+                                    // 此处的this也是vm对象
+                                    return this.firstName + '-' + this.lastName;
+                                },
+                                //set什么时候调用? 当fullName被修改时。
+                                set(value){
+                                    console.log('set',value)
+                                    const arr = value.split('-')
+                                    this.firstName = arr[0]
+                                    this.lastName = arr[1]
+                                }
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+​	计算属性：
+
+​          1.定义：要用的属性不存在，要通过已有属性计算得来。
+
+​          2.原理：底层借助了Objcet.defineproperty方法提供的getter和setter。
+
+​          3.get函数什么时候执行？
+
+​                (1).初次读取时会执行一次。
+
+​                (2).当依赖的数据发生改变时会被再次调用。
+
+​          4.优势：与methods实现相比，内部有缓存机制（复用），效率更高，调试方便。
+
+​          5.备注：
+
+​              1.计算属性最终会出现在vm上，直接读取使用即可。
+
+​              2.如果计算属性要被修改，那必须写set函数去响应修改，且set中要引起计算时依赖的数据发生改变。
+
+
+
+
+
+- **计算属性的简写形式**
+
+​	以上方式是通过`get()`和`set()`两个方法来实现读取和修改的，但一般情况下，我们用到读取的情况比较多，所以`set()`方法用到的情况就要少一些，就可以省略set方法，并且将`fullName()`作为一个函数对象来获取，这种方式在写法上要灵活和简便一些，因为**计算属性最终会出现在vm上，直接读取即可使用**。vue中简写成如下形式，其它不变：
+
+```html
+new Vue({
+    el:'#root', 
+    data:{ 
+        firstName:'张',
+        lastName:'三'
+    },
+    computed:{
+    	fullName(){
+		    return this.firstName + '-' + this.lastName
+    	}
+    }
+})
+```
+
+**注意：只考虑读取，不考虑修改时才能使用简写形式。**
+
+
+
+### 1.11.监视属性
+
+​	天气案例：实现页面天气`凉爽`和`炎热`的切换，并且在控制台显示`现在`和`原来`的天气情况。我们可以通过Vue的监视属性来实现这一功能。vm对象的`$watch()`或`watch`配置来监视指定的属性，当属性发生变化时，回调函数自动执行，在函数内部进行计算。
+
+<img src="images/image-20230115215142948.png" alt="image-20230115215142948" style="zoom: 50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- <h3>今天天气很{{isHot ? '凉爽' : '炎热'}}</h3> -->
+            <h3>今天天气很{{info}}, {{x}}</h3>
+            <button @click="changeWeather">切换</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isHot: true,
+                            x: 1
+                        },
+                        computed: {
+                            info() {
+                                return this.isHot ? '凉爽' : '炎热';
+                            }
+                        },
+                        methods: {
+                            changeWeather() {
+                                this.isHot = !this.isHot;
+                                this.x++
+                            }
+                        },
+                        
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 1.11.1.监视属性的基本用法
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- <h3>今天天气很{{isHot ? '凉爽' : '炎热'}}</h3> -->
+            <h3>今天天气很{{info}}, {{x}}</h3>
+            <button @click="changeWeather">切换</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isHot: true,
+                            x: 1
+                        },
+                        computed: {
+                            info() {
+                                return this.isHot ? '凉爽' : '炎热';
+                            }
+                        },
+                        methods: {
+                            changeWeather() {
+                                this.isHot = !this.isHot;
+                                this.x++
+                            }
+                        },
+                        // watch: {
+                        //     // isHot就是要监视的属性
+                        //     isHot: {
+                        //         // immediate表示立即执行，默认为false
+                        //         immediate:true, //初始化时让handler调用一下
+                        //         // handler()函数是在isHot属性发生变化时执行
+                        //         // newValue,oldValue表示修改前后的值
+                        //         handler(newValue,oldValue) {
+                        //             console.log('isHot发生了改变',newValue,oldValue);
+                        //         }
+                        //     }
+                        // }
+                        
+                })
+                // watch监听方式还可以用以下vm/.$watch()
+                // 两个参数分别为要监视的对象和配置对象
+                vm.$watch('isHot',{
+                    immediate:true, //初始化时让handler调用一下
+                    handler(newValue,oldValue) {
+                        console.log('isHot发生了改变',newValue,oldValue);
+                    }
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```text
+监视属性watch：
+   1.当被监视的属性变化时, 回调函数自动调用, 进行相关操作
+   2.监视的属性必须存在，才能进行监视！！
+   3.监视的两种写法：
+         (1).new Vue时传入watch配置
+         (2).通过vm.$watch监视
+```
+
+**简写:**
+
+​	当使用`watch`时`isHot`属性内部只有`handler`时，可以简写成以下形式：
+
+```html
+1.使用watch时：
+isHot(newValue,oldValue) {
+     console.log('isHot发生了改变',newValue,oldValue);
+},
+
+2.使用$watch()时：
+vm.$watch('isHot',function(newValue,oldValue) {
+                        console.log('isHot发生了改变',newValue,oldValue);
+                    })
+```
+
+
+
+
+
+
+
+#### 1.11.2.深度监视
+
+​	Vue中的watch默认不监视对象内部值得改变（只能监视一层），而要想监视对象内部值（多层）的变化，则需要用到深度监视。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- <h3>今天天气很{{isHot ? '凉爽' : '炎热'}}</h3> -->
+            <h3>今天天气很{{info}}</h3>
+            <button @click="changeWeather">切换</button>
+            <hr>
+            <!-- 需求：通过numbers属性任何一个值的改变，输出语句 -->
+            <h3>a的值是：{{numbers.a}}</h3>
+            <button @click="numbers.a++">点我让a加1</button>
+            
+            <h3>b的值是：{{numbers.b}}</h3>
+            <button @click="numbers.b++">点我让b加1</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isHot: true,
+                            numbers: {
+                                a: 1,
+                                b: 1
+                            }
+                        },
+                        computed: {
+                            info() {
+                                return this.isHot ? '凉爽' : '炎热';
+                            }
+                        },
+                        methods: {
+                            changeWeather() {
+                                this.isHot = !this.isHot;
+                                this.x++
+                            }
+                        },
+                        watch: {
+                            // isHot就是要监视的属性
+                            isHot: {
+                                // immediate表示立即执行，默认为false
+                                immediate:true, //初始化时让handler调用一下
+                                // handler()函数是在isHot属性发生变化时执行
+                                // newValue,oldValue表示修改前后的值
+                                handler(newValue,oldValue) {
+                                    console.log('isHot发生了改变',newValue,oldValue);
+                                }
+                            },
+                            // 监测多级结构中某个属性的用法
+                            // 'numbers.a': {
+                            //     handler() {
+                            //         console.log('a的值改变了。');
+                            //     }
+                            // },
+                            // 监测多级结构中所有属性的用法
+                            numbers: {
+                                // deep:true表示开启深度监测，默认为false
+                                deep: true,
+                                handler() {
+                                    console.log('numbers的值改变了！');
+                                }
+                            }
+                        }
+                        
+                })
+                
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+深度监视：
+      (1).Vue中的watch默认不监测对象内部值的改变（一层）。
+      (2).配置deep:true可以监测对象内部值改变（多层）。
+备注：
+      (1).Vue自身可以监测对象内部值的改变，但Vue提供的watch默认不可以！
+      (2).使用watch时根据数据的具体结构，决定是否采用深度监视。
+```
+
+
+
+
+
+#### 1.11.3.watch  VS  computed
+
+​	计算属性和监听属性的对比可根据官网`https://v2.cn.vuejs.org/v2/guide/computed.html#%E8%AE%A1%E7%AE%97%E5%B1%9E%E6%80%A7-vs-%E4%BE%A6%E5%90%AC%E5%B1%9E%E6%80%A7`的对比进行阅读，我们把之前用**计算属性做的姓名案例**改成监听属性：
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            姓: <input type="text" v-model="firstName"><br/><br/>
+            名：<input type="text" v-model="lastName"><br/><br/>
+            <!-- 此处虽然有多个fullName，但get只被调用一次，因为当第一次读取fullName时会保存缓存 -->
+            姓名：<span>{{fullName}}</span> 
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            firstName: '张',
+                            lastName: '三',
+                            fullName: '张-三'
+                        },
+                        watch: {
+                            firstName(newValue) {
+                                /* 
+                                    定时器：修改后等1秒钟再反馈到页面
+                                    这是watch监听属性才可以完成的异步操作，
+                                    计算属性computed无法完成进行异步操作
+                                */
+                                setTimeout(() => {
+                                    this.fullName = newValue + '-' + this.lastName;
+                                }, 1000);
+                            },
+                            lastName(newValue) {
+                                this.fullName = this.firstName+ '-' + newValue ;
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+**总结：**
+
+```
+computed和watch之间的区别：
+      1.computed能完成的功能，watch都可以完成。
+      2.watch能完成的功能，computed不一定能完成，例如：watch可以进行异步操作。
+两个重要的小原则：
+         1.所有被Vue管理的函数，最好写成普通函数，不写成箭头函数，这样this的指向才是vm 或 组件实例对象。
+         2.所有不被Vue所管理的函数（定时器的回调函数、ajax的回调函数等、Promise的回调函数），最好写成箭头函数，
+           这样this的指向才是vm 或 组件实例对象。
+```
+
+
+
+### 1.12.绑定样式
+
+​	在vue中要绑定元素的样式，可以使用两种方式：**class绑定**和**style绑定**。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <style>
+        .basic{
+            width: 400px;
+            height: 100px;
+            border: 1px solid black;
+        }
+        
+        .happy{
+            border: 4px solid red;;
+            background-color: rgba(255, 255, 0, 0.644);
+            /* 背景渐变，30度渐变轴，从yellow变到yellow */
+            background: linear-gradient(30deg,yellow,pink,orange,yellow);
+        }
+        .sad{
+            border: 4px dashed rgb(2, 197, 2);
+            background-color: gray;
+        }
+        .normal{
+            background-color: skyblue;
+        }
+
+        .z1{
+            background-color: yellowgreen;
+        }
+        .z2{
+            font-size: 30px;
+            text-shadow:2px 2px 10px red;
+        }
+        .z3{
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 需求1：基础样式basic和normal，点击切换成happy属性 
+                 绑定class样式(字符串写法)，通过 :class='xx',把xx配置到data属性中
+                 使用场景：样式类名不确定，需要动态指定
+            -->
+
+            <h3 class="basic" :class="mood" @click='changeMood01'>{{name}}</h3><br><br>
+            
+            <!-- 需求2：基础样式basic，z1,z2,z3两两随机组合 
+                 绑定class样式(数组写法)，通过添加数组属性进行设置
+                 适用场景：要绑定的样式个数不确定、名字也不确定
+            -->
+            <h3 class="basic" :class="classArr">{{name}}</h3><br><br>
+
+            <!-- 需求3基础样式basic，z1和z2任意组合，也可以全有，也可以全没有
+                 绑定class样式(对象写法)，将确定的类名配置到对象中
+                 使用场景：要绑定的样式个数确定、名字确定，但要动态决定用不用
+            -->
+            <h3 class="basic" :class="classObj">{{name}}</h3><br><br>
+
+            <!-- 
+                需求4：给字体添加大小属性
+                绑定style样式(对象写法)
+                css样式再vue中除第以个单词外，其他单词首字母大写
+             -->
+            <h3 class="basic" :class="styleObj01">{{name}}</h3><br><br>
+            
+            <!-- 绑定style样式(数组写法):数组里嵌套对象写法 -->
+            <h3 class="basic" :class="[styleObj01, styleObj02]">{{name}}</h3><br><br>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            name: '四川城市职业学院',
+                            mood: 'normal',
+                            classArr: ['z1', 'z2', 'z3'],
+                            classObj: {
+                                z1: false,
+                                z2: false
+                            },
+                            styleObj01: {
+                                fontSize: '50px',
+                                color: 'red'
+                            },
+                            styleObj01: {
+                                backgroundColor: 'blue'
+                            }
+                        },
+                        methods: {
+                            changeMood01() {
+                                // document.getElementById('demo').className = 'basic happy';
+                                // this.mood = 'happy';
+                                // 以上方式不够灵活，如果需要点击随机切换normal,happy,sad，则需要用到Math
+                                const arr = ['normal', 'happy', 'sad'];
+                                // Math.random()随机生成0-1(不包含1),乘以3再向下取整 
+                                const index = Math.floor(Math.random() * 3);
+                                this.mood = arr[index];
+                            },
+                        },
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+**总结：**
+
+```
+绑定样式：
+      1. class样式
+               写法:class="xxx" xxx可以是字符串、对象、数组。
+                     字符串写法适用于：类名不确定，要动态获取。
+                     对象写法适用于：要绑定多个样式，个数不确定，名字也不确定。
+                     数组写法适用于：要绑定多个样式，个数确定，名字也确定，但不确定用不用。
+      2. style样式
+               :style="{fontSize: xxx}"其中xxx是动态值。
+               :style="[a,b]"其中a、b是样式对象。
+```
+
+
+
+### 1.13.条件渲染
+
+​	在vue中的条件判断和我们之前学习原生JavaScript的`if`语句有很大区别，但仍有单分支，多分支。
+
+```html
+
+```
+
+
+
 
 
 ## 2.vue-cli
@@ -928,3 +1813,23 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 
 ## 6.vue3
+
+
+
+
+
+## 拓展：
+
+### 1.箭头函数和普通函数的区别
+
+```text
+1、外形不同：箭头函数使用箭头定义，普通函数中没有。
+2、箭头函数全都是匿名函数：普通函数可以有匿名函数，也可以有具名函数
+3、箭头函数不能用于构造函数：普通函数可以用于构造函数，以此创建对象实例。
+4、箭头函数中 this 的指向不同： 在箭头函数中不会创建自己的this，只会从自己的作用域链的上一层继承this。（注意其中对象不构成作用域） 在普通函数中，this 总是指向调用它的对象，如果用作构造函数，它指向创建的对象实例。
+5、箭头函数不具有 arguments 对象：每一个普通函数调用后都具有一个
+arguments 对象，用来存储实际传递的参数。但是箭头函数并没有此对象。
+6、其他区别：箭头函数不具有 prototype 原型对象。箭头函数不具有 super。
+箭头函数不具有 new.target
+```
+

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- <h3>今天天气很{{isHot ? '凉爽' : '炎热'}}</h3> -->
+            <h3>今天天气很{{info}}, {{x}}</h3>
+            <button @click="changeWeather">切换</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isHot: true,
+                            x: 1
+                        },
+                        computed: {
+                            info() {
+                                return this.isHot ? '凉爽' : '炎热';
+                            }
+                        },
+                        methods: {
+                            changeWeather() {
+                                this.isHot = !this.isHot;
+                                this.x++
+                            }
+                        },
+                        
+                        
+                })
+        </script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            姓: <input type="text" v-model="firstName"><br/><br/>
+            名：<input type="text" v-model="lastName"><br/><br/>
+            <!-- 此处虽然有多个fullName，但get只被调用一次，因为当第一次读取fullName时会保存缓存 -->
+            姓名：<span>{{fullName}}</span> 
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            firstName: '张',
+                            lastName: '三',
+                            fullName: '张-三'
+                        },
+                        watch: {
+                            firstName(newValue) {
+                                /* 
+                                    定时器：修改后等1秒钟再反馈到页面
+                                    这是watch监听属性才可以完成的异步操作，
+                                    计算属性computed无法完成进行异步操作
+                                */
+                                setTimeout(() => {
+                                    this.fullName = newValue + '-' + this.lastName;
+                                }, 1000);
+                            },
+                            lastName(newValue) {
+                                this.fullName = this.firstName+ '-' + newValue ;
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- <h3>今天天气很{{isHot ? '凉爽' : '炎热'}}</h3> -->
+            <h3>今天天气很{{info}}</h3>
+            <button @click="changeWeather">切换</button>
+            <hr>
+            <!-- 需求：通过numbers属性任何一个值的改变，输出语句 -->
+            <h3>a的值是：{{numbers.a}}</h3>
+            <button @click="numbers.a++">点我让a加1</button>
+            
+            <h3>b的值是：{{numbers.b}}</h3>
+            <button @click="numbers.b++">点我让b加1</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isHot: true,
+                            numbers: {
+                                a: 1,
+                                b: 1
+                            }
+                        },
+                        computed: {
+                            info() {
+                                return this.isHot ? '凉爽' : '炎热';
+                            }
+                        },
+                        methods: {
+                            changeWeather() {
+                                this.isHot = !this.isHot;
+                                this.x++
+                            }
+                        },
+                        watch: {
+                            // isHot就是要监视的属性
+                            isHot: {
+                                // immediate表示立即执行，默认为false
+                                immediate:true, //初始化时让handler调用一下
+                                // handler()函数是在isHot属性发生变化时执行
+                                // newValue,oldValue表示修改前后的值
+                                handler(newValue,oldValue) {
+                                    console.log('isHot发生了改变',newValue,oldValue);
+                                }
+                            },
+                            // 监测多级结构中某个属性的用法
+                            // 'numbers.a': {
+                            //     handler() {
+                            //         console.log('a的值改变了。');
+                            //     }
+                            // },
+                            // 监测多级结构中所有属性的用法
+                            numbers: {
+                                // deep:true表示开启深度监测，默认为false
+                                deep: true,
+                                handler() {
+                                    console.log('numbers的值改变了！');
+                                }
+                            }
+                        }
+                        
+                })
+                
+        </script>
+</body>
+</html>

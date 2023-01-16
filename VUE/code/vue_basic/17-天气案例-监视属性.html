@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- <h3>今天天气很{{isHot ? '凉爽' : '炎热'}}</h3> -->
+            <h3>今天天气很{{info}}, {{x}}</h3>
+            <button @click="changeWeather">切换</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isHot: true,
+                            x: 1
+                        },
+                        computed: {
+                            info() {
+                                return this.isHot ? '凉爽' : '炎热';
+                            }
+                        },
+                        methods: {
+                            changeWeather() {
+                                this.isHot = !this.isHot;
+                                this.x++
+                            }
+                        },
+                        // watch: {
+                        //     // isHot就是要监视的属性
+                               // 完整写法
+                        //     isHot: {
+                        //         // immediate表示立即执行，默认为false
+                        //         immediate:true, //初始化时让handler调用一下
+                        //         // handler()函数是在isHot属性发生变化时执行
+                        //         // newValue,oldValue表示修改前后的值
+                        //         handler(newValue,oldValue) {
+                        //             console.log('isHot发生了改变',newValue,oldValue);
+                        //         }
+                        //     }
+                        // },
+                                // 简写形式
+                                // isHot(newValue,oldValue) {
+                                //     console.log('isHot发生了改变',newValue,oldValue);
+                                // },
+                        
+                })
+                // watch监听方式还可以用以下vm/.$watch()
+                // 两个参数分别为要监视的对象和配置对象
+                // $watch()的完整写法
+                // vm.$watch('isHot',{
+                //     immediate:true, //初始化时让handler调用一下
+                //     handler(newValue,oldValue) {
+                //         console.log('isHot发生了改变',newValue,oldValue);
+                //     }
+                // })
+                    // $watch()的简写形式
+                    vm.$watch('isHot',function(newValue,oldValue) {
+                        console.log('isHot发生了改变',newValue,oldValue);
+                    })
+        </script>
+</body>
+</html>

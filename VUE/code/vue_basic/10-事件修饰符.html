@@ -7,10 +7,79 @@
     <title>vue使用模板</title>
     <!-- 引入vue -->
     <script src='../js/vue.js'></script>
+    <style>
+        * {
+                margin-top: 20px;
+        }
+
+        .demo01 {
+                height: 50px;
+                background-color: red;
+        }
+        .box1{
+		padding: 5px;
+		background-color: skyblue;
+	}
+	.box2{
+		padding: 5px;
+		background-color: orange;
+	}
+	.list{
+	        width: 200px;
+		height: 200px;
+		background-color: peru;
+		overflow: auto;
+	}
+	li{
+		height: 100px;
+	}
+    </style>
 </head>
 <body>
+        <!-- 
+				Vue中的事件修饰符：
+						1.prevent：阻止默认事件（常用）；
+						2.stop：阻止事件冒泡（常用）；
+						3.once：事件只触发一次（常用）；
+						4.capture：使用事件的捕获模式；
+						5.self：只有event.target是当前操作的元素时才触发事件；
+						6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕；
+		-->
         <!-- 准备一个容器 -->
         <div id='root'>
+                <h3>欢迎来到{{name}}学习</h3>
+                <!-- prevent相当于preventDefault()，阻止事件 -->
+                <a href="https://www.baidu.com" @click.prevent="showInfo">点击弹出你好</a>
+                <!-- stop：阻止事件冒泡（常用） -->
+                <div class="demo01" @click="showInfo">
+                        <button @click.stop="showInfo">点击弹出同学你好！</button>
+                </div>
+                <!-- once：事件只触发一次（常用） -->
+                <button @click.once="showInfo">点击弹出同学你好！</button>
+                <!-- capture：使用事件的捕获模式
+                        点击box1输出1，box2输出2，如果不使用capture
+                        点击box2输出21，加了capture输出12
+                -->
+                <div class="box1" @click.capture="showMsg(1)">
+                        div01
+                        <div class="box2" @click="showMsg(2)">
+                                div02
+                        </div>
+                </div>
+                <!-- self：只有event.target是当前操作的元素时才触发事件 -->
+                <div class="demo01" @click.self="showInfo">
+                        <button @click="showInfo">点击弹出同学你好！</button>
+                </div>
+                <!-- passive：事件的默认行为立即执行，无需等待事件回调执行完毕 
+                        scroll是滚动条滚动事件
+                        wheel是鼠标滚轮滚动事件
+                -->
+                <ul class="list" @wheel.passive="showList">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                </ul>
         </div>
         <script>
                 // 设置为 false 以阻止 vue 在启动时生成生产提示
@@ -18,7 +87,29 @@
                 // 创建Vue对象
                 new Vue({
                         el: '#root',
-                        data: {}
+                        data: {
+                                name:'四川城市职业学院'
+                        },
+                        methods: {
+                                showInfo(e) {
+                                        // e.preventDefault()表示不要执行与事件关联的默认动作
+                                        // e.preventDefault();
+                                        // e.stopPropagation()表示阻止事件冒泡执行
+                                        // e.stopPropagation();
+                                        alert('同学你好！！！');
+                                        // console.log(e.target);
+                                },
+                                showMsg(msg) {
+                                        console.log(msg);
+                                },
+                                showList() {
+                                        // console.log('==');
+                                        for (let i = 0; i < 100000; i++) {
+                                                console.log('#');;       
+                                        }
+                                        console.log('终于结束了！');
+                                }
+                        }
                         
                 })
         </script>
