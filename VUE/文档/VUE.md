@@ -1772,11 +1772,813 @@ computed和watch之间的区别：
 
 ### 1.13.条件渲染
 
-​	在vue中的条件判断和我们之前学习原生JavaScript的`if`语句有很大区别，但仍有单分支，多分支。
+​	在vue中的条件判断`v-if`和我们之前学习原生JavaScript的`if`语句有很大区别，但仍有单分支，多分支。除此之外，vue也可以使用`v-show`来进行条件判断。
 
 ```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>当前n的值是：{{n}}</h3>
+            <button @click="n++">点我n加1</button>
+            <!-- 
+                需求：让h3切换显示或隐藏，可用指令v-show
+                v-show可做条件渲染，值可以时true,false或表达式
+                v-show底层通过display属性操作
+             -->
+            <!-- <h3 v-show="false">欢迎来到{{name}}</h3> -->
+            <!-- <h3 v-show="1 === 2">欢迎来到{{name}}</h3> -->
+
+            <!-- v-if指令底层通过注释代码结构完成 -->
+            <h3 v-if="false">欢迎来到{{name}}</h3>
+            <h3 v-if="1 === 1">欢迎来到{{name}}</h3>
+
+            <!-- 不同n的值显示不同的框架
+                v-if,v-else-if,v-else是一组指令，中间
+                不允许打断（如下面的34行），用法和js中的if-else if- else
+                相同
+                需要注意的是v-else指令不添加条件
+            -->
+            <div v-if="n === 1">Angular</div>
+            <div v-else-if="n === 2">React</div>
+            <!-- <div>打断</div> -->
+            <div v-else-if="n === 3">Vue</div>
+            <div v-else>Other JS Framework</div>
+
+            <!-- 
+                template表示模板，与div包裹不同，div仍在页面保留结构
+                而template不影响页面原有结构，可和v-if使用，不能和v-show使用
+             -->
+            <template v-if="n === 1">
+                <h3 >成都</h3>
+                <h3 >重庆</h3>
+                <h3 >西安</h3>
+            </template>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            name: '四川城市职业学院',
+                            n: 0
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```text
+条件渲染：
+         1.v-if
+                  写法：
+                        (1).v-if="表达式" 
+                        (2).v-else-if="表达式"
+                        (3).v-else="表达式"
+                  适用于：切换频率较低的场景。
+                  特点：不展示的DOM元素直接被移除。
+                  注意：v-if可以和:v-else-if、v-else一起使用，但要求结构不能被“打断”。
+
+         2.v-show
+                  写法：v-show="表达式"
+                  适用于：切换频率较高的场景。
+                  特点：不展示的DOM元素未被移除，仅仅是使用样式隐藏掉
+            
+         3.备注：使用v-if的时，元素可能无法获取到，而使用v-show一定可以获取到。
+```
+
+
+
+### 1.14.列表渲染
+
+#### 1.14.1.基本列表
+
+需求：要实现的页面效果:
+
+<img src="images/image-20230117222210319.png" alt="image-20230117222210319" style="zoom:50%;" />
+
+要实现以上页面效果，正常情况下需要三对`<li>`标签，但在vue中，我们可以直接使用`v-for`指令遍历出`data`中需要的数据就可以了，和`v-for`指令配合使用的是`key`属性，`key`属性表示唯一的标识。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 1.v-for遍历数组 -->
+            <h3>人员列表</h3>
+            <ul>
+                <!-- v-for指令表示遍历，必须和属性key配合使用
+                     :key表示让每个li都有唯一一个表示 -->
+                <!-- <li v-for="p in persons" :key="p.id"> -->
+                <!-- 以上方式还可以写成如下，因v-for可以遍历多个数据 -->
+                <li v-for="(p,index) in persons" :key="index">
+                    {{p.name}}-{{p.age}}
+                </li>
+            </ul>
+
+            <!-- 2.v-for遍历对象 -->
+            <h3>房屋信息</h3>
+            <ul>
+                <li v-for="(val, k) in house" :key="k">
+                    {{k}}--{{val}}
+                </li>
+            </ul>
+
+            <!-- 3.v-for遍历字符串 -->
+            <h3>字符串信息</h3>
+            <ul>
+                <li v-for="(char, i) in str" :key="i">
+                    {{i}}-{{char}}
+                </li>
+            </ul>
+
+            <!-- 4.v-for遍历指定次数 -->
+            <h3>指定次数</h3>
+            <ul>
+                <li v-for="(number, index) in 5" :key="index">
+                    {{index}}-{{number}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            persons: [
+                                {id:'001',name:'张三',age:18},
+                                {id:'002',name:'李四',age:19},
+                                {id:'003',name:'王五',age:20}
+                            ],
+                            house: {
+                                name: '汤臣一品',
+                                price: '100000000元',
+                                size: '500平'
+                            },
+                            str: 'hello vue'
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```text
+v-for指令:
+      1.用于展示列表数据
+      2.语法：v-for="(item, index) in xxx" :key="yyy"
+      3.可遍历：数组、对象、字符串（用的很少）、指定次数（用的很少）
+```
+
+
+
+#### 1.14.2.key的作用与原理
+
+关于`key`属性的官方API介绍可以参照https://v2.cn.vuejs.org/v2/api/#key
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>vue使用模板</title>
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<!-- 准备好一个容器-->
+		<div id="root">
+			<!-- 遍历数组 -->
+			<h3>人员列表（遍历数组）</h3>
+			<button @click.once="add">添加一个老6</button>
+			<ul>
+				<li v-for="(p,index) of persons" :key="index">
+                <!-- <li v-for="(p,index) of persons" :key="p.id"> -->
+					{{p.name}}-{{p.age}}
+					<input type="text">
+				</li>
+			</ul>
+		</div>
+
+		<script type="text/javascript">
+			Vue.config.productionTip = false
+			
+			new Vue({
+				el:'#root',
+				data:{
+					persons:[
+						{id:'001',name:'张三',age:18},
+						{id:'002',name:'李四',age:19},
+						{id:'003',name:'王五',age:20}
+					]
+				},
+				methods: {
+					add(){
+						const p = {id:'004',name:'老6',age:30}
+						this.persons.unshift(p)
+					}
+				},
+			})
+		</script>
+</html>
+```
+
+
+
+**原理：**
+
+<img src="images/image-20230130205312833.png" alt="image-20230130205312833" style="zoom:50%;" />
+
+<img src="images/image-20230130205333312.png" alt="image-20230130205333312" style="zoom:50%;" />
+
+**总结：**
 
 ```
+面试题：react、vue中的key有什么作用？（key的内部原理）
+      
+      1. 虚拟DOM中key的作用：
+                  key是虚拟DOM对象的标识，当数据发生变化时，Vue会根据【新数据】生成【新的虚拟DOM】, 
+                  随后Vue进行【新虚拟DOM】与【旧虚拟DOM】的差异比较，比较规则如下：
+                  
+      2.对比规则：
+               (1).旧虚拟DOM中找到了与新虚拟DOM相同的key：
+                        ①.若虚拟DOM中内容没变, 直接使用之前的真实DOM！
+                        ②.若虚拟DOM中内容变了, 则生成新的真实DOM，随后替换掉页面中之前的真实DOM。
+
+               (2).旧虚拟DOM中未找到与新虚拟DOM相同的key
+                        创建新的真实DOM，随后渲染到到页面。
+                        
+      3. 用index作为key可能会引发的问题：
+                     1. 若对数据进行：逆序添加、逆序删除等破坏顺序操作:
+                                 会产生没有必要的真实DOM更新 ==> 界面效果没问题, 但效率低。
+
+                     2. 如果结构中还包含输入类的DOM：
+                                 会产生错误DOM更新 ==> 界面有问题。
+
+      4. 开发中如何选择key?:
+                     1.最好使用每条数据的唯一标识作为key, 比如id、手机号、身份证号、学号等唯一值。
+                     2.如果不存在对数据的逆序添加、逆序删除等破坏顺序操作，仅用于渲染列表用于展示，
+                        使用index作为key是没有问题的。
+```
+
+
+
+#### 1.14.3.列表过滤
+
+​	列表的过滤即对对象进行搜索，按照关键字进行过滤。场景：有如下人员名单，在输入框里输入关键字进行搜索，并将搜索到的和关键字相关的信息显示出来。
+
+<img src="images/image-20230130213320171.png" alt="image-20230130213320171" style="zoom:50%;" />
+
+
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>人员列表</h3>
+            <input type="text" placeholder="请输入名字" v-model="keyWord">
+            <ul>
+                <li v-for="(p,index) in filPersons" :key="index">
+                    {{p.name}}-{{p.age}}-{{p.sex}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // watch实现方式
+                // #region + #endredion可将注释内容折叠
+                // #region
+                // 创建Vue对象
+                // new Vue({
+                //         el: '#root',
+                //         data: {
+                //             keyWord:'',
+                //             persons: [
+                //                 {id:'001',name:'马冬梅',age:18,sex:'女'},
+                //                 {id:'002',name:'周冬雨',age:19,sex:'女'},
+                //                 {id:'003',name:'周杰伦',age:20,sex:'男'},
+                //                 {id:'004',name:'林依伦',age:21,sex:'男'}
+                //             ],
+                //             filPersons: []
+                //         },
+                //         watch:{
+                //             keyWord:{
+                //                 // console.log('keyWord被更改了',val);
+                //                 immediate:true,
+                //                 // 拿到数组过滤filters
+                //                 handler(val) {
+                //                     this.filPersons = this.persons.filter((p) =>{
+                //                     // 返回关键字匹配条件,indexOf返回下标或-1，-1为不包含
+                //                         return p.name.indexOf(val) !== -1;
+                //                 })
+                                   
+                //                 }
+                //             }
+                //         }
+                        
+                // })
+                // #endregion
+                // computed实现
+                new Vue({
+                        el: '#root',
+                        data: {
+                            keyWord:'',
+                            persons: [
+                                {id:'001',name:'马冬梅',age:18,sex:'女'},
+                                {id:'002',name:'周冬雨',age:19,sex:'女'},
+                                {id:'003',name:'周杰伦',age:20,sex:'男'},
+                                {id:'004',name:'林依伦',age:21,sex:'男'}
+                            ],
+                        },
+                        computed:{
+                            filPersons() {
+                                return this.persons.filter((p) => {
+                                    return p.name.indexOf(this.keyWord) !== -1;
+                                })
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 1.14.4.列表排序
+
+​	vue中列表的排序和数组的`sort()`方法一样，只不过需要现定义要实现何种排序的规则。以`1.14.3`中列表中年龄为例，我们实现`降序`，`升序`，`原顺序`的排序方式，实现图例如下：
+
+<img src="images/image-20230131111048987.png" alt="image-20230131111048987" style="zoom:50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>人员列表</h3>
+            <input type="text" placeholder="请输入名字" v-model="keyWord">
+            <button @click="sortType = 2">年龄升序</button>
+            <button @click="sortType = 1">年龄降序</button>
+            <button @click="sortType = 0">原顺序</button>
+            <ul>
+                <li v-for="(p,index) in filPersons" :key="p.id">
+                    {{p.name}}-{{p.age}}-{{p.sex}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            keyWord:'',
+                            // 定义排序规则：0为原顺序，1为降序，2为升序
+                            sortType:0,
+                            persons:[
+                                {id:'001',name:'马冬梅',age:30,sex:'女'},
+                                {id:'002',name:'周冬雨',age:19,sex:'女'},
+                                {id:'003',name:'周杰伦',age:50,sex:'男'},
+                                {id:'004',name:'林依伦',age:21,sex:'男'}
+                            ]
+                        },
+                        computed:{
+                            filPersons(){
+                                // arr是返回过滤后的数组，用它进行判断
+                                const arr =  this.persons.filter((p) => {
+                                    return p.name.indexOf(this.keyWord) !== -1;
+                                })
+                                // 判断是否需要排序
+                                if(this.sortType){
+							        arr.sort((p1,p2)=>{
+								        return this.sortType === 1 ? p2.age-p1.age : p1.age-p2.age
+							        })
+						        }
+						        return arr
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 1.14.5.vue数据监视的原理
+
+​	要想了解vue监视数据的原理，我们先以下面的案例来进行演示：我们想要修改马冬梅的信息，在页面增加了修改按钮：
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>人员列表</h3>
+            <button @click="updateMa">点击修改马冬梅信息</button>
+            <ul>
+                <li v-for="(p,index) in persons" :key="p.id">
+                    {{p.name}}-{{p.age}}-{{p.sex}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                    el: '#root',
+                        data: {
+                            keyWord:'',
+                            // 定义排序规则：0为原顺序，1为降序，2为升序
+                            sortType:0,
+                            persons:[
+                                {id:'001',name:'马冬梅',age:30,sex:'女'},
+                                {id:'002',name:'周冬雨',age:19,sex:'女'},
+                                {id:'003',name:'周杰伦',age:50,sex:'男'},
+                                {id:'004',name:'林依伦',age:21,sex:'男'}
+                            ]
+                        },
+                        methods: {
+                            updateMa() {
+                                // 第一种方式：可行，但复杂
+                                // this.persons[0].name = '马老师'
+                                // this.persons[0].age = 23
+                                // this.persons[0].sex = '男'
+                                // 第二种方式：不可行，vue没有监视到
+                                this.persons[0] = {id:'001',name:'马老师',age:23,sex:'男'}
+                            }
+                        },
+                })
+        </script>
+</body>
+</html>
+```
+
+​	我们可以看到第一种方式打开开发者工具，页面和结点都发生了变化，但第二种方式却没有实现：
+
+- **第一种方式：**
+
+<img src="images/数据监视第一种方式.gif" style="zoom: 33%;" />
+
+
+
+- **第二种方式：**
+
+<img src="images/数据监视第二种方式.gif" style="zoom:33%;" />
+
+​	
+
+<img src="images/image-20230131135842808.png" alt="image-20230131135842808" style="zoom:33%;" />
+
+​	我们发现：当我们使用第一种方式去更改信息时是没有问题的，但是非常复杂。而第二种方式虽然在页面上没有显示更改成功，但我们可以通过控制台查看到是更改成功了的，并且重新打开一个窗口，先点击按钮，再打开开发者工具，也是发现结点已经修改。因为当我们点击按钮时，内存中的`persons[0]`的数据是更改了的，但vue可能没有监测到。这是为什么呢？我们通过以下两个案例，分别从`对象`和`数组`来究其原因。
+
+##### 1.14.5.1.数据监视原理--对象
+
+​	我们用以下案例来监视数据，会发现我们嵌套的`student`对象有`name`和`age`两个属性，而`age`又嵌套了两个值，并且`student`对象中还有一个`friend`对象。我们在控制台输出`vm._data`会发现每一层对象都有一个`get`和`set`，用来获取和设置对象的值，由此我们发现：**对象的数据监视原理是get()和set()**。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>学校名称：{{name}}</h3>
+            <h3>学校地址：{{addr}}</h3>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            name:'城院',
+                            addr:'成都',
+                            student:{
+					            name:'tom',
+					            age:{
+                                    rAge:40,
+                                    sAge:29,
+                                },
+                                friends:[
+                                    {name:'jerry',age:35}
+                                ]
+				            }
+                        }  
+                })
+        </script>
+</body>
+</html>
+```
+
+<img src="images/image-20230131144944769.png" alt="image-20230131144944769" style="zoom:50%;" />
+
+##### 1.14.5.2.Vue.set()方法
+
+​	https://v2.cn.vuejs.org/v2/api/#Vue-set
+
+​	如果在Vue示例中已经配置好数据，后期如果想要再添加其他属性，这时就不再是响应式数据了。但Vue提供了一个API，即`Vue.set()`，它不仅可以完成属性和值的添加，还可以以响应式的方式进行添加。`set(target,key,val)`的三个参数分别代表：要`添加的对象`；`属性名`；`属性值`。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h2>学校信息</h2>
+            <h3>学校名称：{{name}}</h3>
+            <h3>学校地址：{{addr}}</h3>
+            <h3>校长：{{leader}}</h3>
+            <hr/>
+            <h2>学生信息</h2>
+            <button @click="addSex">添加一个性别属性，默认为男</button>
+            <h3>学生姓名：{{student.name}}</h3>
+            <h3>学生年龄：真实{{student.age.rAge}},对外{{student.age.sAge}}</h3>
+            <h3 v-if="student.sex">学生性别：{{student.sex}}</h3>
+            <h3>朋友们</h3>
+            <ul>
+                <li v-for="(f,index) in student.friends" :key="index">
+                    {{f.name}}--{{f.age}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            name:'城院',
+                            addr:'成都',
+                            student:{
+					            name:'tom',
+					            age:{
+                                    rAge:40,
+                                    sAge:29,
+                                },
+                                // sex:'男',
+                                friends:[
+                                    {name:'jerry',age:35},
+                                    {name:'tony',age:36}
+                                ]
+				            }
+                          },
+                          methods:{
+                                addSex(){
+                                    /* 
+                                        Vue.set(target,key,val)
+                                        target:要添加属性的对象
+                                        key:属性
+                                        val:值
+                                        Vue.set()等效于vm.$set()
+                                    */
+                                    // Vue.set(this.student,'sex','男')
+                                    this.$set(this.student,'sex','男')
+                                }
+                            }  
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+​	但需要注意的是，`Vue.set()`方法不允许添加一个响应式数据在vue上，即不能直接给`data`里添加数据，而是需要添加到`data`中的某一个属性对象中。如下面我们为学校信息添加`校长`，但学校信息被直接包含在vm中，这个时候添加就会报错：
+
+<img src="images/image-20230131162744498.png" alt="image-20230131162744498" style="zoom:50%;" />
+
+​	如果要添加进去，必须将数据提取到一个对象中：
+
+```html
+<h2>学校信息</h2>
+<h3>学校名称：{{school.name}}</h3>
+<h3>学校地址：{{school.addr}}</h3>
+<h3>校长：{{school.leader}}</h3>
+
+
+school:{
+        name:'城院',
+        addr:'成都'
+       }
+```
+
+
+
+##### 1.14.5.3.数据监视原理--数组
+
+​	与对象的原理不同，Vue监视数组不是通过`get`,`set`来修改的，因为数组里没有`get`和`set`。Vue通过自己的数组的相关方法，如push()，pop()，shift()，unshift()，splice()，sort()，reverse()等方法来监视数组数据的变化。
+
+<img src="images/image-20230131164945994.png" alt="image-20230131164945994" style="zoom:50%;" />
+
+- **注：这些方法是Vue变更数组的，不是数组原来的**。
+
+<img src="images/image-20230131173151740.png" alt="image-20230131173151740" style="zoom:50%;" />
+
+<img src="images/数组变更方法.png" style="zoom: 33%;" />
+
+
+
+
+
+- **总结：**
+
+  ```
+  Vue监视数据的原理：
+     1. vue会监视data中所有层次的数据。
+  
+     2. 如何监测对象中的数据？
+                 通过setter实现监视，且要在new Vue时就传入要监测的数据。
+                    (1).对象中后追加的属性，Vue默认不做响应式处理
+                    (2).如需给后添加的属性做响应式，请使用如下API：
+                                Vue.set(target，propertyName/index，value) 或 
+                                vm.$set(target，propertyName/index，value)
+  
+     3. 如何监测数组中的数据？
+                    通过包裹数组更新元素的方法实现，本质就是做了两件事：
+                       (1).调用原生对应的方法对数组进行更新。
+                       (2).重新解析模板，进而更新页面。
+  
+     4.在Vue修改数组中的某个元素一定要用如下方法：
+              1.使用这些API:push()、pop()、shift()、unshift()、splice()、sort()、reverse()
+              2.Vue.set() 或 vm.$set()
+     
+     特别注意：Vue.set() 和 vm.$set() 不能给vm 或 vm的根数据对象 添加属性！！！
+  ```
+
+**数据监测总结练习：**
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>vue使用模板</title>
+		<style>
+			button{
+				margin-top: 10px;
+			}
+		</style>
+		<!-- 引入Vue -->
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<!-- 准备好一个容器-->
+		<div id="root">
+			<h1>学生信息</h1>
+			<button @click="student.age++">年龄+1岁</button> <br/>
+			<button @click="addSex">添加性别属性，默认值：男</button> <br/>
+			<button @click="student.sex = '女' ">修改性别</button> <br/>
+			<button @click="addFriend">在列表首位添加一个朋友</button> <br/>
+			<button @click="updateFirstFriendName">修改第一个朋友的名字为：张三</button> <br/>
+			<button @click="addHobby">添加一个爱好</button> <br/>
+			<button @click="updateHobby">修改第一个爱好为：开车</button> <br/>
+			<button @click="removeSmoke">过滤掉爱好中的抽烟</button> <br/>
+			<h3>姓名：{{student.name}}</h3>
+			<h3>年龄：{{student.age}}</h3>
+			<h3 v-if="student.sex">性别：{{student.sex}}</h3>
+			<h3>爱好：</h3>
+			<ul>
+				<li v-for="(h,index) in student.hobby" :key="index">
+					{{h}}
+				</li>
+			</ul>
+			<h3>朋友们：</h3>
+			<ul>
+				<li v-for="(f,index) in student.friends" :key="index">
+					{{f.name}}--{{f.age}}
+				</li>
+			</ul>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+		const vm = new Vue({
+			el:'#root',
+			data:{
+				student:{
+					name:'tom',
+					age:18,
+					hobby:['抽烟','喝酒','烫头'],
+					friends:[
+						{name:'jerry',age:35},
+						{name:'tony',age:36}
+					]
+				}
+			},
+			methods: {
+				addSex(){
+					// Vue.set(this.student,'sex','男')
+					this.$set(this.student,'sex','男')
+				},
+				addFriend(){
+					this.student.friends.unshift({name:'jack',age:70})
+				},
+				updateFirstFriendName(){
+					this.student.friends[0].name = '张三'
+				},
+				addHobby(){
+					this.student.hobby.push('学习')
+				},
+				updateHobby(){
+					// this.student.hobby.splice(0,1,'开车')
+					// Vue.set(this.student.hobby,0,'开车')
+					this.$set(this.student.hobby,0,'开车')
+				},
+				removeSmoke(){
+					this.student.hobby = this.student.hobby.filter((h)=>{
+						return h !== '抽烟'
+					})
+				}
+			}
+		})
+	</script>
+</html>
+```
+
+
+
+### 1.15.收集表单数据
 
 
 

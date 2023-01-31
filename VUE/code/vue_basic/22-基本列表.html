@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 1.v-for遍历数组 -->
+            <h3>人员列表</h3>
+            <ul>
+                <!-- v-for指令表示遍历，必须和属性key配合使用
+                     :key表示让每个li都有唯一一个表示 -->
+                <!-- <li v-for="p in persons" :key="p.id"> -->
+                <!-- 以上方式还可以写成如下，因v-for可以遍历多个数据 -->
+                <li v-for="(p,index) in persons" :key="index">
+                    {{p.name}}-{{p.age}}
+                </li>
+            </ul>
+
+            <!-- 2.v-for遍历对象 -->
+            <h3>房屋信息</h3>
+            <ul>
+                <li v-for="(val, k) in house" :key="k">
+                    {{k}}--{{val}}
+                </li>
+            </ul>
+
+            <!-- 3.v-for遍历字符串 -->
+            <h3>字符串信息</h3>
+            <ul>
+                <li v-for="(char, i) in str" :key="i">
+                    {{i}}-{{char}}
+                </li>
+            </ul>
+
+            <!-- 4.v-for遍历指定次数 -->
+            <h3>指定次数</h3>
+            <ul>
+                <li v-for="(number, index) in 5" :key="index">
+                    {{index}}-{{number}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            persons: [
+                                {id:'001',name:'张三',age:18},
+                                {id:'002',name:'李四',age:19},
+                                {id:'003',name:'王五',age:20}
+                            ],
+                            house: {
+                                name: '汤臣一品',
+                                price: '100000000元',
+                                size: '500平'
+                            },
+                            str: 'hello vue'
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
