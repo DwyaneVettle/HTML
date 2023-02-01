@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src='../js/dayjs.min.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>显示格式化后的时间</h3>
+            <h4>计算属性实现</h4>
+            <h5>现在是：{{fmtTime}}</h5>
+            <h4>methods实现</h4>
+            <h5>现在是：{{getFmtTime()}}</h5>
+            <h4>过滤器实现 |</h4>
+            <h5>现在是：{{time | timeFormater}}</h5>
+            <h4>过滤器实现(参数传递实现复用) |</h4>
+            <!-- 过滤器可以通过管道符逐一传递 -->
+            <h5>现在是：{{time | timeFormater('YYYY年MM月DD号') | mySlice}}</h5>
+        </div>
+
+        <div id="root2">
+            <h4>{{msg | mySlice}}</h4>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 配置全局过滤器
+                Vue.filter('mySlice',function(val){
+                    return val.slice(0,4)
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            time: 1675258591019 // 当前时间时间戳
+                        },
+                        computed:{
+                            fmtTime() {
+                                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        },
+                        methods: {
+                            getFmtTime() {
+                                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        },
+                        // 局部过滤器，只能#root这个容器能用
+                        filters:{
+                            /* 格式化会传递两个参数，第一个参数默认为管道符|前面的值
+                                第二个参数是可以自己定义的格式化格式，可以用默认值参数形式传递 */
+                            timeFormater(val,str='YYYY-MM-DD HH:mm:ss') {
+                                // console.log(val);
+                                return dayjs(val).format(str)
+                            },
+                            // mySlice(val) {
+                            //     // 截取(0-4]
+                            //     return val.slice(0,4)
+                            // }
+                        }
+                }),
+                new Vue({
+                    el:"#root2",
+                    data:{
+                        msg:'hello Vue!!!'
+                    }
+                })
+        </script>
+</body>
+</html>

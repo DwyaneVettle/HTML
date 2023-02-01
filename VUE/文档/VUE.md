@@ -2580,7 +2580,232 @@ school:{
 
 ### 1.15.收集表单数据
 
+​	我们之前使用`v-model`收集过`<input type='text'>`中的数据，但在真实的表单提交中`type`属性还有很多，那么关于`type`的如`radio`，`checkbox`等其他属性和`<textarea>,<select>`等标签该如何实现表单数据呢？我们以下图表单提交为例：
 
+<img src="images/image-20230201212458266.png" alt="image-20230201212458266" style="zoom: 50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- @submit.prevent表示阻止表单提交 -->
+            <form @submit.prevent="demo">
+                <!-- v-model.trim表示不收集空格 -->
+                账号：<input type="text"  v-model.trim="userInfo.account"><br/>
+                密码：<input type="password" v-model="userInfo.password"><br/>
+                <!-- type="number"表示表单输入数字，是html技术
+                     v-model.number表示控制提交数据为数字，因为默认输入是字符串
+                -->
+                年龄：<input type="number" v-model.number="userInfo.sex"><br/>
+                性别：
+                男<input type="radio" name="sex" v-model='userInfo.sex' value="male"> 
+                女<input type="radio" name="sex" v-model='userInfo.sex' value="female"><br/>
+                爱好：
+                学习：<input type="checkbox" v-model="userInfo.hobby" value="study">
+                打游戏：<input type="checkbox" v-model="userInfo.hobby" value="game">
+                运动：<input type="checkbox" v-model="userInfo.hobby" value="sport">
+                <br/><br/>
+                所属校区：
+                <select v-model="userInfo.city">
+                    <option value="">请选择校区</option>
+                    <option value="chengdu">成都校区</option>
+                    <option value="meishan">眉山校区</option>
+                </select>
+                <br/><br/>
+                其他信息：
+                <!-- v-model.lazy表示失去焦点时才收集 -->
+                <textarea v-model.lazy="userInfo.other"></textarea>
+                <br/>
+                <input type="checkbox" v-model="userInfo.agree">
+                阅读并接受<a href="https://abc.oracleoaec.com/">《用户协议》</a><br/>
+                <button>提交</button>
+            </form>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                           userInfo:{
+                                account:'',
+                                password:'',
+                                age:'',
+                                sex:'male',
+                                hobby:[],
+                                city:'', 
+                                other:'',
+                                agree:''
+                           }
+                        },
+                        methods: {
+                            demo() {
+                                // JSON.stringify()将数据转化为JSON
+                                // console.log(JSON.stringify(this._data))
+                                console.log(JSON.stringify(this.userInfo));
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+收集表单数据：
+      若：<input type="text"/>，则v-model收集的是value值，用户输入的就是value值。
+      若：<input type="radio"/>，则v-model收集的是value值，且要给标签配置value值。
+      若：<input type="checkbox"/>
+            1.没有配置input的value属性，那么收集的就是checked（勾选 or 未勾选，是布尔值）
+            2.配置input的value属性:
+                  (1)v-model的初始值是非数组，那么收集的就是checked（勾选 or 未勾选，是布尔值）
+                  (2)v-model的初始值是数组，那么收集的的就是value组成的数组
+      备注：v-model的三个修饰符：
+                  lazy：失去焦点再收集数据
+                  number：输入字符串转为有效的数字
+                  trim：输入首尾空格过滤
+```
+
+
+
+### 1.16.过滤器
+
+​	我们前端工程师收集的时间是通过`Date.now()`来收集当前时间的，但此种方式只能收集到时间戳，可以通过原生JS的一些方法把它转换成年月日时分秒，也可以通过`计算属性`完成，当然，较为方便的是使用`过滤器`。使用过滤器需要引入第三方库，我们可以在开源库`https://www.bootcdn.cn/`搜索**`Moment.js`或`dayjs`**，此处我们下载较为轻量的`dayjs`：
+
+![](images/day.js下载.gif)
+
+`dayjs`的用法可参考github仓库`https://github.com/iamkun/dayjs`:
+
+<img src="images/image-20230201215651870.png" alt="image-20230201215651870" style="zoom:50%;" />
+
+
+
+```js
+dayjs()
+  .startOf('month')
+  .add(1, 'day')
+  .set('year', 2018)
+  .format('YYYY-MM-DD HH:mm:ss')
+```
+
+在文件中引入`dayjs.min.js`文件：
+
+```js
+<script src='../js/dayjs.min.js'></script>
+```
+
+以下面页面为例，我们使用格式化的方式显示当前时间：
+
+<img src="images/image-20230201222931795.png" alt="image-20230201222931795" style="zoom:50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src='../js/dayjs.min.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>显示格式化后的时间</h3>
+            <h4>计算属性实现</h4>
+            <h5>现在是：{{fmtTime}}</h5>
+            <h4>methods实现</h4>
+            <h5>现在是：{{getFmtTime()}}</h5>
+            <h4>过滤器实现 |</h4>
+            <h5>现在是：{{time | timeFormater}}</h5>
+            <h4>过滤器实现(参数传递实现复用) |</h4>
+            <!-- 过滤器可以通过管道符逐一传递 -->
+            <h5>现在是：{{time | timeFormater('YYYY年MM月DD号') | mySlice}}</h5>
+        </div>
+
+        <div id="root2">
+            <h4>{{msg | mySlice}}</h4>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 配置全局过滤器
+                Vue.filter('mySlice',function(val){
+                    return val.slice(0,4)
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            time: 1675258591019 // 当前时间时间戳
+                        },
+                        computed:{
+                            fmtTime() {
+                                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        },
+                        methods: {
+                            getFmtTime() {
+                                return dayjs(this.time).format('YYYY-MM-DD HH:mm:ss')
+                            }
+                        },
+                        // 局部过滤器，只能#root这个容器能用
+                        filters:{
+                            /* 格式化会传递两个参数，第一个参数默认为管道符|前面的值
+                                第二个参数是可以自己定义的格式化格式，可以用默认值参数形式传递 */
+                            timeFormater(val,str='YYYY-MM-DD HH:mm:ss') {
+                                // console.log(val);
+                                return dayjs(val).format(str)
+                            },
+                            // mySlice(val) {
+                            //     // 截取(0-4]
+                            //     return val.slice(0,4)
+                            // }
+                        }
+                }),
+                new Vue({
+                    el:"#root2",
+                    data:{
+                        msg:'hello Vue!!!'
+                    }
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+过滤器：
+   定义：对要显示的数据进行特定格式化后再显示（适用于一些简单逻辑的处理）。
+   语法：
+         1.注册过滤器：Vue.filter(name,callback) 或 new Vue{filters:{}}
+         2.使用过滤器：{{ xxx | 过滤器名}}  或  v-bind:属性 = "xxx | 过滤器名"
+   备注：
+         1.过滤器也可以接收额外参数、多个过滤器也可以串联
+         2.并没有改变原本的数据, 是产生新的对应的数据
+```
+
+
+
+### 1.17.内部指令
 
 
 
