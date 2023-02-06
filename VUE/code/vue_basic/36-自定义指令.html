@@ -17,11 +17,38 @@
             -->
             <h3>当前的n值是：<span v-text="n"></span></h3>
             <h3>扩大10倍后的n值是：<span v-big="n"></span></h3>
+            <!-- <h3>扩大10倍后的n值是：<span v-big-number="n"></span></h3> -->
             <button @click="n++">点我n+1</button>
+            <hr>
+            <input type="text" v-fbind:value="n">
+            <hr>
+        </div>
+        <div id="root2">
+            <input type="text" v-fbind:value="x">
         </div>
         <script>
                 // 设置为 false 以阻止 vue 在启动时生成生产提示
                 Vue.config.productionTip = false;
+                // 全局自定义指令(如果是函数式指令，第二个参数为function(){})
+                Vue.directive('fbind',{
+                                // 指令与元素成功被绑定时
+                                bind(element,binding){
+                                    // console.log('1');
+                                    // 所有指令里的this都是window
+                                    // console.log(this);
+                                    element.value = binding.value
+                                },
+                                // 指令所在元素被插入页面时
+                                inserted(element,binding){
+                                    // console.log('2');
+                                    element.focus()
+                                },
+                                // 指令所在的模板被重新解析时
+                                update(element,binding){
+                                    // console.log('3');
+                                    element.value = binding.value
+                                }
+                            })
                 // 创建Vue对象
                 new Vue({
                         el: '#root',
@@ -40,9 +67,40 @@
                                 // binding是big绑定的信息，value就是它的值
                                 // console.log(element,binding);
                                 element.innerText = binding.value * 10
-                            }
+                            },
+                            // 'big-number'(element,binding) {
+                            //     // element表示big指令所在的结构标签
+                            //     // binding是big绑定的信息，value就是它的值
+                            //     // console.log(element,binding);
+                            //     element.innerText = binding.value * 10
+                            // },
+                            /* fbind:{
+                                // 指令与元素成功被绑定时
+                                bind(element,binding){
+                                    // console.log('1');
+                                    // 所有指令里的this都是window
+                                    // console.log(this);
+                                    element.value = binding.value
+                                },
+                                // 指令所在元素被插入页面时
+                                inserted(element,binding){
+                                    // console.log('2');
+                                    element.focus()
+                                },
+                                // 指令所在的模板被重新解析时
+                                update(element,binding){
+                                    // console.log('3');
+                                    element.value = binding.value
+                                }
+                            } */
                         }
                         
+                }),
+                new Vue({
+                    el: "#root2",
+                    data: {
+                        x: 1
+                    }
                 })
         </script>
 </body>

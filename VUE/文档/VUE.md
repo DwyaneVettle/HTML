@@ -3085,15 +3085,150 @@ v-pre指令：
 ​	除了Vue的作者给我们创建的内置指令外，我们也可以自己定义一些指令来完成特定的功能。自定义指令的指令名可以根据功能来自定义，如按以下两个需求来定义指令：
 
 ```text
-需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。
-需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。
+需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。  -- 函数式
+需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。  -- 对象式
+```
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 
+                需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。
+                需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。 
+            -->
+            <h3>当前的n值是：<span v-text="n"></span></h3>
+            <h3>扩大10倍后的n值是：<span v-big="n"></span></h3>
+            <!-- <h3>扩大10倍后的n值是：<span v-big-number="n"></span></h3> -->
+            <button @click="n++">点我n+1</button>
+            <hr>
+            <input type="text" v-fbind:value="n">
+            <hr>
+        </div>
+        <div id="root2">
+            <input type="text" v-fbind:value="x">
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 全局自定义指令(如果是函数式指令，第二个参数为function(){})
+                Vue.directive('fbind',{
+                                // 指令与元素成功被绑定时
+                                bind(element,binding){
+                                    // console.log('1');
+                                    // 所有指令里的this都是window
+                                    // console.log(this);
+                                    element.value = binding.value
+                                },
+                                // 指令所在元素被插入页面时
+                                inserted(element,binding){
+                                    // console.log('2');
+                                    element.focus()
+                                },
+                                // 指令所在的模板被重新解析时
+                                update(element,binding){
+                                    // console.log('3');
+                                    element.value = binding.value
+                                }
+                            })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            n:1,
+                        },
+                        directives:{
+                            // 函数式
+                            /* 
+                                big函数何时被调用
+                                    1.指令与元素成功被绑定时；
+                                    2.指令所在的模板被重新解析时。
+                            */
+                            big(element,binding) {
+                                // element表示big指令所在的结构标签
+                                // binding是big绑定的信息，value就是它的值
+                                // console.log(element,binding);
+                                element.innerText = binding.value * 10
+                            },
+                            // 'big-number'(element,binding) {
+                            //     // element表示big指令所在的结构标签
+                            //     // binding是big绑定的信息，value就是它的值
+                            //     // console.log(element,binding);
+                            //     element.innerText = binding.value * 10
+                            // },
+                            /* fbind:{
+                                // 指令与元素成功被绑定时
+                                bind(element,binding){
+                                    // console.log('1');
+                                    // 所有指令里的this都是window
+                                    // console.log(this);
+                                    element.value = binding.value
+                                },
+                                // 指令所在元素被插入页面时
+                                inserted(element,binding){
+                                    // console.log('2');
+                                    element.focus()
+                                },
+                                // 指令所在的模板被重新解析时
+                                update(element,binding){
+                                    // console.log('3');
+                                    element.value = binding.value
+                                }
+                            } */
+                        }
+                        
+                }),
+                new Vue({
+                    el: "#root2",
+                    data: {
+                        x: 1
+                    }
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+一、定义语法：
+         (1).局部指令：
+                  new Vue({                                            new Vue({
+                     directives:{指令名:配置对象}   或         directives{指令名:回调函数}
+                  })                                                        })
+         (2).全局指令：
+                     Vue.directive(指令名,配置对象) 或   Vue.directive(指令名,回调函数)
+
+二、配置对象中常用的3个回调：
+         (1).bind：指令与元素成功绑定时调用。
+         (2).inserted：指令所在元素被插入页面时调用。
+         (3).update：指令所在模板结构被重新解析时调用。
+
+三、备注：
+         1.指令定义时不加v-，但使用时要加v-；
+         2.指令名如果是多个单词，要使用kebab-case命名方式，不要用camelCase命名
 ```
 
 
 
+#### 1.19.生命周期
+
+##### 1.19.1.生命周期概述
 
 
 
+##### 1.19.2.
 
 
 
