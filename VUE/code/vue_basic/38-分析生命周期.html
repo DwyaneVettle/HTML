@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root' :x="n">
+            <h3>当前的n值是：{{n}}</h3>
+            <button @click="add">点我n+1</button>
+            <button @click="byebye">点我销毁vm</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        // template:`
+                        //     <div>
+                        //         <h3>当前的n值是：{{n}}</h3>
+                        //         <button @click="add">点我n+1</button>
+                        //     </div>
+                        // `,
+                        data: {
+                            n:1
+                        },
+                        methods:{
+                            add() {
+                                this.n += 1
+                            },
+                            byebye() {
+                                console.log('byebye');
+                                this.$destroy()
+                            }
+                        },
+                        // 此方法初始化事件和生命周期，不会加载_data和n等值
+                        beforeCreate() {
+                            console.log('beforeCreate');  
+                            // console.log(this); // 此处的this是Vue对象
+                            // debugger;  调用，终止执行此行下的代码                   
+                        },
+                        // 数据开始代理监测，有了add方法和_data
+                        created() {
+                            console.log('created');
+                            /* console.log(this);
+                            debugger; */
+                        },
+                        beforeMount() {
+                            console.log('beforeMount');
+                            // console.log(this);
+                            // debugger;
+                            // 这里操作的DOM最终都不奏效
+                            // document.querySelector('h2').innerText = '123';
+                        },
+                        mounted() {
+                            console.log('mounted',this.$el);
+                            // console.log(this);
+                            // 此处操作DOM有效，但尽量避免该操作
+                            // document.querySelector('h2').innerText = '123';
+                        },
+                        beforeUpdate() {
+                            console.log('beforeUpdate')
+                            // console.log(this.n)
+                        },
+                        updated() {
+                            console.log('updated');
+                        },
+                        beforeDestroy() {
+                            console.log('beforeDestroy');
+                        },
+                        destroyed() {
+                            console.log('destroyed');
+                        },
+                        
+                })
+        </script>
+</body>
+</html>

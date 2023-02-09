@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+                <h3 :style="{opacity}">欢迎学习Vue</h3>
+                <button @click="stop">点我停止变换</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data:{
+                                opacity:1
+                        },
+                        methods: {
+                            stop() {
+                                // clearInterval(this.timer) // 点击还保留响应式
+                                this.$destroy() // 暴力停止，直接杀死
+                            }
+                        },
+                        // Vue完成模板的解析并把初始的真实DOM元素放入页面后(挂载完毕)调用mounted
+                        mounted() {
+                                this.timer = setInterval(() => {
+                                                this.opacity -= 0.01
+                                                if(this.opacity <= 0)  this.opacity = 1 
+                                        }, 20);
+                        },
+                        // 在vm销毁之前，清除定时器
+                        beforeDestroy() {
+                            clearInterval(this.timer)
+                        },
+                })
+        </script>
+</body>
+</html>

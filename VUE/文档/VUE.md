@@ -3222,53 +3222,249 @@ v-pre指令：
 
 
 
-#### 1.19.生命周期
+### 1.19.生命周期
 
-##### 1.19.1.生命周期概述
+#### 1.19.1.生命周期概述
+
+为了解Vue的生命周期，我们先完成以下页面来进行观察：页面字体的透明度在0-1之间变化
+
+![](images/生命周期定时器.gif)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+                <h3 :style="{opacity}">欢迎学习Vue</h3>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data:{
+                                opacity:1
+                        },
+                        // Vue完成模板的解析并把初始的真实DOM元素放入页面后(挂载完毕)调用mounted
+                        mounted() {
+                                setInterval(() => {
+                                                this.opacity -= 0.01
+                                                if(this.opacity <= 0)  this.opacity = 1 
+                                        }, 20);
+                        },
+                        
+                })
+                // 通过外部定时器实现，但不推荐，生产下不会接收vm对象
+                /* setInterval(() => {
+                       vm.opacity -= 0.01
+                       if(vm.opacity <= 0)  vm.opacity = 1 
+                }, 20); */
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+生命周期：
+      1.又名：生命周期回调函数、生命周期函数、生命周期钩子。
+      2.是什么：Vue在关键时刻帮我们调用的一些特殊名称的函数。
+      3.生命周期函数的名字不可更改，但函数的具体内容是程序员根据需求编写的。
+      4.生命周期函数中的this指向是vm 或 组件实例对象。
+```
 
 
 
-##### 1.19.2.
+#### 1.19.2.分析生命周期
+
+​	我们在`1.19.1`中使用到了`mounted`这个声明周期函数，并且在这个函数调用之前和之后都调用了一些兄弟函数，那么这些兄弟函数又有哪些呢？我们先参照官网创建Vue示例的图示(https://v2.cn.vuejs.org/v2/guide/instance.html)：
+
+<img src="images/vue声明周期.png" style="zoom: 50%;" />
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root' :x="n">
+            <h3>当前的n值是：{{n}}</h3>
+            <button @click="add">点我n+1</button>
+            <button @click="byebye">点我销毁vm</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        // template:`
+                        //     <div>
+                        //         <h3>当前的n值是：{{n}}</h3>
+                        //         <button @click="add">点我n+1</button>
+                        //     </div>
+                        // `,
+                        data: {
+                            n:1
+                        },
+                        methods:{
+                            add() {
+                                this.n += 1
+                            },
+                            byebye() {
+                                console.log('byebye');
+                                this.$destroy()
+                            }
+                        },
+                        // 此方法初始化事件和生命周期，不会加载_data和n等值
+                        beforeCreate() {
+                            console.log('beforeCreate');  
+                            // console.log(this); // 此处的this是Vue对象
+                            // debugger;  调用，终止执行此行下的代码                   
+                        },
+                        // 数据开始代理监测，有了add方法和_data
+                        created() {
+                            console.log('created');
+                            /* console.log(this);
+                            debugger; */
+                        },
+                        beforeMount() {
+                            console.log('beforeMount');
+                            // console.log(this);
+                            // debugger;
+                            // 这里操作的DOM最终都不奏效
+                            // document.querySelector('h2').innerText = '123';
+                        },
+                        mounted() {
+                            console.log('mounted',this.$el);
+                            // console.log(this);
+                            // 此处操作DOM有效，但尽量避免该操作
+                            // document.querySelector('h2').innerText = '123';
+                        },
+                        beforeUpdate() {
+                            console.log('beforeUpdate')
+                            // console.log(this.n)
+                        },
+                        updated() {
+                            console.log('updated');
+                        },
+                        beforeDestroy() {
+                            console.log('beforeDestroy');
+                        },
+                        destroyed() {
+                            console.log('destroyed');
+                        },
+                        
+                })
+        </script>
+</body>
+</html>
+```
 
 
 
+**总结：**
+
+```
+常用的生命周期钩子：
+      1.mounted: 发送ajax请求、启动定时器、绑定自定义事件、订阅消息等【初始化操作】。
+      2.beforeDestroy: 清除定时器、解绑自定义事件、取消订阅消息等【收尾工作】。
+
+关于销毁Vue实例
+      1.销毁后借助Vue开发者工具看不到任何信息。
+      2.销毁后自定义事件会失效，但原生DOM事件依然有效。
+      3.一般不会在beforeDestroy操作数据，因为即便操作数据，也不会再触发更新流程了。
+```
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+                <h3 :style="{opacity}">欢迎学习Vue</h3>
+                <button @click="stop">点我停止变换</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data:{
+                                opacity:1
+                        },
+                        methods: {
+                            stop() {
+                                // clearInterval(this.timer) // 点击还保留响应式
+                                this.$destroy() // 暴力停止，直接杀死
+                            }
+                        },
+                        // Vue完成模板的解析并把初始的真实DOM元素放入页面后(挂载完毕)调用mounted
+                        mounted() {
+                                this.timer = setInterval(() => {
+                                                this.opacity -= 0.01
+                                                if(this.opacity <= 0)  this.opacity = 1 
+                                        }, 20);
+                        },
+                        // 在vm销毁之前，清除定时器
+                        beforeDestroy() {
+                            clearInterval(this.timer)
+                        },
+                })
+        </script>
+</body>
+</html>
+```
 
 
-## 2.vue-cli
+
+## 2.组件化编程
+
+​	组件是Vue.js中重要的思想，它提供一种抽象，我们可以开发出一个独立可复用的小组件来构造我们的应用组件。简而言之，组件可以复用Vue实例，它们与Vue接收相同的选项，例如`data`,`computed`,`watch`,`methods`以及声明周期钩子等。仅有例外是像`el`这样根实例特有的选项。
+
+​	要了解组件化编程，我们先来看看传统方式编程和组件化编程的区别。
+
+<img src="images/组件化.png" style="zoom:33%;" />
 
 
 
+<img src="images/组件编程.png" style="zoom:33%;" />
 
+通常一个应用会以一棵嵌套的组件树的形式来组织：
 
+<img src="images/components.png" style="zoom:33%;" />
 
-
-## 3.vue-router
-
-
-
-
-
-## 4.vuex
-
-
-
-
-
-
-
-## 5.element-ui
-
-
-
-
-
-
-
-## 6.vue3
-
-
-
-
+- **模块：**向外提供特定功能的 js 程序，一般就是一个 js 文件，可实现复用 js，简化 js 的编写，提高 js 运行效率；
+- **组件：**用来实现局部功能的代码和资源的集合（html/css/js/image…），可实现复用编码，简化项目编码，提高运行效率；
+- **模块化：**当应用中的 js 都以模块来编写的，那这个应用就是一个模块化的应用；
+- **组件化：**当应用中的功能都是多组件的方式来编写的，那这个应用就是一个组件化的应用。
 
 ## 拓展：
 
