@@ -3466,6 +3466,245 @@ v-pre指令：
 - **模块化：**当应用中的 js 都以模块来编写的，那这个应用就是一个模块化的应用；
 - **组件化：**当应用中的功能都是多组件的方式来编写的，那这个应用就是一个组件化的应用。
 
+### 2.1.非单文件组件
+
+​	非单文件组件指一个文件中包含多个Vue组件，实际就是html文件组件化。
+
+#### 2.1.1.基本使用
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../../js/vue.js'></script>
+</head>
+<body>
+        <!-- 
+            注册组件的步骤：
+                1.创建组件，
+                2.注册组件，
+                3.编写组件标签
+         -->
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <hello></hello>
+            <hr>
+            <h2>{{msg}}</h2>
+            <!-- <h3>学校名称：{{schoolName}}</h3>
+            <h3>学校地址：{{addr}}</h3> -->
+            <school></school>
+            <hr>
+            <!-- <h3>学校姓名：{{studentName}}</h3>
+            <h3>学校年龄：{{age}}</h3> -->
+            <student></student>
+        </div>
+        <div id="root2">
+            <hello></hello>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.config.devtools = true
+                // 创建school组件
+                const school = Vue.extend({
+                        // el: '#root', el只能通过new来使用，由vm决定服务于谁
+                        template:`
+                            <div>
+                                <h3>学校名称：{{schoolName}}</h3>
+                                <h3>学校地址：{{addr}}</h3> 
+                                <button @click='showName'>点我弹出学校名</button>
+                            </div>
+                        `,
+                        data(){
+                             return {
+                                schoolName:'四川城市职业学院',
+                                addr:'四川成都'
+                             }
+                            },
+                        methods: {
+                            showName() {
+                                alert('四川城市职业学院')
+                            }
+                        },
+                })
+                // 创建student组件
+                const student = Vue.extend({
+                    template:`
+                            <div>
+                                <h3>学校姓名：{{studentName}}</h3>
+                                <h3>学校年龄：{{age}}</h3>
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            studentName: 'Jack Chen',
+                            age: 20
+                        }
+                    }
+                })
+                // 创建hello组件
+                const hello = Vue.extend({
+                    template:`
+                            <div>
+                                <h3>你好：{{name}}</h3>
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'Micheal'
+                        }
+                    }
+                }) 
+                // 配置全局注册组件
+                Vue.component('hello',hello)
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data:{
+                            msg:'你好，Vue'
+                        },
+                        // 注册组件，k-v结构，左边组件名，右边配置变量名
+                        components:{
+                            school:school,
+                            student:student
+                        }
+                }) 
+                new Vue({
+                    el:'#root2'
+                })
+        </script>
+</body>
+</html>
+```
+
+**总结：**
+
+```
+Vue中使用组件的三大步骤：
+      一、定义组件(创建组件)
+      二、注册组件
+      三、使用组件(写组件标签)
+
+一、如何定义一个组件？
+         使用Vue.extend(options)创建，其中options和new Vue(options)时传入的那个options几乎一样，但也有点区别；
+         区别如下：
+               1.el不要写，为什么？ ——— 最终所有的组件都要经过一个vm的管理，由vm中的el决定服务哪个容器。
+               2.data必须写成函数，为什么？ ———— 避免组件被复用时，数据存在引用关系。
+         备注：使用template可以配置组件结构。
+
+二、如何注册组件？
+            1.局部注册：靠new Vue的时候传入components选项
+            2.全局注册：靠Vue.component('组件名',组件)
+
+三、编写组件标签：
+            <school></school>
+```
+
+
+
+#### 2.1.2.注意事项
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h2>{{msg}}</h2>
+            <school></school>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+               
+                const school = {
+                    name:'micheal',
+                    template:`
+                            <div>
+                                <h3>学校名称：{{name}}</h3>
+                                <h3>学校地址：{{addr}}</h3> 
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'四川城市职业学院',
+                            addr:'四川成都'
+                        }
+                    }
+                }
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            msg:'欢迎来到城院'
+                        },
+                        components:{
+                            school:school
+                        }     
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+**总结：**
+
+```
+1.关于组件名:
+         一个单词组成：
+                  第一种写法(首字母小写)：school
+                  第二种写法(首字母大写)：School
+         多个单词组成：
+                  第一种写法(kebab-case命名)：my-school
+                  第二种写法(CamelCase命名)：MySchool (需要Vue脚手架支持)
+         备注：
+               (1).组件名尽可能回避HTML中已有的元素名称，例如：h2、H2都不行。
+               (2).可以使用name配置项指定组件在开发者工具中呈现的名字。
+
+2.关于组件标签:
+         第一种写法：<school></school>
+         第二种写法：<school/>
+         备注：不用使用脚手架时，<school/>会导致后续组件不能渲染。
+
+3.一个简写方式：
+         const school = Vue.extend(options) 可简写为：const school = options
+```
+
+#### 2.1.3.组件的嵌套
+
+
+
+
+
+
+
+### 2.2.单文件组件
+
+
+
+
+
+
+
+
+
+
+
 ## 拓展：
 
 ### 1.箭头函数和普通函数的区别
