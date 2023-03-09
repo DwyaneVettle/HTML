@@ -364,7 +364,7 @@
       /**
        * Show production mode tip message on boot?
        */
-      productionTip: false,
+      productionTip: true,
       /**
        * Whether to enable devtools
        */
@@ -5835,7 +5835,7 @@
               validateComponentName(name);
           }
           var Sub = function VueComponent(options) {
-            this._init(options);
+              this._init(options);
           };
           Sub.prototype = Object.create(Super.prototype);
           Sub.prototype.constructor = Sub;

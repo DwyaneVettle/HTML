@@ -4,7 +4,7 @@ JavaScript2022年度报告：https://csdnnews.blog.csdn.net/article/details/1286
 
 JavaScript相关框架、构建工具、测试工具等（排名来源于JS年度报告中的调查）：
 
-![](images/js相关框架png.png)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627893.png)
 
 # VUE
 
@@ -18,7 +18,7 @@ JavaScript相关框架、构建工具、测试工具等（排名来源于JS年�
 
 ****
 
-<img src="images/image-20221220211048186(1).png" alt="image-20221220211048186" style="zoom:33%;" />
+​	
 
 
 
@@ -32,7 +32,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 - 2019年：尤雨溪公布了3.0.0的源代码，当时还是Alpha版本；
 - 2020年：9月18日，正式发布vue3.0.0（海贼王）。
 
-<img src="images/image-20221220211924275.png" alt="image-20221220211924275" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627895.png" alt="image-20221220211924275" style="zoom:33%;" />
 
 
 
@@ -40,7 +40,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 1. 采用组件化模式，提高代码复用率，让代码更好维护；
 
-<img src="images/image-20221220213555774.png" alt="image-20221220213555774" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627896.png" alt="image-20221220213555774" style="zoom:50%;" />
 
 
 
@@ -52,17 +52,19 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 ### 1.3.搭建vue环境
 
-可根据vue官方文档https://v2.cn.vuejs.org/v2/guide的`学习``教程`参考安装搭建vue环境。
+#### 1.3.1.安装vue
+
+可根据vue官方文档https://v2.cn.vuejs.	/v2/guide的`学习``教程`参考安装搭建vue环境。
 
 - 安装：安装版本有`开发版本`和`生产版本`，开发版本包含完整的警告和调试模式，而生产版本则删除了警告，是项目上线时的首选，这里我们两个都下载，以便进行对比。
 
-<img src="images/2022-12-22_210212.png" style="zoom: 33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627897.png" style="zoom: 33%;" />
 
 
 
 - 创建工程`vue-basic`，并创建同级文件夹`js`，引入两个版本的`vue.js`和`vue.min.js`，创建文件`01-初识vue.html`，文件层级如下：
 
-**<img src="images/image-20221222211626476.png" alt="image-20221222211626476" style="zoom:33%;" />**
+**<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627898.png" alt="image-20221222211626476" style="zoom:33%;" />**
 
 - 通过`<script>`标签引入vue，然后再通过浏览器控制台打开查看到两个提示：
 
@@ -71,17 +73,17 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 <script src="../js/vue.js"></script>
 ```
 
-<img src="images/2022-12-22_211937.png" style="zoom: 33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627899.png" style="zoom: 33%;" />
 
 
 
 - 下载vue开发者工具：在`https://devtools.vuejs.org/guide/installation.html`中根据自己使用的浏览器进行vue开发者工具的下载，然后将其拖动到浏览器扩展中。如报错`Vue.js is not detected`可打开插件管理页，打开插件详情，将`允许访问文件网址`打开（参考：https://blog.csdn.net/qiaoyangla/article/details/122801903）。当引入开发者工具成功，刷新刚才的网页，第一条警告消失：
 
-<img src="images/image-20221222214348425.png" alt="image-20221222214348425" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627900.png" alt="image-20221222214348425" style="zoom:33%;" />
 
 - 另一条提示，我们也可以根据`学习`中的`api`的全局配置`https://v2.cn.vuejs.org/v2/api/`进行配置，将#productionTip属性值设置为false即可组织vue在启动时生成生产提示。
 
-<img src="images/2022-12-22_215014.png" style="zoom: 33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627901.png" style="zoom: 33%;" />
 
 添加代码如下：
 
@@ -301,6 +303,181 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 
 
+#### 1.3.2.Node.js环境
+
+​	Node.js是一个基于chrome V8引擎的**JavaScript运行环境**。它可以让JavaScript运行在服务器端。node官网为：`http://nodejs.p2hp.com/`。
+
+​	为什么使用node？作为一个程序员写完代码直接就可以运行了，但是用户并没有办法执行源码，所以我们需要用node将项目暴露出去，然后用户就可以通过浏览器访问项目了。这一交给node管理的过程，我们称之为项目部署/项目发布。
+
+![image-20230222150927308](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221509436.png)
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221456805.png)
+
+​	下载后进行安装，直接默认“下一步”就行了。安装完成后可以在命令行输入如下命令，检测是否安装好：
+
+```shell
+node -v
+```
+
+![image-20230222145824856](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221458968.png)
+
+通过node编写`Hello World!`案例：
+
+1.在VSCode上编写`HelloWorld.js`文件:
+
+```javascript
+console.log("HelloWorld!");
+```
+
+2.在文件所在目录进入`cmd`命令执行如下命令：
+
+```shell
+node HelloWorld.js
+```
+
+![image-20230222150418371](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221504476.png)
+
+3.node可以产生一个交互式环境REPL(Read-Eval-Print Loop:读取-求值-输出 循环)，相当于浏览器的控制台，输入以下命令测试：
+
+```shell
+node
+console.log("HelloWorld!")
+```
+
+![image-20230222150841498](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221508614.png)
+
+环境配置：cmd运行
+
+```shell
+npm config set prefix "D:\Software\nodejs\node_global"
+
+npm config set cache "D:\Software\nodejs\node_cache"
+```
+
+配置环境变量：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221551590.png" style="zoom:33%;" />
+
+在 系统变量 中 选择 Path 添加如下属性:
+
+```shell
+D:\Software\nodejs  				npm命令
+
+D:\Software\nodejs\node_global		vue命令
+```
+
+![image-20230222155425285](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221554397.png)
+
+测试：全局安装express模块：
+
+```shell
+npm install express -g
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221610415.png" alt="image-20230222161037246" style="zoom:33%;" />
+
+如安装不成功，可以参照以下步骤：
+
+```text
+1.删除C:\Users{账户}\下的.npmrc 文件
+
+2.清除npm缓存：npm cache clean --force
+
+3.再运行npm install命令即可
+```
+
+
+
+#### 1.3.3.npm包管理工具
+
+​	npm是Node.js Package Manager的简称，用来解决Node.js代码部署的问题。使用场景需求：
+
+- 从npm服务器下载别人编写的第三方库到本地使用；
+- 从npm服务器下载并安装别人编写的命令程序到本地使用；
+- 将自己编写的包或命令行程序上传到npm服务器供别人使用。
+
+​	npm官方文档：https://www.npmjs.cn/
+
+​	npm快速入门：https://www.npmjs.cn/getting-started/installing-node/
+
+​	nmp常用命令：
+
+1. `npm install`：安装项目所需的全部包，需要配置package,json文件
+
+2. `npm install 包名`：安装指定名称的包
+
+3. `npm uninstall 包名`：卸载指定的包
+
+4. `npm update 包名`：更新指定包
+
+5. `npm start`：项目启动
+
+6. `npm run build`：项目构建
+
+   **npm默认服务器为海外的服务器，需配置npm服务器为淘宝：``npm config set registry https://registry.npm.taobao.org``**
+
+
+
+#### 1.3.4.webpack打包工具
+
+​	webpack是一个模块打包工具，可以把前端项目中的js、css、scss/less、图片等文件打包在一起，实现自动化构建，给前端开发人员带来极大的便利。
+
+官网：https://www.webpackjs.com/
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302281725736.png" alt="image-20230222153905413" style="zoom:50%;" />
+
+为啥要打包？在模块化开发中，我们会编写大量的模块，如果不打包进行上线，那么页面的加载和交互将会产生大量的请求，从而影响性能。
+
+- **全局安装webpack**：`npm install webpack webpack-cli -g --registry=https://registry.npm.taobao.org`
+- **查看webpack版本：`**webpack -v`
+- **卸载webpack:`**npm uninstall webpack webpack-cli -g`
+- ![image-20230222164811273](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221648466.png)
+
+**webpack简单使用：**
+
+1.创建`example.js`文件：
+
+```javascript
+function add(a,b) {
+    return a+b
+}
+
+console.log(add(3,4));
+```
+
+2.在文件所在的目录用webpack打包`example.js`文件到`app.js`：
+
+```shell
+webpack example.js -o app.js
+```
+
+如不允许使用打包请参考:https://blog.csdn.net/weixin_45597064/article/details/119617447
+
+
+
+3.新建`index.html`引入`app.js`：
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <script src="./app.js/main.js"></script>
+</head>
+<body>
+    
+</body>
+</html>
+```
+
+4.浏览器查看：
+
+<img src="C:/Users/HP/AppData/Roaming/Typora/typora-user-images/image-20230222172736605.png" alt="image-20230222172736605" style="zoom:33%;" />
+
+
+
+
+
 ### 1.4.vue模板语法
 
 之前我们所学习到的{{xxx}}是模板语法中的一种---**插值语法**，它能实现的功能比较单一，只能将指定的值放到指定的地方。还有一种就是---**指令语法**，它可以用于解析标签（包括：标签属性、标签体内容、绑定事件等。）我们分别来了解下这两种模板语法。
@@ -410,11 +587,11 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 ### 1.5.数据绑定
 
-​	之前我们所用到的`v-bind`只能实现从data流向页面的单项绑定，我们在页面准备input输入框，用`v-bind`传递`name`属性过来，我们发现从vue插件流向输入框是可以的，但从输入框输入的值无法改变vue插件中的值。如果想要实现双向绑定，vue也给我们提供了`v-model`，它不仅能从data流向页面，还可以从页面流向data。
+​	之前我们所用到的`v-bind`只能实现从data流向页面的单向绑定，我们在页面准备input输入框，用`v-bind`传递`name`属性过来，我们发现从vue插件流向输入框是可以的，但从输入框输入的值无法改变vue插件中的值。如果想要实现双向绑定，vue也给我们提供了`v-model`，它不仅能从data流向页面，还可以从页面流向data。
 
 ​	但需要注意的是：虽然`v-model`功能更加强大，能实现双向绑定，但它实现的场景只能是**表单类元素（输入类元素）**上（如：input，select等）。
 
-<img src="images/image-20230108191833553.png" alt="image-20230108191833553" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627902.png" alt="image-20230108191833553" style="zoom:33%;" />
 
 ```html
 <!DOCTYPE html>
@@ -484,7 +661,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 ​	el属性我们之前已经用过了，它指定哪个容器使用当前的Vue实例，但这种方式不太灵活，我们可以将创建的Vue实例返回一个对象，我们打印这个对象可以发现，这个对象有很多的方法属性，有`$`的大都是开发人员能使用的，其他的就属于Vue实例自己使用，而一部分方法则在原型对象`prototype`。我们可以使用原型对象中的`$mount`来取代`el`属性，以增加代码的灵活性。
 
-<img src="images/image-20230108204121164.png" alt="image-20230108204121164" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627903.png" alt="image-20230108204121164" style="zoom:33%;" />
 
 
 
@@ -565,7 +742,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 - V：视图（View），即模板代码；
 - VM：视图模型（ViewModel），即Vue实例。
 
-<img src="images/image-20230108210509349.png" alt="image-20230108210509349" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627904.png" alt="image-20230108210509349" style="zoom:33%;" />
 
 ```html
 <!DOCTYPE html>
@@ -674,7 +851,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 				// value:18,
 				// enumerable:true, //控制属性是否可以枚举，默认值是false
 				// writable:true, //控制属性是否可以被修改，默认值是false
-				// configurable:true //控制属性是否可以被删除，默认值是false
+				// configurable:true //控制属性是否可以被删除，默认值是false，控制台delete person.age删不掉了
 
 				//当有人读取person的age属性时，get函数(getter)就会被调用，且返回值就是age的值
 				get(){
@@ -732,7 +909,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 ​	我们在控制台操作可以看到既可以得到obj2的x属性，也可以修改obj2的x属性值：
 
-<img src="images/image-20230109214834725.png" alt="image-20230109214834725" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627905.png" alt="image-20230109214834725" style="zoom:33%;" />
 
 
 
@@ -740,7 +917,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 ​	Vue中的数据代理是：**通过Object.defineProperty()把data对象中所有的属性添加到vm上，且数据从data到vm中的过程，又为每一个属性添加上getter和setter方法，用户修改或者读取时，也是通过getter或setter方法访问_data，_data返回或操作data中的数据实现的**。
 
-<img src="images/2023-01-14_205407.png" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627906.png" style="zoom:50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -777,7 +954,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 </html>
 ```
 
-<img src="images/2023-01-14_203454.png" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627907.png" style="zoom:50%;" />
 
 **总结：**
 
@@ -870,7 +1047,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 ​              4.`method`中配置的函数，都是被Vue所管理的函数，`this`的指向是vm 或 组件实例对象；
 
-​              5.`@click="demo"` 和` @click="demo($event)"` 效果一致，但后者可以传参；
+​              5.`@click="demo"` 和` @click="demo($event)"` 效果一致，但后者可以传参.
 
 
 
@@ -1103,7 +1280,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 ​	要想了解计算属性，我们现通过以下案例来观察：在第一个输入框中动态接收姓，第二个输入框中动态接收名，然后用`-`分隔进行显示。常用的有两种实现的方式：①插值语法；②methods方法。
 
-<img src="images/image-20230115195526767.png" alt="image-20230115195526767" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627908.png" alt="image-20230115195526767" style="zoom:33%;" />
 
 
 
@@ -1308,7 +1485,7 @@ new Vue({
 
 ​	天气案例：实现页面天气`凉爽`和`炎热`的切换，并且在控制台显示`现在`和`原来`的天气情况。我们可以通过Vue的监视属性来实现这一功能。vm对象的`$watch()`或`watch`配置来监视指定的属性，当属性发生变化时，回调函数自动执行，在函数内部进行计算。
 
-<img src="images/image-20230115215142948.png" alt="image-20230115215142948" style="zoom: 50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627909.png" alt="image-20230115215142948" style="zoom: 50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -1870,7 +2047,7 @@ computed和watch之间的区别：
 
 需求：要实现的页面效果:
 
-<img src="images/image-20230117222210319.png" alt="image-20230117222210319" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627910.png" alt="image-20230117222210319" style="zoom:50%;" />
 
 要实现以上页面效果，正常情况下需要三对`<li>`标签，但在vue中，我们可以直接使用`v-for`指令遍历出`data`中需要的数据就可以了，和`v-for`指令配合使用的是`key`属性，`key`属性表示唯一的标识。
 
@@ -2015,9 +2192,9 @@ v-for指令:
 
 **原理：**
 
-<img src="images/image-20230130205312833.png" alt="image-20230130205312833" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627911.png" alt="image-20230130205312833" style="zoom:50%;" />
 
-<img src="images/image-20230130205333312.png" alt="image-20230130205333312" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627912.png" alt="image-20230130205333312" style="zoom:50%;" />
 
 **总结：**
 
@@ -2055,7 +2232,7 @@ v-for指令:
 
 ​	列表的过滤即对对象进行搜索，按照关键字进行过滤。场景：有如下人员名单，在输入框里输入关键字进行搜索，并将搜索到的和关键字相关的信息显示出来。
 
-<img src="images/image-20230130213320171.png" alt="image-20230130213320171" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627913.png" alt="image-20230130213320171" style="zoom:50%;" />
 
 
 
@@ -2148,7 +2325,7 @@ v-for指令:
 
 ​	vue中列表的排序和数组的`sort()`方法一样，只不过需要现定义要实现何种排序的规则。以`1.14.3`中列表中年龄为例，我们实现`降序`，`升序`，`原顺序`的排序方式，实现图例如下：
 
-<img src="images/image-20230131111048987.png" alt="image-20230131111048987" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627914.png" alt="image-20230131111048987" style="zoom:50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -2279,17 +2456,17 @@ v-for指令:
 
 - **第一种方式：**
 
-<img src="images/数据监视第一种方式.gif" style="zoom: 33%;" />
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302211657383.gif)
 
 
 
 - **第二种方式：**
 
-<img src="images/数据监视第二种方式.gif" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627916.gif" style="zoom:33%;" />
 
 ​	
 
-<img src="images/image-20230131135842808.png" alt="image-20230131135842808" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627917.png" alt="image-20230131135842808" style="zoom:33%;" />
 
 ​	我们发现：当我们使用第一种方式去更改信息时是没有问题的，但是非常复杂。而第二种方式虽然在页面上没有显示更改成功，但我们可以通过控制台查看到是更改成功了的，并且重新打开一个窗口，先点击按钮，再打开开发者工具，也是发现结点已经修改。因为当我们点击按钮时，内存中的`persons[0]`的数据是更改了的，但vue可能没有监测到。这是为什么呢？我们通过以下两个案例，分别从`对象`和`数组`来究其原因。
 
@@ -2340,7 +2517,7 @@ v-for指令:
 </html>
 ```
 
-<img src="images/image-20230131144944769.png" alt="image-20230131144944769" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627918.png" alt="image-20230131144944769" style="zoom:50%;" />
 
 ##### 1.14.5.2.Vue.set()方法
 
@@ -2424,7 +2601,7 @@ v-for指令:
 
 ​	但需要注意的是，`Vue.set()`方法不允许添加一个响应式数据在vue上，即不能直接给`data`里添加数据，而是需要添加到`data`中的某一个属性对象中。如下面我们为学校信息添加`校长`，但学校信息被直接包含在vm中，这个时候添加就会报错：
 
-<img src="images/image-20230131162744498.png" alt="image-20230131162744498" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627919.png" alt="image-20230131162744498" style="zoom:50%;" />
 
 ​	如果要添加进去，必须将数据提取到一个对象中：
 
@@ -2447,13 +2624,13 @@ school:{
 
 ​	与对象的原理不同，Vue监视数组不是通过`get`,`set`来修改的，因为数组里没有`get`和`set`。Vue通过自己的数组的相关方法，如push()，pop()，shift()，unshift()，splice()，sort()，reverse()等方法来监视数组数据的变化。
 
-<img src="images/image-20230131164945994.png" alt="image-20230131164945994" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627920.png" alt="image-20230131164945994" style="zoom:50%;" />
 
 - **注：这些方法是Vue变更数组的，不是数组原来的**。
 
-<img src="images/image-20230131173151740.png" alt="image-20230131173151740" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627921.png" alt="image-20230131173151740" style="zoom:50%;" />
 
-<img src="images/数组变更方法.png" style="zoom: 33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627922.png" style="zoom: 33%;" />
 
 
 
@@ -2582,7 +2759,7 @@ school:{
 
 ​	我们之前使用`v-model`收集过`<input type='text'>`中的数据，但在真实的表单提交中`type`属性还有很多，那么关于`type`的如`radio`，`checkbox`等其他属性和`<textarea>,<select>`等标签该如何实现表单数据呢？我们以下图表单提交为例：
 
-<img src="images/image-20230201212458266.png" alt="image-20230201212458266" style="zoom: 50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627923.png" alt="image-20230201212458266" style="zoom: 50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -2686,11 +2863,11 @@ school:{
 
 ​	我们前端工程师收集的时间是通过`Date.now()`来收集当前时间的，但此种方式只能收集到时间戳，可以通过原生JS的一些方法把它转换成年月日时分秒，也可以通过`计算属性`完成，当然，较为方便的是使用`过滤器`。使用过滤器需要引入第三方库，我们可以在开源库`https://www.bootcdn.cn/`搜索**`Moment.js`或`dayjs`**，此处我们下载较为轻量的`dayjs`：
 
-![](images/day.js下载.gif)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627924.gif)
 
 `dayjs`的用法可参考github仓库`https://github.com/iamkun/dayjs`:
 
-<img src="images/image-20230201215651870.png" alt="image-20230201215651870" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627925.png" alt="image-20230201215651870" style="zoom:50%;" />
 
 
 
@@ -2710,7 +2887,7 @@ dayjs()
 
 以下面页面为例，我们使用格式化的方式显示当前时间：
 
-<img src="images/image-20230201222931795.png" alt="image-20230201222931795" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627926.png" alt="image-20230201222931795" style="zoom:50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -2874,11 +3051,11 @@ v-text指令：
 
 ​	与`v-text`不同，`v-html`支持标签结构的解析。但它存在一定的安全隐患。以下面页面为例：由于不是一个登录网页，我们可以打开网页，然后再开发者工具中打开应用，点击编辑输入`cookie`：
 
-<img src="images/image-20230202105729169.png" alt="image-20230202105729169" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627927.png" alt="image-20230202105729169" style="zoom:33%;" />
 
 然后点击超链接（str2由标签包裹，并发送?传参），这时我们可以发现超链接会发现百度携带了我们在该网页输入的`cookie`值：
 
-![image-20230202105924234](images/image-20230202105924234.png)
+![image-20230202105924234](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627928.png)
 
 ```html
 <!DOCTYPE html>
@@ -2986,7 +3163,7 @@ v-html指令：
 
 ​	`v-once`指令是将网页在初次渲染后，就视为静态内容了，并不再改变。以下图为例：我们有一个初始值`n`为1，点击按钮`n+1`，但初始值不改变：
 
-<img src="images/image-20230202113409928.png" alt="image-20230202113409928" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627929.png" alt="image-20230202113409928" style="zoom:50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -3228,7 +3405,7 @@ v-pre指令：
 
 为了解Vue的生命周期，我们先完成以下页面来进行观察：页面字体的透明度在0-1之间变化
 
-![](images/生命周期定时器.gif)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627930.gif)
 
 ```html
 <!DOCTYPE html>
@@ -3290,7 +3467,7 @@ v-pre指令：
 
 ​	我们在`1.19.1`中使用到了`mounted`这个声明周期函数，并且在这个函数调用之前和之后都调用了一些兄弟函数，那么这些兄弟函数又有哪些呢？我们先参照官网创建Vue示例的图示(https://v2.cn.vuejs.org/v2/guide/instance.html)：
 
-<img src="images/vue声明周期.png" style="zoom: 50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627931.png" style="zoom: 50%;" />
 
 ```html
 <!DOCTYPE html>
@@ -3451,15 +3628,15 @@ v-pre指令：
 
 ​	要了解组件化编程，我们先来看看传统方式编程和组件化编程的区别。
 
-<img src="images/组件化.png" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627932.png" style="zoom:33%;" />
 
 
 
-<img src="images/组件编程.png" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627933.png" style="zoom:33%;" />
 
 通常一个应用会以一棵嵌套的组件树的形式来组织：
 
-<img src="images/components.png" style="zoom:33%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627935.png" style="zoom:33%;" />
 
 - **模块：**向外提供特定功能的 js 程序，一般就是一个 js 文件，可实现复用 js，简化 js 的编写，提高 js 运行效率；
 - **组件：**用来实现局部功能的代码和资源的集合（html/css/js/image…），可实现复用编码，简化项目编码，提高运行效率；
@@ -3687,13 +3864,492 @@ Vue中使用组件的三大步骤：
 
 #### 2.1.3.组件的嵌套
 
+​	组件的嵌套即在已经定义好的组件`data(){}`数据中再定义`components:{}`。以上面案例为例，我们再在school中嵌套student的做法如下，需要注意的是，使用嵌套的组件必须在组件已经生成时才能注册进去，并且被嵌套的组件标签必须放到父级组件中：
+
+```html
+<!-- 准备一个容器 -->
+        <div id='root'>
+                <school></school>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义student组件
+                const student = {
+                    name:'micheal',
+                    template:`
+                            <div>
+                                <h3>学生姓名：{{name}}</h3>
+                                <h3>学生年龄：{{age}}</h3> 
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'张三',
+                            age:20
+                        }
+                    }
+                }
+                // 定义school组件
+                const school = {
+                    name:'micheal',
+                    template:`
+                            <div>
+                                <h3>学校名称：{{name}}</h3>
+                                <h3>学校地址：{{addr}}</h3> 
+                                <student></student>
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'四川城市职业学院',
+                            addr:'四川成都'
+                        }
+                    },
+                    components: {
+                        student
+                    }
+                }
+                
+
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        // 组测局部组件
+                        components:{
+                             school,
+                             student
+                        }     
+                })
+        </script>
+```
+
+​	
+
+​	**在实际的开发过程中，APP组件是所有组件的父组件，它领导了其他组件，甚至在html的div容器中都不用写，把它通过<template>配置到vm中：**
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+                
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义student组件
+                const student = {
+                    name:'micheal',
+                    template:`
+                            <div>
+                                <h3>学生姓名：{{name}}</h3>
+                                <h3>学生年龄：{{age}}</h3> 
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'张三',
+                            age:20
+                        }
+                    }
+                }
+                // 定义school组件
+                const school = {
+                    name:'micheal',
+                    template:`
+                            <div>
+                                <h3>学校名称：{{name}}</h3>
+                                <h3>学校地址：{{addr}}</h3> 
+                                <student></student>
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'四川城市职业学院',
+                            addr:'四川成都'
+                        }
+                    },
+                    components: {
+                        student
+                    }
+                }
+                // 定义hello组件
+                const hello = {
+                    template:`
+                            <div>
+                                <h2>{{msg}}</h2>
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            msg:"欢迎来到四川城市职业学院"
+                        }
+                    },
+                }
+                // 定义app组件，领导其他组件
+                const app = Vue.extend({
+                        template:`
+                                <div>
+                                        <hello></hello>
+                                        <school></school>    
+                                </div>
+                        `,
+                        components:{
+                               school,
+                               hello 
+                        }
+                })
+                
+
+                // 创建Vue对象
+                new Vue({
+                        template:`
+                                <app></app>
+                        `,
+                        el: '#root',
+                        // 组测局部组件
+                        components:{
+                             app
+                        }     
+                })
+        </script>
+</body>
+</html>
+```
+
+![image-20230221161618536](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302211616711.png)
 
 
 
+#### 2.1.4.VueCompoent构造函数
+
+​	组件的本质就是一个构造函数，这个函数就是VueCompoent，它是`Vue.extend()`生成的，我们只需要写<school>，Vue解析时会帮我们创建school实例对象，即Vue帮我们执行了new VueComponent(options)，需要注意的是**每次调用Vue.extend()，都会返回一个全新的VueComponent。**
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <school></school>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义school组件
+                const school = {
+                    template:`
+                            <div>
+                                <h3>学校名称：{{name}}</h3>
+                                <h3>学校地址：{{addr}}</h3> 
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'四川城市职业学院',
+                            addr:'四川成都'
+                        }
+                    }
+                }
+                console.log("==",school);
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        components:{
+                            school
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+​	上面代码输出了school这个组件，我们在控制台看到了实际就是输出的VueComponent这个函数，我们在`vue.js`源码中找到这个函数，在下面添加一段输出语句，结果发现它是调用了这个函数了的：
+
+![image-20230221163209389](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302211632531.png)
+
+![image-20230221163228220](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302211632339.png)
 
 
+
+​	实际上两个对象有一定的关系：即`VueComponent.prototype.__proto__ == Vue.prototype`。这样的关系使得组件对象vc能够访问到Vue原型上的属性和方法。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302211725741.png" alt="image-20230221172525472" style="zoom: 50%;" />
 
 ### 2.2.单文件组件
+
+​	单文件组件即按照Vue定义好的规则定义组件，组件的名字通常以`.vue`为后缀。这些文件会按需导入。这样做的好处是能将业务更好的区分，更好的维护，不用在一个文件中写所有的代码，使得团队能有更好的分工。`.vue`文件中通常有三个标签：
+
+- <tmplate>：组件的结构；
+
+- <script>：组件交互功能；
+
+- <style>：组件的样式
+
+一个完整的页面的构成需要以下几个文件：
+
+- 若干个`.vue`文件，表示若干个组件；
+- 一个`App.vue`管理所有的组件；
+- 一个`main.js`创建Vue对象，引入`App.vue`；
+- 一个`index.html`，创建容器，引入`vue.js`。
+
+**School.vue**
+
+```vue
+<template>
+	<div class="demo">
+		<h2>学校名称：{{name}}</h2>
+		<h2>学校地址：{{address}}</h2>
+		<button @click="showName">点我提示学校名</button>	
+	</div>
+</template>
+
+<script>
+	 export default {
+		name:'School',
+		data(){
+			return {
+				name:'四川城市职业学院',
+				address:'成都龙泉'
+			}
+		},
+		methods: {
+			showName(){
+				alert(this.name)
+			}
+		},
+	}
+</script>
+
+<style>
+	.demo{
+		background-color: orange;
+	}
+</style>
+```
+
+
+
+**Student.vue:**
+
+```vue
+<template>
+	<div>
+		<h2>学生姓名：{{name}}</h2>
+		<h2>学生年龄：{{age}}</h2>
+	</div>
+</template>
+
+<script>
+	 export default {
+		name:'Student',
+		data(){
+			return {
+				name:'张三',
+				age:18
+			}
+		}
+	}
+</script>
+
+```
+
+
+
+**App.vue:**
+
+```vue
+<template>
+	<div>
+		<School></School>
+		<Student></Student>
+	</div>
+</template>
+
+<script>
+	//引入组件
+	import School from './School.vue'
+	import Student from './Student.vue'
+
+	export default {
+		name:'App',
+		components:{
+			School,
+			Student
+		}
+	}
+</script>
+
+```
+
+
+
+**main.js:**
+
+```javascript
+import App from './App.vue'
+
+new Vue({
+	el:'#root',
+	template:`<App></App>`,
+	components:{App},
+})
+```
+
+
+
+**index.html:**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="../../js/vue.js"></script>
+    <script src="./main.js"></script>
+</body>
+</html>
+```
+
+组要注意的是`main.js`中`import`语句浏览器不认识，页面无法展示，后期运用脚手架即可展示：
+
+![image-20230222120712251](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221207415.png)
+
+
+
+## 3.Vue脚手架--Vue cli
+
+​	Vue脚手架是Vue官方提供的标准化**开发工具**。它可以自动生成vue.js+webpack的项目模板。可用于定制新项目、配置原型、添加插件和检查webpack配置等。
+
+ 	**特别注意**：[Vue脚手架](https://so.csdn.net/so/search?q=Vue脚手架&spm=1001.2101.3001.7020)是用来方便开发的，但vue脚手架不是最终发布到生产环境的产品。很多人会误认为生产环境也要安装vue脚手架。
+
+​	官方文档：https://cli.vuejs.org/zh/
+
+
+
+### 3.1.安装脚手架
+
+卸载旧版：
+
+```shell
+npm uninstall vue-cli -g
+```
+
+
+
+1.全局安装@vue/cli(仅安装一次即可)：
+
+```shell
+npm install -g @vue/cli --registry=https://registry.npm.taobao.org
+# OR
+yarn global add @vue/cli --registry=https://registry.npm.taobao.org
+```
+
+![image-20230222191150414](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221911748.png)
+
+查看版本：
+
+```shell
+vue -V  V大写
+```
+
+
+
+2.创建一个项目（切换到要创建的文件夹）：
+
+```shell
+vue create hello_vue
+# OR
+vue ui
+```
+
+如出现如下安装情况说明vue-cli版本过低，可参考链接：
+
+![image-20230223113657767](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302231137002.png)
+
+https://blog.csdn.net/zlzbt/article/details/110136755
+
+![image-20230302222042657](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303022220850.png)
+
+​	在创建项目时，Vue CLI提示用户选取一个preset(预设)，Default是默认选项，包含基本的babel+eslint设置，适合快速创建一个新项目；Manually select features表示手动配置，提供可选择的npm包，更适合生产时的项目，在实际工作中推荐使用该种方式。
+
+3.进入项目目录`cd hello_vue`启动项目：
+
+```shell
+npm run serve
+```
+
+
+
+
+
+注意：
+
+1.如出现下载缓慢，需要把npm切换为淘宝镜像：`npm config set registry https://registry.npm.taobao.org`
+
+2.Vue脚手架隐藏了所有webpack相关配置，若想查看具体配置，请执行：`vue inspect > output.js`。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

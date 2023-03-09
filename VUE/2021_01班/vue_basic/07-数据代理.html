@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+        </div>
+        <script>
+                let person = {
+                    name:"刘德华",
+                    sex:"男",
+                    // age:20
+                }
+                /* 
+                Object.defineProperty(obj,prop,desc)
+                    obj是操作的对象
+                    prop:为对象添加的属性
+                    desc:属性的配置项
+                        value:属性的值
+                        enumerable:支不支持遍历，默认为false
+                        writable:支不支持可改变，默认为false
+                        configurable:支不支持删除，默认为false
+
+                */
+                Object.defineProperty(person,'age',{
+                    // 数据描述符
+                    // value:20,
+                    // enumerable:true,
+                    // writable:true,
+                    // configurable:true
+                    // 存取描述符
+                    get() {
+                        return number
+                    },
+                    set(value) {
+                        number = value
+                    }
+                })
+                // for (const key in person) {
+                //     console.log(person[key]);
+                // }
+                // console.log(Object.keys(person));
+        </script>
+</body>
+</html>

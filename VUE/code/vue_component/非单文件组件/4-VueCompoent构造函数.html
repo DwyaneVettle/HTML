@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <school></school>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义school组件
+                const school = {
+                    template:`
+                            <div>
+                                <h3>学校名称：{{name}}</h3>
+                                <h3>学校地址：{{addr}}</h3> 
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            name:'四川城市职业学院',
+                            addr:'四川成都'
+                        }
+                    }
+                }
+                console.log("==",school);
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        components:{
+                            school
+                        }
+                })
+        </script>
+</body>
+</html>

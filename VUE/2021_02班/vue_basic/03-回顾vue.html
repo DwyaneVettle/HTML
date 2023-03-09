@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+    <!-- 1.引入vue.js文件 -->
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 2.创建容器 -->
+    <div class="root">
+        {{name}}
+    </div>
+    <!-- <div class="root">
+        {{name}}
+    </div> -->
+    <script>
+        Vue.config.productionTip = false;
+        // options配置对象
+        new Vue({
+            /* 
+                el:要为那个容器服务
+                data:为容器提供的数据 {}
+            */
+            el:".root",
+            data:{
+                name:"hello"
+            }
+        })
+        // new Vue({
+        //     /* 
+        //         el:要为那个容器服务
+        //         data:为容器提供的数据 {}
+        //     */
+        //     el:".root",
+        //     data:{
+        //         age:20
+        //     }
+        // })
+    </script>
+</body>
+</html>
