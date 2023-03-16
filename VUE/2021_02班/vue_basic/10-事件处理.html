@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+    <!-- 
+         事件的基本使用：
+
+​              1.使用`v-on:xxx` 或` @xxx` 绑定事件，其中xxx是事件名；
+
+​              2.事件的回调需要配置在`methods`对象中，最终会在vm上；
+
+​              3.`methods`中配置的函数，不要用箭头函数！否则`this`就不是vm了；
+
+​              4.`method`中配置的函数，都是被Vue所管理的函数，`this`的指向是vm 或 组件实例对象；
+
+​              5.`@click="demo"` 和` @click="demo($event)"` 效果一致，但后者可以传参.
+     -->
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- v-on做事件的绑定 -->
+            <button v-on:click="showInfo">点击按钮弹出同学你好</button>
+            <!-- v-on:可以简写成@事件 -->
+            <button @click="showInfo()">点击按钮弹出同学你好</button>
+            <button @click="showMsg($event,666)">点击按钮弹出同学你好</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                var vm = new Vue({
+                        el: '#root',
+                        data: {},
+                        methods: {
+                            showInfo() {
+                                alert("同学你好")
+                            },
+                            showMsg(e,value) {
+                                console.log(this);
+                                console.log(e.target.innerText);
+                                console.log(value);
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>

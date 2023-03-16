@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            姓：<input type="text" v-model="firstName"><br>
+            名：<input type="text" v-model="lastName"><br>
+            姓名：<span>{{fullName}}</span>
+            姓名：<span>{{fullName}}</span>
+            姓名：<span>{{fullName}}</span>
+            姓名：<span>{{fullName}}</span>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                var vm = new Vue({
+                        el: '#root',
+                        data: {
+                            firstName:'张',
+                            lastName:'三'
+                        },
+                        // 计算属性 computed属性实现
+                        // 返回的值要通过get和set方法获取和修改
+                        computed:{
+                            fullName:{
+                                // get方法是当有人读取fullName时，就会被调用，且返回值作为fullName的值
+                                get() {
+                                    console.log("=");
+                                    return this.firstName + '-' + this.lastName
+                                },
+                                set(value) {
+                                    // this.fullName = value
+                                    var arr = value.split('-')
+                                    this.firstName = arr[0]
+                                    this.lasttName = arr[1]
+                                }
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

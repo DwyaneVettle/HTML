@@ -37,9 +37,11 @@
                     // configurable:true
                     // 存取描述符
                     get() {
+                        console.log("数值被获取了。。");
                         return number
                     },
                     set(value) {
+                        console.log("数值被修改了");
                         number = value
                     }
                 })

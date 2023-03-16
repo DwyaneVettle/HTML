@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <style>
+        * {
+            margin-top: 10px;
+        }
+        .demo01 {
+            height: 50px;
+            background-color: aqua;
+        }
+    </style>
+</head>
+<body>
+    <!-- Vue中的事件修饰符：
+
+​                        1.prevent：阻止默认事件（常用）；
+
+​                        2.stop：阻止事件冒泡（常用）；
+
+​                        3.once：事件只触发一次（常用）；
+
+​                        4.capture：使用事件的捕获模式；
+
+​                        5.self：只有event.target是当前操作的元素时才触发事件；
+
+​                        6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕； -->
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 事件修饰符：在时间.修饰符 -->
+            <!-- prevent:阻止事件 -->
+            <a href="https://www.baidu.com" @click:prevent="showInfo()">点击输出你好</a>
+            <!-- stop：阻止事件冒泡 -->
+            <div class="demo01" @click="showInfo">
+                <button @click.stop="showInfo">点击弹出信息</button>
+            </div>
+            <!-- once:事件只触发1次 -->
+            <button @click.once="showInfo">点击弹出信息</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        methods: {
+                            showInfo(e) {
+                                alert("你好")
+                                // e.preventDefault(); // 表示不执行与事件关联的默认的操作     
+                            }
+                        },      
+                })
+        </script>
+</body>
+</html>

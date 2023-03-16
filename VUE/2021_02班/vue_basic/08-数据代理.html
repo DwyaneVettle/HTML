@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+        </div>
+        <script>
+               let obj01 = {x: 100};
+               let obj02 = {y:200}
+
+               /* 
+                设置obj02的x属性，
+                    1.获取obj01的x属性，2.返回给obj02
+               */
+              console.log(obj01.x);
+              Object.defineProperty(obj02,'x',{
+                get() {
+                    return obj01.x;
+                },
+                set(v) {
+                    obj01.x = v
+                }
+              })
+        </script>
+</body>
+</html>

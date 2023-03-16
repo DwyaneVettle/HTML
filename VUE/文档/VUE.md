@@ -915,7 +915,7 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 #### 1.8.2.Vue中的数据代理
 
-​	Vue中的数据代理是：**通过Object.defineProperty()把data对象中所有的属性添加到vm上，且数据从data到vm中的过程，又为每一个属性添加上getter和setter方法，用户修改或者读取时，也是通过getter或setter方法访问_data，_data返回或操作data中的数据实现的**。
+​	Vue中的数据代理是：**通过Object.defineProperty()把data对象中所有的属性添加到vm上，且数据从data到vm中的过程，又为每一个属性添加上getter和setter方法，用户修改或者读取时，也是通过getter或setter方法访问`_data`，`_data`返回或操作data中的数据实现的**。
 
 <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627906.png" style="zoom:50%;" />
 
@@ -1183,6 +1183,43 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 ​                        6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕；
 
+- **案例：**通过点击事件，获取一个随机数
+
+  ![image-20230309214147909](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092142654.png)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="count += Math.random()">点击生成随机数</button>
+            <p>自动生成随机数为{{count}}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            count:0
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
 
 
 #### 1.9.3.键盘事件
@@ -1277,6 +1314,8 @@ set:一个给属性提供 setter 的方法，如果没有setter则为默认的un
 
 
 ### 1.10.计算属性
+
+​	计算属性就是拿着已有的属性去加工和计算，变成一个全新的属性。
 
 ​	要想了解计算属性，我们现通过以下案例来观察：在第一个输入框中动态接收姓，第二个输入框中动态接收名，然后用`-`分隔进行显示。常用的有两种实现的方式：①插值语法；②methods方法。
 
@@ -3257,6 +3296,66 @@ v-pre指令：
 
 
 
+#### 1.17.6.学生列表案例
+
+​	案例需求：点击添加学生，默认添加一个名为“张三”的学生，点击**删除学生**，默认删除最后一个学生：
+
+![image-20230309203707765](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092142003.png)
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Vue使用模板</title>
+  <script src="../js/vue.js"></script>
+</head>
+<body>
+  <div id="root">
+    <button @click="add">添加学生</button>
+    <button @click="del">删除学生</button>
+    <table border="1" width="50%" style="border-collapse: collapse">
+      <tr>
+        <th>班级</th>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>年龄</th>
+      </tr>
+      <tr align="center" v-for="item in students">
+        <td>{{item.grade}}</td>
+        <td>{{item.name}}</td>
+        <td>{{item.gender}}</td>
+        <td>{{item.age}}</td>
+      </tr>
+    </table>
+  </div>
+  <script>
+    var vm = new Vue({
+      el: '#root',
+      data: {
+        students: []
+      },
+      methods: {
+        // 添加学生信息
+        add () {
+          var student = {grade: '1', name: '张三', gender: '男', age: 25}
+          this.students.push(student)
+        },
+        // 删除学生信息
+        del () {
+          this.students.pop()
+        }
+      }
+    })
+  </script>
+</body>
+</html>
+```
+
+
+
+
+
 ### 1.18.自定义指令
 
 ​	除了Vue的作者给我们创建的内置指令外，我们也可以自己定义一些指令来完成特定的功能。自定义指令的指令名可以根据功能来自定义，如按以下两个需求来定义指令：
@@ -4241,7 +4340,395 @@ new Vue({
 
 
 
-## 3.Vue脚手架--Vue cli
+## 3.全局API和配置属性
+
+### 3.1.全局API
+
+​	在我们之前使用的Vue.component()方法来注册自定义组件，这个方式实际就是全局API（Application Programming Interface）。我们可以通过这些API来构建自定义的指令、组件和插件，来实现功能的拓展。
+
+
+
+#### 3.1.1.Vue.use()
+
+​	Vue.use()主要用于在Vue中**安装插件**，通过插件可以为Vue添加全局功能。插件可以时一个对象或函数，如果是**对象**，必须提供intall()方法，用于安装插件；如果是一个**函数**，则该函数将被当成install()方法。插件安装的步骤：
+
+- 定义自定义插件的对象
+- 编写插件对象的install()方法--通过方法处理业务逻辑
+- Vue.use()安装插件
+- 使用插件中的指令
+
+**需求：**通过安装的自定义插件指令改变`div`的样式为背景色红色，长宽100*100：
+
+![image-20230309221248065](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092212217.png)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root' v-my-derective>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 1.定义一个插件对象
+                let MyPlugin = {};
+                // 2.编写插件对象的install方法
+                MyPlugin.install = function(Vue,options) {
+                    console.log(options); // 接收安装此插件时传递的参数
+                    Vue.directive('my-derective',{
+                        bind(el,binding) {
+                            el.style = "width:100px;height:100px;background-color:red";
+                        }
+                    })
+                }
+                // 3.安装插件，{someOption:true}参数并没有用，但实际开发可以配置
+                Vue.use(MyPlugin,{someOption:true})
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 3.1.2.Vue.set()
+
+​	Vue的核心具有一套响应式的系统，简单来说就是通过监听器监听数据层的数据变化，当数据改变后，通过视图自动更新（MVVM）。
+
+​	Vue.set()用于向响应式对象中添加一个属性，并确保这个属性也同样是响应式的，会触发视图更新。其格式为：
+
+```html
+Vue.set(target,propertyName/index,value)
+// target:添加数据的对象
+// propertyName:添加的属性名
+// value:添加的属性的值
+```
+
+**需求：**创建vm对象动态设置属性b，使这个属性在刷新页面时才相应到页面中：
+
+![image-20230309222536876](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092225034.png)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <div>{{a}}</div>
+            <div>{{obj.b}}</div>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            a:"我是响应式数据a",
+                            obj:{}
+                        }    
+                })
+                // 通过set()添加的是响应式的
+                // 有的需求在后期才决定新增属性，所有不是在data中
+                Vue.set(vm.obj,'b','我是Vue.set()添加的响应式属性b')
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 3.1.3.Vue.mixin()
+
+​	Vue.mixin()方法全局注册一个混入，影响注册之后所有创建的每个 Vue 实例。插件作者可以使用混入，向组件注入自定义的行为。**不推荐在应用代码中使用**。
+
+官网参考：https://v2.cn.vuejs.org/v2/guide/mixins.html#%E5%85%A8%E5%B1%80%E6%B7%B7%E5%85%A5
+
+![image-20230309222927682](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092229844.png)
+
+使用格式如下：
+
+```javascript
+// 为自定义的选项 'myOption' 注入一个处理器。
+Vue.mixin({
+  created: function () {
+    var myOption = this.$options.myOption
+    if (myOption) {
+      console.log(myOption)
+    }
+  }
+})
+
+new Vue({
+  myOption: 'hello!'
+})
+// => "hello!"
+```
+
+**需求：**将混入的数据转为大写：
+
+![image-20230309223622658](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092236829.png)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            {{msg}}
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.mixin({
+                    // 混入对象可以有组件中的选项
+                    data() {
+                        return {
+                            msg:"混入的数据"
+                        }
+                    },
+                    // 钩子函数created()
+                    created() {
+                        console.log("混入的created()");
+                        var myOption = this.$options.myOption;
+                        if(myOption) {
+                            console.log(myOption.toUpperCase());
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        myOption:'hello Vue',
+                        created(){
+                            console.log("vue的钩子函数");
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+### 3.2.实例属性
+
+#### 3.2.1.$props
+
+​	使用v,.$props属性可以接收上级组件向下传递的数据（父组件向子组件传递）。
+
+**需求：**通过$props实现手机信息搜索。
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id="root">
+            <!-- 父组件 -->
+            <my-parent></my-parent>
+          </div>
+        
+          <!-- 父组件模板 -->
+          <template id="parent">
+            <div>
+              <h3>手机信息搜索</h3>
+              手机品牌：<input type="text" v-model="brand">
+              <!-- 子组件 -->
+              <my-child v-bind:name="brand"></my-child>
+            </div>
+          </template>
+        
+          <!-- 子组件模板 -->
+          <template id="child">
+            <ul>
+              <li>手机品牌：{{show.brand}}</li>
+              <li>手机型号：{{show.type}}</li>
+              <li>市场价格：{{show.price}}</li>
+            </ul>
+          </template>
+        <script>
+                 Vue.component('my-parent', {
+                        template: '#parent',
+                        data () {
+                            return {
+                            brand: ''
+                            }
+                        }
+                        })
+                        Vue.component('my-child', {
+                        template: '#child',
+                        data () {
+                            return {
+                            content: [
+                                {brand: '华为', type: 'Mate20', price: 3699},
+                                {brand: '苹果', type: 'iPhone7', price: 2949},
+                                {brand: '三星', type: 'Galaxy S8+', price: 3299},
+                                {brand: 'vivo', type: 'Z5x', price: 1698},
+                                {brand: '一加', type: 'OnePlus7', price: 2999},
+                                {brand: '360', type: 'N7 Pro', price: 1099},
+                                {brand: 'oppo', type: 'Reno', price: 2599}
+                            ],
+                            show: {brand: '', type: '', price: ''}
+                            }
+                        },
+                        props: ['name'],
+                        watch: {
+                            name () {
+                            if (this.$props.name) {
+                                var found = false
+                                this.content.forEach((value, index) => {
+                                if (value.brand === this.$props.name) {
+                                    found = value
+                                }
+                                })
+                                this.show = found ? found : {brand: '', type: '', price: ''}
+                            } else {
+                                return
+                            }
+                            }
+                        }
+                        })
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 3.2.2.$options
+
+​	Vue实例初始化时，除了传入指定的选项外，还可以传入自定义选项。自定义选项的值可以是数组、对象、函数等，它们通过vm.$options来获取。
+
+![image-20230310210421182](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303102104350.png)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <p>{{base}}</p>
+            <p>{{noBase}}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        customOption: '我是自定义数据',
+                        data: {
+                            base: '我是基础数据' 
+                        },
+                        created () {
+                            this.noBase = this.$options.customOption
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+### 3.2.3.$el
+
+​	vm.$el用来访问vm实例使用的根DOM元素。
+
+**案例：**采用$el替换原有div根节点内的内容：
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <p>我是根标签结构</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                var vm = new Vue({
+                        el: '#root',
+                        data: {}   
+                })
+                vm.$el.innerHTML = '<div>我是替换后的div标签</div>'
+        </script>
+</body>
+</html>
+```
+
+
+
+
+
+## 4.Vue脚手架--Vue cli
 
 ​	Vue脚手架是Vue官方提供的标准化**开发工具**。它可以自动生成vue.js+webpack的项目模板。可用于定制新项目、配置原型、添加插件和检查webpack配置等。
 
@@ -4251,7 +4738,7 @@ new Vue({
 
 
 
-### 3.1.安装脚手架
+### 4.1.安装脚手架
 
 卸载旧版：
 
