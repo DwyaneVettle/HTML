@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    
+    <div id="root">
+        姓：<input type="text" v-model="firstName"><br><br>
+        
+        名：<input type="text" v-model="lastName"><br><br>
+        
+        <span>姓名：{{fullName}}</span>
+    </div>
+    <script>
+        Vue.config.productionTip = false;
+        var vm = new Vue({
+            el:"#root",
+            data:{
+                firstName:"张",
+                lastName:"三"
+            },
+            // 计算属性computed
+            // 生成新的属性，新属性作为computed的配置项产生
+            computed:{
+                // 简写：将计算后的属性
+                // 当只有获取，没有修改的时候之间将属性作为get()方法名
+                fullName(){
+                       return this.firstName + "-" + this.lastName;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

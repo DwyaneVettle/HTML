@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+</head>
+<body>
+    <!-- 
+        璁＄畻灞炴€э細
+
+鈥�          1.瀹氫箟锛氳鐢ㄧ殑灞炴€т笉瀛樺湪锛岃閫氳繃宸叉湁灞炴€ц绠楀緱鏉ャ€�
+
+鈥�          2.鍘熺悊锛氬簳灞傚€熷姪浜哋bjcet.defineproperty鏂规硶鎻愪緵鐨刧etter鍜宻etter銆�
+
+鈥�          3.get鍑芥暟浠€涔堟椂鍊欐墽琛岋紵
+
+鈥�                (1).鍒濇璇诲彇鏃朵細鎵ц涓€娆°€�
+
+鈥�                (2).褰撲緷璧栫殑鏁版嵁鍙戠敓鏀瑰彉鏃朵細琚啀娆¤皟鐢ㄣ€�
+
+鈥�          4.浼樺娍锛氫笌methods瀹炵幇鐩告瘮锛屽唴閮ㄦ湁缂撳瓨鏈哄埗锛堝鐢級锛屾晥鐜囨洿楂橈紝璋冭瘯鏂逛究銆�
+
+鈥�          5.澶囨敞锛�
+
+鈥�              1.璁＄畻灞炴€ф渶缁堜細鍑虹幇鍦╲m涓婏紝鐩存帴璇诲彇浣跨敤鍗冲彲銆�
+
+鈥�              2.濡傛灉璁＄畻灞炴€ц琚慨鏀癸紝閭ｅ繀椤诲啓set鍑芥暟鍘诲搷搴斾慨鏀癸紝涓攕et涓寮曡捣璁＄畻鏃朵緷璧栫殑鏁版嵁鍙戠敓鏀瑰彉銆�
+
+
+     -->
+    <div id="root">
+        濮擄細<input type="text" v-model="firstName"><br><br>
+        
+        鍚嶏細<input type="text" v-model="lastName"><br><br>
+        
+        <span>濮撳悕锛歿{fullName}}</span>
+        <span>濮撳悕锛歿{fullName}}</span>
+        <span>濮撳悕锛歿{fullName}}</span>
+        <span>濮撳悕锛歿{fullName}}</span>
+        <span>濮撳悕锛歿{fullName}}</span>
+        <span>濮撳悕锛歿{fullName}}</span>
+    </div>
+    <script>
+        Vue.config.productionTip = false;
+        var vm = new Vue({
+            el:"#root",
+            data:{
+                firstName:"寮�",
+                lastName:"涓�"
+            },
+            // 璁＄畻灞炴€omputed
+            // 鐢熸垚鏂扮殑灞炴€э紝鏂板睘鎬т綔涓篶omputed鐨勯厤缃」浜х敓
+            computed:{
+                fullName:{
+                    /* 
+                    get()浠€涔堟椂鍊欐墽琛岋紵
+                        1.鍒濇璇诲彇閰嶇疆瀵硅薄fullName
+                        2.fullName鎵€浠ユ潵鐨刦istName鍜宭astName鏁版嵁鍙戠敓鏀瑰彉鏃�
+                    */
+                    get() {
+                        console.log("鏁版嵁琚幏鍙栦簡銆傘€�");
+                       return this.firstName + "-" + this.lastName;
+                    },
+                    /* 
+                    set()鏂规硶浠€涔堟椂鍊欐墽琛岋紵
+                        褰揻ullName鏁版嵁鍙戠敓鏀瑰彉鏃舵墽琛�
+                    */
+                    set(value) {
+                        console.log("鏁版嵁琚慨鏀逛簡銆傘€傘€�");
+                        var arr = value.split('-')
+                        arr[0] = this.firstName
+                        arr[1] = this.lastName
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

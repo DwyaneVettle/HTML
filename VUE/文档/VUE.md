@@ -1520,6 +1520,54 @@ new Vue({
 
 
 
+计算属性案例：
+
+​	 在页面当中使用表达式会非常的遍历，但如果逻辑太多反而会使得模板更加难以维护，下面来一个简单的例子感受一下，会发现在 {{}} 中编写的内容较多，这么写并没有问题，如果写一些比较简单的逻辑较好，多了会导致模板过重，不利于维护；
+
+​	那么Computed就是解决这种问题的，对于任何复杂逻辑，你都应当使用**计算属性；**
+
+![image-20230322215212853](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303222152025.png)
+
+```html
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- {{msg.toUpperCase()+' / '+msg.substring(8,22).toUpperCase()}} -->
+            {{msgComputed}}
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            msg:'what do you want to be?'
+                        },
+                        computed:{
+                            msgComputed() {
+                                return this.msg.toUpperCase()+' / '+ this.msg.substring(8,22).toUpperCase()
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
 ### 1.11.监视属性
 
 ​	天气案例：实现页面天气`凉爽`和`炎热`的切换，并且在控制台显示`现在`和`原来`的天气情况。我们可以通过Vue的监视属性来实现这一功能。vm对象的`$watch()`或`watch`配置来监视指定的属性，当属性发生变化时，回调函数自动执行，在函数内部进行计算。
@@ -1899,14 +1947,14 @@ computed和watch之间的区别：
 <body>
         <!-- 准备一个容器 -->
         <div id='root'>
-            <!-- 需求1：基础样式basic和normal，点击切换成happy属性 
+            <!-- 需求1：基础样式basic，点击切换成happy属性（或点击随机心情） 
                  绑定class样式(字符串写法)，通过 :class='xx',把xx配置到data属性中
                  使用场景：样式类名不确定，需要动态指定
             -->
 
             <h3 class="basic" :class="mood" @click='changeMood01'>{{name}}</h3><br><br>
             
-            <!-- 需求2：基础样式basic，z1,z2,z3两两随机组合 
+            <!-- 需求2：基础样式basic，z1,z2,z3组合 
                  绑定class样式(数组写法)，通过添加数组属性进行设置
                  适用场景：要绑定的样式个数不确定、名字也不确定
             -->
@@ -1954,6 +2002,7 @@ computed和watch之间的区别：
                             changeMood01() {
                                 // document.getElementById('demo').className = 'basic happy';
                                 // this.mood = 'happy';
+                                
                                 // 以上方式不够灵活，如果需要点击随机切换normal,happy,sad，则需要用到Math
                                 const arr = ['normal', 'happy', 'sad'];
                                 // Math.random()随机生成0-1(不包含1),乘以3再向下取整 
@@ -4730,6 +4779,8 @@ new Vue({
 
 ## 4.Vue脚手架--Vue cli
 
+​	当使用Vue构建项目时，在页面中通过`<script>`标签引入`vue.js`文件，这种方式仅适用于简单的案例，在实际的开发中，往往需要处理复杂的业务逻辑，那么通过`<script>`引入的方式就不太合适了，此时需要借助Vue脚手架工具，它可以帮助我们快速的构建一个适用于实际项目中的环境。
+
 ​	Vue脚手架是Vue官方提供的标准化**开发工具**。它可以自动生成vue.js+webpack的项目模板。可用于定制新项目、配置原型、添加插件和检查webpack配置等。
 
  	**特别注意**：[Vue脚手架](https://so.csdn.net/so/search?q=Vue脚手架&spm=1001.2101.3001.7020)是用来方便开发的，但vue脚手架不是最终发布到生产环境的产品。很多人会误认为生产环境也要安装vue脚手架。
@@ -4744,6 +4795,10 @@ new Vue({
 
 ```shell
 npm uninstall vue-cli -g
+```
+
+```shell
+npm uninstall vue-cli@版本 -g
 ```
 
 
@@ -4799,6 +4854,10 @@ npm run serve
 1.如出现下载缓慢，需要把npm切换为淘宝镜像：`npm config set registry https://registry.npm.taobao.org`
 
 2.Vue脚手架隐藏了所有webpack相关配置，若想查看具体配置，请执行：`vue inspect > output.js`。
+
+3.如果一直创建脚手架工程出现卡顿，参考https://www.jb51.net/article/265182.htm
+
+https://www.jianshu.com/p/180f645fcccc
 
 
 
