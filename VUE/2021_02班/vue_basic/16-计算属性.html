@@ -28,9 +28,10 @@
                                     return this.msg.toUpperCase() + "/" + this.msg.substring(9,20).toUpperCase()                         
                             }
                         },
+                        
                         watch:{
                             msg(newValue,oldValue) {
-                                newValue = oldValue.toUpperCase() + "/" + oldValue.substring(9,20).toUpperCase()
+                                this.msg = oldValue.toUpperCase() + "/" + oldValue.substring(9,20).toUpperCase()
                             }
                         }
                         
