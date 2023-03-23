@@ -34,7 +34,7 @@
                             fullName:{
                                 // get方法是当有人读取fullName时，就会被调用，且返回值作为fullName的值
                                 get() {
-                                    console.log("=");
+                                    console.log("=",this);
                                     return this.firstName + '-' + this.lastName
                                 },
                                 set(value) {

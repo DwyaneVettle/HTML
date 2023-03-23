@@ -1971,10 +1971,10 @@ computed和watch之间的区别：
                 绑定style样式(对象写法)
                 css样式再vue中除第以个单词外，其他单词首字母大写
              -->
-            <h3 class="basic" :class="styleObj01">{{name}}</h3><br><br>
+            <h3 class="basic" :style="styleObj01">{{name}}</h3><br><br>
             
             <!-- 绑定style样式(数组写法):数组里嵌套对象写法 -->
-            <h3 class="basic" :class="[styleObj01, styleObj02]">{{name}}</h3><br><br>
+            <h3 class="basic" :style="[styleObj01, styleObj02]">{{name}}</h3><br><br>
         </div>
         <script>
                 // 设置为 false 以阻止 vue 在启动时生成生产提示
