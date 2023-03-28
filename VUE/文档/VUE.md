@@ -4798,15 +4798,21 @@ npm uninstall vue-cli -g
 ```
 
 ```shell
-npm uninstall vue-cli@版本 -g
+npm uninstall @vue/cli -g
 ```
+
+**安装和创建推荐使用yarn的方式，因为该方式比npm更快：**
+
+https://blog.csdn.net/qq_45152044/article/details/122999616?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167966344016800213058109%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=167966344016800213058109&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122999616-null-null.142^v76^pc_new_rank,201^v4^add_ask,239^v2^insert_chatgpt&utm_term=yarn%E5%88%9B%E5%BB%BAvue-cli%E9%A1%B9%E7%9B%AE&spm=1018.2226.3001.4187
 
 
 
 1.全局安装@vue/cli(仅安装一次即可)：
 
 ```shell
-npm install -g @vue/cli --registry=https://registry.npm.taobao.org
+npm install -g vue-cli												# 安装旧版2.9.6
+
+npm install -g @vue/cli --registry=https://registry.npm.taobao.org    # 安装新版3.x-5.x
 # OR
 yarn global add @vue/cli --registry=https://registry.npm.taobao.org
 ```
@@ -4847,7 +4853,7 @@ npm run serve
 
 
 
-
+webpack创建参考：https://blog.csdn.net/u013034585/article/details/106763710?ops_request_misc=&request_id=&biz_id=102&utm_term=%E5%88%9B%E5%BB%BAvue%E8%84%9A%E6%89%8B%E6%9E%B6%E5%BE%88%E5%8D%A1&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-106763710.142^v76^pc_new_rank,201^v4^add_ask,239^v2^insert_chatgpt&spm=1018.2226.3001.4187
 
 注意：
 

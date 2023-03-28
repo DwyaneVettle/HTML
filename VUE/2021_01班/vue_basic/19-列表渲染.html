@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>人员列表(数组遍历)</h3>
+            <ul v-for="(p,index) in persons" :key="p.id">
+                <!-- <li>{{p.name}}-{{p.age}}</li> -->
+                {{p.name}}-{{p.age}}
+            </ul>
+
+
+            <h3>房屋信息(对象遍历)</h3>
+            <ul v-for="(value,key) in house" :key="key">
+                {{key}}-{{value}}
+            </ul>
+
+
+            <h3>字符串信息(字符串遍历)</h3>
+            <ul v-for="(char,index) in str" :key="index">
+                {{index}}-{{char}}
+            </ul>
+
+
+            <h3>指定次数遍历</h3>
+            <ul v-for="(number,index) in 5">
+                {{index}}-{{number}}
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            persons:[
+                                {id:'001',name:'张三',age:18},
+                                {id:'002',name:'李四',age:19},
+                                {id:'003',name:'王五',age:20}
+                            ],
+                            house:{
+                                name:'草堂之春',
+                                price:'2000w',
+                                size:'300平'
+                            },
+                            str:"hello"
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
