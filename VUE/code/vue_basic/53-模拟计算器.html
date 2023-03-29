@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+      <div id="app">
+    <input type="text" v-model="n1">
+    <select v-model="opt">
+        <option value="+">+</option>
+        <option value="-">-</option>
+        <option value="*">*</option>
+        <option value="/">/</option>
+    </select>
+    <input type="text" v-model="n2">
+    <input type="button" value="=" @click="calculator">
+    <input type="text" v-model="result">
+</div>
+
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            n1: 0,
+            n2: 0,
+            opt: '+',
+            result: 0
+        },
+        methods: {
+            calculator() {
+                switch (this.opt) {
+                    case '+':
+                        this.result = Number(this.n1) + Number(this.n2);
+                        break;
+                    case '-':
+                        this.result = Number(this.n1) - Number(this.n2);
+                        break;
+                    case '*':
+                        this.result = Number(this.n1) * Number(this.n2);
+                        break;
+                    case '/':
+                        this.result = Number(this.n1) / Number(this.n2);
+                        break;
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
