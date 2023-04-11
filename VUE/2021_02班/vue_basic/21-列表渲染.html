@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>人员列表（遍历数组）</h3>
+            <ul>
+                <!-- 
+                    v-for表示遍历
+                    格式：v-for="变量 in 要遍历对象"
+                    v-for通过遍历可以呈现多个数据
+                    v-for="item in items" :key="item.message"
+                 -->
+               <li v-for="(p,index) in persons" :key="p.index">
+                {{p.name}}-{{p.age}}
+               </li>
+            </ul>
+
+            <h3>房屋信息（遍历对象）</h3>
+            <ul>
+                <li v-for="(val,key) in house">
+                    {{key}}-{{val}}
+                </li>
+            </ul>
+
+            <h3>字符串信息（遍历字符串）</h3>
+            <ul>
+                <li v-for="(char,index) in str">
+                    {{index}}-{{char}}
+                </li>
+            </ul>
+
+            <h3>遍历指定次数</h3>
+            <ul>
+                <li v-for="(num,index) in 5">
+                    {{index}}-{{num}}
+                </li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            persons:[
+                                {id:'001',name:'张三',age:18},
+                                {id:'002',name:'李四',age:19},
+                                {id:'003',name:'王五',age:20}
+                            ],
+                            house:{
+                                name:"亚特兰蒂斯",
+                                price:"2亿",
+                                size:"500平"
+                            },
+                            str:"helloVue"
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

@@ -2515,8 +2515,6 @@ v-for指令:
                     el: '#root',
                         data: {
                             keyWord:'',
-                            // 定义排序规则：0为原顺序，1为降序，2为升序
-                            sortType:0,
                             persons:[
                                 {id:'001',name:'马冬梅',age:30,sex:'女'},
                                 {id:'002',name:'周冬雨',age:19,sex:'女'},
@@ -2606,6 +2604,49 @@ v-for指令:
 ```
 
 <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627918.png" alt="image-20230131144944769" style="zoom:50%;" />
+
+模拟数监视：
+
+```html
+<script type="text/javascript" >
+
+			let data = {
+				name:'四川城院',
+				address:'成都',
+			}
+
+			//创建一个监视的实例对象，用于监视data中属性的变化
+			const obs = new Observer(data)		
+			console.log(obs)	
+
+			//准备一个vm实例对象
+			let vm = {}
+			vm._data = data = obs
+
+			function Observer(obj){
+				//汇总对象中所有的属性形成一个数组
+				const keys = Object.keys(obj)
+				//遍历
+				keys.forEach((k)=>{
+					Object.defineProperty(this,k,{
+						get(){
+							return obj[k]
+						},
+						set(val){
+							console.log(`${k}被改了，我要去解析模板，生成虚拟DOM.....我要开始忙了`)
+							obj[k] = val
+						}
+					})
+				})
+			}
+			
+			
+
+
+		</script>
+```
+
+<img src="https://img.gxlcms.com//Uploads-s/new/2019-09-26-201926/5408b6c293368ffdc5f77eaaa1a25318-0.jpg" alt="img" style="zoom:50%;" />
 
 ##### 1.14.5.2.Vue.set()方法
 
@@ -2721,6 +2762,77 @@ school:{
 <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627922.png" style="zoom: 33%;" />
 
 
+
+```html
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<title>Vue模板</title>
+		<!-- 引入Vue -->
+		<script type="text/javascript" src="../js/vue.js"></script>
+	</head>
+	<body>
+		<!-- 准备好一个容器-->
+		<div id="root">
+			<h1>学校信息</h1>
+			<h2>学校名称：{{school.name}}</h2>
+			<h2>学校地址：{{school.address}}</h2>
+			<h2>校长是：{{school.leader}}</h2>
+			<hr/>
+			<h1>学生信息</h1>
+			<button @click="addSex">添加一个性别属性，默认值是男</button>
+			<h2>姓名：{{student.name}}</h2>
+			<h2 v-if="student.sex">性别：{{student.sex}}</h2>
+			<h2>年龄：真实{{student.age.rAge}}，对外{{student.age.sAge}}</h2>
+			<h2>爱好</h2>
+			<ul>
+				<li v-for="(h,index) in student.hobby" :key="index">
+					{{h}}
+				</li>
+			</ul>
+			<h2>朋友们</h2>
+			<ul>
+				<li v-for="(f,index) in student.friends" :key="index">
+					{{f.name}}--{{f.age}}
+				</li>
+			</ul>
+		</div>
+	</body>
+
+	<script type="text/javascript">
+		Vue.config.productionTip = false //阻止 vue 在启动时生成生产提示。
+
+		const vm = new Vue({
+			el:'#root',
+			data:{
+				school:{
+					name:'四川城市职业学院',
+					address:'成都',
+				},
+				student:{
+					name:'tom',
+					age:{
+						rAge:40,
+						sAge:29,
+					},
+					hobby:['抽烟','喝酒','烫头'],
+					friends:[
+						{name:'jerry',age:35},
+						{name:'tony',age:36}
+					]
+				}
+			},
+			methods: {
+				addSex(){
+					// Vue.set(this.student,'sex','男')
+					this.$set(this.student,'sex','男')
+				}
+			}
+		})
+	</script>
+</html>
+```
 
 
 
@@ -2953,6 +3065,8 @@ school:{
 
 ![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627924.gif)
 
+
+
 `dayjs`的用法可参考github仓库`https://github.com/iamkun/dayjs`:
 
 <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627925.png" alt="image-20230201215651870" style="zoom:50%;" />
@@ -3106,6 +3220,7 @@ v-show 	: 条件渲染 (动态控制节点是否展示)
         <div id='root'>
             <h3>你好，{{msg}}</h3>
             <h3 v-text="msg"></h3>
+            <!-- 不能解析标签 -->
             <h3 v-text="str"></h3>
         </div>
         <script>

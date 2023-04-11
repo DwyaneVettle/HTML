@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <ul>
+                <li>
+                    <input type="text" v-model="num1">
+                </li>
+                <li>
+                    <input type="text" v-model="num2">
+                </li>
+                <li>
+                    <button @click="compare()">比较</button>
+                </li>
+                <div>{{result}}</div>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            num1:"",
+                            num2:"",
+                            result:""
+                        },
+                        methods: {
+                            compare() {
+                                if(!this.num1 || !this.num2) {
+                                    this.result = "输入的值不能为空"
+                                } else {
+                                    if(parseInt(this.num1) == parseInt(this.num2)) {
+                                        this.result = "两数相等"
+                                    } else if(parseInt(this.num1)> parseInt(this.num2) ){
+                                        this.result = "前一个数大于后一个数"
+                                    } else {
+                                        this.result = "后一个数大于前一个数"
+                                    }
+                                }
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>
