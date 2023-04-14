@@ -31,6 +31,13 @@
                     {{f.name}}-{{f.age}}
                 </li>
             </ul>
+
+            <h2>爱好</h2>
+            <ul>
+                <li v-for="(f,index) of student.hobby" :key="index">
+                   {{f}}
+                </li>
+            </ul>
         </div>
         <script>
                 // 设置为 false 以阻止 vue 在启动时生成生产提示
@@ -52,7 +59,8 @@
                                 friends:[
                                     {name:'张萍',age:24},
                                     {name:'陈华',age:23}
-                                ]
+                                ],
+                                hobby:['学习','运动']
                             }
                         },
                         methods: {

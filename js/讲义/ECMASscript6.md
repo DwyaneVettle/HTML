@@ -8,7 +8,7 @@ ES6， 全称 ECMAScript 6.0 ，是 JavaScript 的下一个版本标准，2015.0
 
 ES6 主要是为了解决 ES5 的先天不足，比如 JavaScript 里并没有类的概念，但是目前浏览器的 JavaScript 是 ES5 版本，大多数高版本的浏览器也支持 ES6，不过只实现了 ES6 的部分特性和功能。
 
-<img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\image-20220921161534115.png" alt="image-20220921161534115" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202304012150904.png" alt="image-20220921161534115" style="zoom:50%;" />
 
 ### 1.2.ECMAScript 的背景
 
@@ -27,7 +27,7 @@ ES6 是 ECMAScript 标准十余年来变动最大的一个版本，为其添加�
 - 2009 年 12 月，ECMAScript 5.0 版正式发布。ECMA 专家组预计 ECMAScript 的第五个版本会在 2013 年中期到 2018 年作为主流的开发标准。2011年6月，ES 5.1 版发布，并且成为 ISO 国际标准。
 - 2013 年，ES6 草案冻结，不再添加新的功能，新的功能将被放到 ES7 中；2015年6月， ES6 正式通过，成为国际标准。
 
-![](ECMASscript6.assets/es6-tutorial.jpg)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202304012150177.jpg)
 
 ## 2.let和const
 
@@ -484,7 +484,7 @@ Map 对象保存键值对。任何值(对象或者原始值) 都可以作为一�
   - Map 的键值对个数可以从 size 属性获取，而 Object 的键值对个数只能手动计算；
   - Object 都有自己的原型，原型链上的键名有可能和你自己在对象上的设置的键名产生冲突。
 
-<img src="ECMASscript6.assets/image-20220921170406729.png" alt="image-20220921170406729" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202304012151829.png" alt="image-20220921170406729" style="zoom:50%;" />
 
 - **Map中的key**
 
