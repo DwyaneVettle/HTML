@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="add()">添加学生</button>
+            <button @click="del()">删除学生</button>
+            <table style="border-collapse:collapse" border="1" width="50%">
+                <tr>
+                    <th>班级</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>年龄</th>
+                </tr>
+                <tr v-for="(item, index) in student" :key="index">
+                    <td>{{item.grade}}</td>
+                    <td>{{item.name}}</td>
+                    <td>{{item.sex}}</td>
+                    <td>{{item.age}}</td>
+                </tr>
+            </table>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            student:[
+                                {grade:'1',name:'张三',sex:'男',age:'25'},
+                                {grade:'2',name:'李四',sex:'女',age:'20'}
+                            ],
+                            
+                        },
+                        methods:{
+                            add() {
+                                var stu = {grade:'1',name:'张三',sex:'男',age:'25'}
+                                var stu02 = {grade:'3',name:'王五',sex:'男',age:'30'}
+                                this.student.push(stu)
+                                this.student.unshift(stu02)
+                            },
+                            del() {
+                                this.student.pop()
+                                this.student.shift()
+                            }
+                        }                        
+                })
+        </script>
+</body>
+</html>
