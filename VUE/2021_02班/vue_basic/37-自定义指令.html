@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 
+                需求1：定义一个v-big指令，和v-text功能类似，但会把绑定的数值放大10倍。  -- 函数式
+                需求2：定义一个v-fbind指令，和v-bind功能类似，但可以让其所绑定的input元素默认获取焦点。  -- 对象式
+             -->
+             <h3>当前的n值：{{n}}</h3>
+             <h3>放大10倍后的n值：
+                <span v-big-number="n"></span>
+             </h3>
+             <input type="text" v-fbind:value="x">
+        </div>
+        <div id="app">
+            <input type="text" v-fbind:value="x">
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 配置全局指令
+                Vue.directive('fbind',{
+                    inserted(element,binding) {
+                                element.focus()
+                            }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            n:1,
+                            x:2
+                        },
+                        directives:{
+                            // 函数式
+                            // element:表示big所在结构的标签
+                            // binding：表示big要绑定的信息，value属性是他的值
+                            // v-big什么时候执行？1.指定被绑定时；2.指令被重新解析
+                            'big-number'(element,binding) {
+                                element.innerText = binding.value * 10
+                            },
+                            // 对象形式
+                            // fbind:{
+                            //     bind(element,binding) {
+                            //         // 指令与元素成功绑定
+                            //     },
+                            //     // 当指令所在的元素被插入页面的时候
+                            //     inserted(element,binding) {
+                            //         element.focus()
+                            //     },
+                            //     update(element,binding) {
+                            //         // 指令所在的页面被重新解析时
+                            //     }
+                            // }
+                        }
+                        
+                })
+                new Vue({
+                    el: "#app",
+                    data: {
+                        x:1
+                }
+                })
+        </script>
+</body>
+</html>
