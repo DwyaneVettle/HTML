@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root' v-my-derective></div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                /* 
+                - 定义自定义插件的对象
+                - 编写插件对象的install()方法--通过方法处理业务逻辑
+                - Vue.use()安装插件 */
+                // 第一步.定义插件对象
+                let MyPlugin = {}
+                
+                // 第二部.编写intall()方法
+                // install() {}
+                MyPlugin.install = function(Vue,options) {
+                        // 配置安装指令
+                        Vue.directive('my-derective',{
+                            bind(element,binding) {
+                                element.style = 
+                                "width:100px;height:100px;background-color:red;"
+                            }
+                        })
+                }
+                // 第三步.安装插件
+                // {someOption:true} 表示的是一些配置
+                // 在此处没有用，但在实际开发中可以在里面进行配置
+                Vue.use(MyPlugin,{someOption:true})
+                
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {}        
+                })
+        </script>
+</body>
+</html>

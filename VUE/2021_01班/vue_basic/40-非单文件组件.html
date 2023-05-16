@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h2>{{msg}}</h2>
+            <!-- 第三步。编写组件标签 -->
+            <school></school>
+            <hr>
+            <student></student>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                /* 
+                    注册组件的步骤：
+                    1.创建一个组件
+                    2.注册组件
+                    3.编写组件生效的标签
+                */
+
+                // 第一步。创建组件,Vue.extend()
+                const school = Vue.extend({
+                    //el:"", 定义组件是不能放el，只有new 才能使用el
+                    template:`<div>
+                                <h3>学校名称：{{schoolName}}</h3>
+                                <h3>学校地址：{{addr}}</h3>
+                                <button @click='showName()'>点我提示学校名称</button>
+                              </div>`,
+                    data() {
+                        return {
+                            schoolName:'四川城院',
+                            addr:'四川成都'
+                        }
+                    },
+                    methods: {
+                        showName() {
+                            alert('四川城院')
+                        }
+                    },
+                });
+                const student = Vue.extend({
+                    template:`
+                            <div>
+                                <h3>学校姓名：{{studentName}}</h3>
+                                <h3>学校年龄：{{age}}</h3>
+                            </div>
+                        `,
+                    data() {
+                        return {
+                            studentName: 'Jack Chen',
+                            age: 20
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            msg:'组件来咯',    
+                        },
+                        // 2.第二步。注册组件
+                        components:{
+                            // 组件名:变量名
+                            school:school,
+                            student:student
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

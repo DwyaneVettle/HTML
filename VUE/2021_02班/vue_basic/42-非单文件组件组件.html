@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+    <!-- 
+            注册组件的步骤：
+                1.创建组件，
+                2.注册组件，
+                3.编写组件标签
+     -->
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 第三步：将组件化为标签使用 -->
+            <my-school/></my-chool>
+            <hr>
+            <Student></Student>
+            <Hello></Hello>
+        </div>
+
+        <div id="app">
+            <Hello></Hello>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 第一步：创建组件对象
+                // school组件
+                var school = Vue.extend({
+                    // 组件就是一个vue实例，除el外的所有属性都可以在组件使用
+                    name:'my-school',
+                    template:`
+                        <div>
+                            <h3>学校名称：{{name}}</h3>
+                            <h3>学校地址：{{addr}}</h3>
+                            <button @click="showName()">点击弹出学校名</button>
+                        </div>
+                    `,
+                    data() {
+                        return {
+                            name:'四川城市职业学院',
+                            addr:'四川成都'
+                        }
+                    },
+                    methods:{
+                        showName() {
+                            alert('四川城市职业学院')
+                        }
+                    },
+                    created() {
+                        console.log("生命周期钩子函数也能在组件执行");
+                    },
+                })
+                
+                // 学生组件
+                var student = Vue.extend({
+                    name:'MyStudent',
+                    template:`
+                        <div>
+                            <h3>学生姓名：{{name}}</h3>
+                            <h3>学生年龄：{{age}}</h3>  
+                        </div>
+                    `,
+                    data() {
+                        return {
+                            name:'tom',
+                            age:20
+                        }
+                    }
+                })
+                
+                // Vue.extend()可以省略，只写配置项
+                var hello = {
+                    template:`
+                        <div>
+                            <h3>{{msg}}</h3>    
+                        </div>
+                    `,
+                    data() {
+                        return {
+                            msg:"欢迎光临"
+                        }
+                    }
+                }
+                
+                // 全局注册组件
+                // Vue.component('组件名','组件对象')
+                // 当组件创建完成才能注册组件
+                Vue.component('Hello',hello)
+
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        // 第二步：注册组件
+                        components: {
+                            // 组件名:组件对象  
+                            // 注意：组件名不能和HTML标签重名
+                            'my-school':school,
+                            Student:student
+                        }
+                        
+                })
+                new Vue({
+                    el:"#app",
+                })
+        </script>
+</body>
+</html>

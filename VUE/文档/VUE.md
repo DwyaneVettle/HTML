@@ -3908,7 +3908,7 @@ v-pre指令：
 
 ### 2.1.非单文件组件
 
-​	非单文件组件指一个文件中包含多个Vue组件，实际就是html文件组件化。
+​	非单文件组件指**一个文件中包含多个Vue组件**，实际就是html文件组件化。
 
 #### 2.1.1.基本使用
 
@@ -3939,7 +3939,7 @@ v-pre指令：
             <h3>学校地址：{{addr}}</h3> -->
             <school></school>
             <hr>
-            <!-- <h3>学校姓名：{{studentName}}</h3>
+            <!-- <h3>学生姓名：{{studentName}}</h3>
             <h3>学校年龄：{{age}}</h3> -->
             <student></student>
         </div>
@@ -4372,7 +4372,9 @@ Vue中使用组件的三大步骤：
 - 若干个`.vue`文件，表示若干个组件；
 - 一个`App.vue`管理所有的组件；
 - 一个`main.js`创建Vue对象，引入`App.vue`；
-- 一个`index.html`，创建容器，引入`vue.js`。
+- 一个`index.html`，创建容器，引入`main.js`。
+
+一些IDE不支持`.vue`的文件格式，需要安装一些插件，以便快速开发，如VSCode中安装`vetur`，安装插件后输入`<v`再按回车键就能把模板补全。
 
 **School.vue**
 
@@ -4582,7 +4584,7 @@ Vue.set(target,propertyName/index,value)
 // value:添加的属性的值
 ```
 
-**需求：**创建vm对象动态设置属性b，使这个属性在刷新页面时才相应到页面中：
+**需求：**创建vm对象动态设置属性b，使这个属性在刷新页面时才响应到页面中：
 
 ![image-20230309222536876](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092225034.png)
 
@@ -4637,7 +4639,7 @@ Vue.set(target,propertyName/index,value)
 ```javascript
 // 为自定义的选项 'myOption' 注入一个处理器。
 Vue.mixin({
-  created: function () {
+  created () {
     var myOption = this.$options.myOption
     if (myOption) {
       console.log(myOption)
@@ -4918,6 +4920,8 @@ npm uninstall @vue/cli -g
 
 **安装和创建推荐使用yarn的方式，因为该方式比npm更快：**
 
+npm config set registry https://registry.npm.taobao.org
+
 ```shell
 npm uninstall -g yarn				# 卸载yarn
 npm i yarn -g						# 安装yarn
@@ -4973,7 +4977,21 @@ https://blog.csdn.net/zlzbt/article/details/110136755
 
 ```shell
 npm run serve
+
+# or
+
+yarn serve
 ```
+
+运行加载后，会出来两个地址：
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092014025.png)
+
+复制任意一个地址到浏览器中就可以访问，这是Vue为我们写好的helloworld案例：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092015957.png" alt="image-20230509201545668" style="zoom:50%;" />
+
+
 
 
 
@@ -4991,11 +5009,144 @@ https://www.jianshu.com/p/180f645fcccc
 
 
 
+### 4.2.脚手架工程文件介绍
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092045385.png)
+
+```text
+├── node_modules 
+├── public
+│   ├── favicon.ico: 页签图标
+│   └── index.html: 主页面
+├── src
+│   ├── assets: 存放静态资源
+│   │   └── logo.png
+│   │── component: 存放组件
+│   │   └── HelloWorld.vue
+│   │── App.vue: 汇总所有组件
+│   │── main.js: 入口文件
+├── .gitignore: git版本管制忽略的配置
+├── babel.config.js: babel的配置文件
+├── package.json: 应用包配置文件 
+├── README.md: 应用描述文件
+├── package-lock.json：包版本控制文件
+```
+
+
+
+​	了解完目录后，我们将`2.2.单文件组件`中创建的`App.vue`替换`hello_vue`中`src`的`App.vue`文件，并将`School.vue`和`Student.vue`放入到`components`中，再删除`HelloWorld.vue`，最后将`App.vue`中引入路径进行修改：
+
+![image-20230509203946721](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092039889.png)
+
+​	在`App.vue`文件的模板中引入图标：
+
+```html
+<template>
+	<div>
+		<img src="./assets/logo.png" alt="log">
+		<School></School>
+		<Student></Student>
+	</div>
+</template>
+```
+
+​	执行命令`npm run serve`运行程序，按住`Ctrl`点击进入。如出现以下问题则是Vue的风格规范中需要将组将名命名为多个单词，你可以改变组件名，也可以在`vue.config.js`(该文件为配置项文件，和`package.js同级`)中添加**关闭语法检测**的代码`lintOnSave:false`：
+
+![image-20230509210350996](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092103164.png)
+
+![image-20230509210405378](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092104938.png)
 
 
 
 
 
+页面正常显示：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092106678.png" alt="image-20230509210608539" style="zoom:50%;" />
+
+
+
+​	**使用vue.config.js可以对脚手架进行个性化定制，参考：https://cli.vuejs.org/zh/config/#vue-config-js**
+
+​	我们发现在`main.js`文件中看到了一个关键字`render`，那么它和我们之前写的`template:`<App></App>`,
+​	components:{App},`有什么区别呢？
+
+```javascript
+import Vue from 'vue'
+import App from './App.vue'
+
+Vue.config.productionTip = false
+
+new Vue({
+    el:'#app',
+    // 简写形式
+	render: h => h(App),
+    // 完整形式
+	// render(createElement){
+	//     return createElement(App)
+	// }
+})
+```
+
+​	我们发现它实际上是一个函数，创建了一个 元素，再将元素中的App组件进行了返回，所以它和我们之前的代码是完全等效的。
+
+
+
+
+
+为更好的理解以下知识点，我们将src复制改名作为源文件保存，再将src中Student组件删除，并删除`App.vue`中的组件注册和引入。
+
+### 4.3.ref属性
+
+​	在原生JS中获取DOM的方式是通过`getElementByxxx()`或`querySelect()`的方式，但在Vue中，一般不能直接操作DOM元素，那么怎么办呢？我们可以使用Vue提供的`ref`属性来进行获取。`ref`属性不仅可以添加到DOM上获取它，还可以添加到组件上，这样获取的就是组件（vc对象）：
+
+```vue
+<template>
+	<div>
+		<!-- 原生用法 -->
+		<h2 v-text="msg" id="title"></h2>
+		<!-- Vue用法ref属性 -->
+		<h2 v-text="msg" ref="title"></h2>
+		<button @click="showDOM()" >点我输出上方DOMton</button>
+		<School ref="sch"></School>
+	</div>
+</template>
+
+<script>
+	//引入组件
+	import School from './components/School.vue'
+
+	export default {
+		name:'App',
+		components:{School},
+		data() {
+			return {
+				msg:"欢迎学习"
+			}
+		},
+		methods:{
+			showDOM() {
+				// 原生用法
+				// console.log(document.getElementById('title'));
+				// Vue用法
+				console.log(this.$refs.title);
+				// 组件添加ref属性是vc实例对象
+				console.log(this.$refs.sch);
+			}
+		}
+	}
+</script>
+```
+
+**总结：**
+
+```text
+1. 被用来给元素或子组件注册引用信息（id的替代者）
+2. 应用在html标签上获取的是真实DOM元素，应用在组件标签上是组件实例对象（vc）
+3. 使用方式：
+   3.1. 打标识：```<h1 ref="xxx">.....</h1>``` 或 ```<School ref="xxx"></School>```
+   3.2. 获取：```this.$refs.xxx```
+```
 
 
 

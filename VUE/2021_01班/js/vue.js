@@ -5835,6 +5835,7 @@
               validateComponentName(name);
           }
           var Sub = function VueComponent(options) {
+            
             this._init(options);
           };
           Sub.prototype = Object.create(Super.prototype);
