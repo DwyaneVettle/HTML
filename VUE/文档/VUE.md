@@ -4920,7 +4920,7 @@ npm uninstall @vue/cli -g
 
 **安装和创建推荐使用yarn的方式，因为该方式比npm更快：**
 
-npm config set registry https://registry.npm.taobao.org
+`npm config set registry https://registry.npm.taobao.org`
 
 ```shell
 npm uninstall -g yarn				# 卸载yarn
