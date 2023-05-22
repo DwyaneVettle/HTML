@@ -5150,19 +5150,367 @@ new Vue({
 
 
 
+### 4.4.props配置
+
+​	我们创建学生组件，展示学生信息时，如果在另一位置想要使用该组件并修改组件里的数组，按我们原来的是为只能再创建一个另外的学生组件，这显然不符合组件的复用性，那么我们可以使用`props`配置。
+
+`Student.vue`
+
+```html
+<template>
+	<div>
+        <h2>{{msg}}</h2>
+		<h2>学生姓名：{{name}}</h2>
+		<h2>学生性别：{{sex}}</h2>
+		<h2>学生年龄：{{age}}</h2>
+	</div>
+</template>
+
+<script>
+export default {
+	name:'Student',
+	data() {
+		return {
+            msg:'欢迎学习'
+			name:'张三',
+			sex:'男',
+			age:18
+		}
+	}
+}
+</script>
+
+<style>
+
+</style>
+```
+
+`App.vue`：
+
+```html
+<template>
+	<div>
+		<h3>{{msg}}</h3>
+		<Student></Student>
+	</div>
+</template>
+
+<script>
+	//引入组件
+	import Student from './components/Student.vue'
+
+	export default {
+		name:'App',
+		components:{Student},
+		
+	}
+</script>
+```
+
+<img src="C:/Users/HP/AppData/Roaming/Typora/typora-user-images/image-20230522214054599.png" alt="image-20230522214054599" style="zoom:50%;" />
+
+​	此时我们还想展示李四的学生信息时，可以做以下配置：
+
+`Student.vue`:
+
+```html
+<template>
+	<div>
+		<h1>{{msg}}</h1>
+		<h2>学生姓名：{{name}}</h2>
+		<h2>学生性别：{{sex}}</h2>
+		<h2>学生年龄：{{myAge+1}}</h2>
+		<button @click="updateAge">尝试修改收到的年龄</button>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'Student',
+		data() {
+			console.log(this)
+			return {
+				msg:'我是学生',
+				myAge:this.age
+			}
+		},
+		methods: {
+			updateAge(){
+				this.myAge++
+			}
+		},
+		//简单声明接收
+		// props:['name','age','sex'] 
+
+		//接收的同时对数据进行类型限制
+		/* props:{
+			name:String,
+			age:Number,
+			sex:String
+		} */
+
+		//接收的同时对数据：进行类型限制+默认值的指定+必要性的限制
+		props:{
+			name:{
+				type:String, //name的类型是字符串
+				required:true, //name是必要的
+			},
+			age:{
+				type:Number,
+				default:99 //默认值
+			},
+			sex:{
+				type:String,
+				required:true
+			}
+		}
+	}
+</script>
+```
+
+`App.vue`:
+
+```html
+<template>
+	<div>
+		<Student name="李四" sex="女" :age="20"/>
+		<Student name="王五" sex="女" :age="20"/>
+	</div>
+</template>
+
+<script>
+	//引入组件
+	import Student from './components/Student.vue'
+
+	export default {
+		name:'App',
+		components:{Student},
+	}
+</script>
+```
+
+**总结：**
+
+1. 功能：让组件接收外部传过来的数据
+
+2. 传递数据：```<Demo name="xxx"/>```
+
+3. 接收数据：
+
+   1. 第一种方式（只接收）：```props:['name'] ```
+   2. 第二种方式（限制类型）：```props:{name:String}```
+   3. 第三种方式（限制类型、限制必要性、指定默认值）：
+
+   ```javascript
+   props:{
+   	name:{
+   	type:String, //类型
+   	required:true, //必要性
+   	default:'老王' //默认
+   	}
+   }
+   ```
+
+  4.备注：props是只读的，Vue底层会监测你对props的修改，如果进行了修改，就会发出警告，若业务需求确实需要修改，那么请复制props的内容到data中一份，然后去修改data中的数据。
 
 
 
+### 4.5.mixin混入
+
+​	Vue.mixin()方法全局注册一个混入，影响注册之后所有创建的每个 Vue 实例。插件作者可以使用混入，向组件注入自定义的行为。**不推荐在应用代码中使用**。
+
+官网参考：https://v2.cn.vuejs.org/v2/guide/mixins.html#%E5%85%A8%E5%B1%80%E6%B7%B7%E5%85%A5
+
+![image-20230309222927682](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303092229844.png)
+
+使用格式如下：
+
+```javascript
+// 为自定义的选项 'myOption' 注入一个处理器。
+Vue.mixin({
+  created () {
+    var myOption = this.$options.myOption
+    if (myOption) {
+      console.log(myOption)
+    }
+  }
+})
+
+new Vue({
+  myOption: 'hello!'
+})
+// => "hello!"
+```
+
+`Student.vue`:
+
+```html
+<template>
+	<div>
+		<h2 @click="showName()">学生姓名：{{name}}</h2>
+		<h2>学生性别：{{sex}}</h2>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'Student',
+		data() {
+			console.log(this)
+			return {
+				name:'张三',
+				sex:'男'
+			}
+		},
+		methods: {
+			showName() {
+				alert(this.name)
+			}
+		},
+		
+	}
+</script>
+```
+
+`School.vue`:
+
+```html
+<template>
+	<div>
+		<h2 @click="showName()">学校名称：{{name}}</h2>
+		<h2>学生地址：{{addr}}</h2>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'School',
+		data() {
+			console.log(this)
+			return {
+				name:'四川城市职业学院',
+				addr:'四川成都'
+			}
+		},
+		methods: {
+			showName() {
+				alert(this.name)
+			}
+		},
+		
+	}
+</script>
+```
+
+`App.vue`:
+
+```html
+<template>
+	<div>
+		<Student/>
+		<hr/>
+		<School/>
+	</div>
+</template>
+
+<script>
+	//引入组件
+	import Student from './components/Student.vue'
+	import School from './components/School.vue'
+
+	export default {
+		name:'App',
+		components:{Student,School},
+	}
+</script>
+```
+
+​	我们通过以上代码发现，`School`组件和`Student`组件都有一个相同的方法`showName()`，那么，我们就可以采用混合的方式提取该方法，以简化代码。我们在`src`下创建`mixin.js`文件，把需要混合的代码放进来，并导出，再删除两个组件中共有的方法，并引入：
+
+`mixin.js`:
+
+```javascript
+export var mixin = {
+    methods: {
+        showName() {
+            alert(this.name)
+        }
+    },
+    mounted() {
+        console.log("这是混合后的钩子函数");
+    },
+}
+```
+
+`School.vue`:
+
+```html
+<template>
+	<div>
+		<h2 @click="showName()">学校名称：{{name}}</h2>
+		<h2>学生地址：{{addr}}</h2>
+	</div>
+</template>
+
+<script>
+	import {mixin} from '../mixin.js'
+	export default {
+		name:'School',
+		data() {
+			console.log(this)
+			return {
+				name:'四川城市职业学院',
+				addr:'四川成都'
+			}
+		},
+		mixins:[mixin]
+	}
+</script>
+```
+
+`Student..vue`:
+
+```html
+<template>
+	<div>
+		<h2 @click="showName()">学生姓名：{{name}}</h2>
+		<h2>学生性别：{{sex}}</h2>
+	</div>
+</template>
+
+<script>
+	import {mixin} from '../mixin.js'
+	export default {
+		name:'Student',
+		data() {
+			console.log(this)
+			return {
+				name:'张三',
+				sex:'男'
+			}
+		},
+		mixins:[mixin]
+		
+	}
+</script>
+```
 
 
 
+​	除以上方式在每个组件内部配置混合（局部混合），还可以在`main.js`中引入混合做全局混合：
 
+```javascript
+import Vue from 'vue'
+import App from './App.vue'
+import {mixin} from './mixin.js'
+Vue.config.productionTip = false
+Vue.mixin(mixin)
 
+new Vue({
+  render: h => h(App),
+}).$mount('#app')
 
-
-
-
-
+```
 
 
 
