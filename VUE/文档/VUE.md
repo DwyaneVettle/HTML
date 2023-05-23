@@ -5050,6 +5050,20 @@ https://www.jianshu.com/p/180f645fcccc
 </template>
 ```
 
+​	`main.js`：
+
+```javascript
+// 创建Vue对象，引入App.vue文件
+import App from './App.vue'
+import Vue from 'vue'
+    
+new Vue({
+    render: h => h(App),
+}).$mount('#app')
+```
+
+
+
 ​	执行命令`npm run serve`运行程序，按住`Ctrl`点击进入。如出现以下问题则是Vue的风格规范中需要将组将名命名为多个单词，你可以改变组件名，也可以在`vue.config.js`(该文件为配置项文件，和`package.js同级`)中添加**关闭语法检测**的代码`lintOnSave:false`：
 
 ![image-20230509210350996](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092103164.png)
