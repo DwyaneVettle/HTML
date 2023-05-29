@@ -1,13 +1,14 @@
 <template>
-	<div class="demo">
-		<h2>学生姓名：{{name}}</h2>
+	<div>
+		<h2 @click="showName()">学生姓名：{{name}}</h2>
 		<h2>学生性别：{{sex}}</h2>
 	</div>
 </template>
 
 <script>
-	
+	//import {mixin} from '../mixin.js'
 	export default {
+		name:'Student',
 		data() {
 			console.log(this)
 			return {
@@ -15,13 +16,7 @@
 				sex:'男'
 			}
 		},
+		//mixins:[mixin]
 		
 	}
 </script>
-
-<style scoped>
-	.demo {
-		background-color:aqua;
-	}
-
-</style>

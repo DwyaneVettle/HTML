@@ -5528,9 +5528,87 @@ new Vue({
 
 
 
+### 4.6.scoped样式
+
+​	该配置能让样式在局部生效，防止冲突。它的写法非常简单：
+
+```css
+<style scoped>
+```
+
+​	以下案例中，`Student`组件和`School`组件都有背景色的样式，但是类名都为`demo`，造成了冲突，这个时候最终样式采用到了**后面引入的组件的样式**（该处为School组件后引入）：
+
+`Student.vue`:
+
+```vue
+<template>
+	<div class="demo">
+		<h2>学生姓名：{{name}}</h2>
+		<h2>学生性别：{{sex}}</h2>
+	</div>
+</template>
+
+<script>
+	
+	export default {
+		data() {
+			console.log(this)
+			return {
+				name:'张三',
+				sex:'男'
+			}
+		},
+		
+	}
+</script>
+
+<style>
+	.demo {
+		background-color:aqua;
+	}
+
+</style>
+```
+
+`School.vue`：
+
+```vue
+<template>
+	<div class="demo">
+		<h2 @click="showName()">学校名称：{{name}}</h2>
+		<h2>学生地址：{{addr}}</h2>
+	</div>
+</template>
+
+<script>
+	
+	export default {
+		data() {
+			return {
+				name:'四川城市职业学院',
+				addr:'四川成都'
+			}
+		},
+		
+	}
+</script>
+
+<style>
+	.demo {
+		background-color:pink;
+	}
+</style>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305291747882.png" alt="image-20230529174712634" style="zoom:50%;" />
+
+​	这个时候只需要给`style`标签加上`scoped`属性就行了`<style scoped>`：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305291750125.png" alt="image-20230529175054840" style="zoom:33%;" />
 
 
 
+### 4.7.TodoList案例
 
 
 
