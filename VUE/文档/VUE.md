@@ -5610,11 +5610,380 @@ new Vue({
 
 ### 4.7.TodoList案例
 
+​	完成以下功能：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305311631263.png" alt="image-20230531163130109" style="zoom:50%;" />
+
+组件拆分：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305311633599.png" style="zoom:50%;" />
+
+`src/components/MyHeader.vue`：
+
+```vue
+<template>
+    <div class="todo-header">
+        <input type="text" placeholder="请输入你的任务名称，按回车键确认" @keydown.enter="add" v-model="title"/>
+    </div>
+</template>
+
+<script>
+    import {nanoid} from 'nanoid'
+    export default {
+        name:'MyHeader',
+        data() {
+            return {
+                title:''
+            }
+        },
+        methods:{
+            add(){
+                if(!this.title.trim()) return
+                const todoObj = {id:nanoid(),title:this.title,done:false}
+                this.addTodo(todoObj)
+                this.title = ''
+            }
+        },
+        props:['addTodo']
+    }
+</script>
+
+<style scoped>
+    .todo-header input {
+        width: 560px;
+        height: 28px;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 4px 7px;
+    }
+
+    .todo-header input:focus {
+        outline: none;
+        border-color: rgba(82, 168, 236, 0.8);
+        box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+    }
+</style>
+
+```
 
 
 
+`src/components/MyList.vue`：
+
+```vue
+<template>
+    <ul class="todo-main">
+        <MyItem 
+            v-for="todo in todos" 
+            :key="todo.id" 
+            :todo="todo" 
+            :checkTodo="checkTodo"
+            :deleteTodo="deleteTodo"
+        />
+    </ul>
+</template>
+
+<script>
+    import MyItem from './MyItem.vue'
+
+    export default {
+        name:'MyList',
+        components:{MyItem},
+        props:['todos','checkTodo','deleteTodo']
+    }
+</script>
+
+<style scoped>
+    .todo-main {
+        margin-left: 0px;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        padding: 0px;
+    }
+
+    .todo-empty {
+        height: 40px;
+        line-height: 40px;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        padding-left: 5px;
+        margin-top: 10px;
+    }
+</style>
+
+```
 
 
+
+`src/components/MyItem.vue`：
+
+```vue
+<template>
+    <li>
+        <label>
+            <input type="checkbox" :checked="todo.done" @click="handleCheck(todo.id)"/>
+            <span>{{todo.title}}</span>
+        </label>
+        <button class="btn btn-danger" @click="handleDelete(todo.id,todo.title)">删除</button>
+    </li>
+</template>
+
+<script>
+    export default {
+        name:'MyItem',
+        props:['todo','checkTodo','deleteTodo'],
+        methods:{
+            handleCheck(id){
+                this.checkTodo(id)
+            },
+            handleDelete(id,title){
+                if(confirm("确定删除任务："+title+"吗？")){
+                    this.deleteTodo(id)
+                }
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    li {
+        list-style: none;
+        height: 36px;
+        line-height: 36px;
+        padding: 0 5px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    li label {
+        float: left;
+        cursor: pointer;
+    }
+
+    li label li input {
+        vertical-align: middle;
+        margin-right: 6px;
+        position: relative;
+        top: -1px;
+    }
+
+    li button {
+        float: right;
+        display: none;
+        margin-top: 3px;
+    }
+
+    li:before {
+        content: initial;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    li:hover {
+        background-color: #eee;
+    }
+
+    li:hover button{
+        display: block;
+    }
+</style>
+
+```
+
+
+
+`src/components/MyFooter.vue`：
+
+```vue
+<template>
+    <div class="todo-footer" v-show="total">
+        <label>
+            <input type="checkbox" v-model="isAll"/>
+        </label>
+        <span>
+            <span>已完成{{doneTotal}}</span> / 全部{{total}}
+        </span>
+        <button class="btn btn-danger" @click="clearAll">清除已完成任务</button>
+    </div>
+</template>
+
+<script>
+    export default {
+        name:'MyFooter',
+        props:['todos','checkAllTodo','clearAllTodo'],
+        computed:{
+            doneTotal(){
+                return this.todos.reduce((pre,todo)=> pre + (todo.done ? 1 : 0) ,0)
+            },
+            total(){
+                return this.todos.length
+            },
+            isAll:{
+                get(){
+                    return this.total === this.doneTotal && this.total > 0
+                },
+                set(value){
+                    this.checkAllTodo(value)
+                }
+            }
+        },
+        methods:{
+            clearAll(){
+                this.clearAllTodo()
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    .todo-footer {
+        height: 40px;
+        line-height: 40px;
+        padding-left: 6px;
+        margin-top: 5px;
+        }
+
+    .todo-footer label {
+        display: inline-block;
+        margin-right: 20px;
+        cursor: pointer;
+    }
+
+    .todo-footer label input {
+        position: relative;
+        top: -1px;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
+
+    .todo-footer button {
+        float: right;
+        margin-top: 5px;
+    }
+</style>
+```
+
+
+
+`src/App.vue`：
+
+```vue
+<template>
+    <div id="root">
+        <div class="todo-container">
+            <div class="todo-wrap">
+            <MyHeader :addTodo="addTodo"/>
+            <MyList :todos="todos" :checkTodo="checkTodo" :deleteTodo="deleteTodo"/>
+            <MyFooter :todos="todos" :checkAllTodo="checkAllTodo" :clearAllTodo="clearAllTodo"/>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+    import MyHeader from './components/MyHeader.vue'
+    import MyList from './components/MyList.vue'
+    import MyFooter from './components/MyFooter.vue'
+
+    export default {
+        name:'App',
+        components: { MyHeader,MyList,MyFooter },
+        data() {
+            return {
+                todos:[
+                    {id:'001',title:'运动',done:false},
+                    {id:'002',title:'看书',done:false},
+                    {id:'003',title:'学习',done:false},
+                ]
+            }
+        },
+        methods:{
+            //添加一个todo
+            addTodo(todoObj){
+                this.todos.unshift(todoObj)
+            },
+            //勾选or取消勾选一个todo
+            checkTodo(id){
+                this.todos.forEach((todo)=>{
+                    if(todo.id === id) todo.done = !todo.done
+                })
+            },
+            //删除一个todo
+            deleteTodo(id){
+                this.todos = this.todos.filter(todo => todo.id !== id)
+            },
+            //全选or取消勾选
+            checkAllTodo(done){
+                this.todos.forEach(todo => todo.done = done)
+            },
+            //删除已完成的todo
+            clearAllTodo(){
+                this.todos = this.todos.filter(todo => !todo.done)
+            }
+        }
+    }
+</script>
+
+<style>
+    body {
+    	background: #fff;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 4px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        line-height: 20px;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+        border-radius: 4px;
+    }
+
+    .btn-danger {
+        color: #fff;
+        background-color: #da4f49;
+        border: 1px solid #bd362f;
+    }
+
+    .btn-danger:hover {
+        color: #fff;
+        background-color: #bd362f;
+    }
+
+    .btn:focus {
+    	outline: none;
+    }
+
+    .todo-container {
+        width: 600px;
+        margin: 0 auto;
+    }
+    .todo-container .todo-wrap {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+    }
+</style>
+```
+
+
+
+`main.js`：
+
+```javascript
+import Vue from 'vue'
+import App from './App.vue'
+Vue.config.productionTip = false
+
+new Vue({
+  render: h => h(App),
+}).$mount('#app')
+```
 
 
 
