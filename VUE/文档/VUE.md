@@ -5638,9 +5638,12 @@ new Vue({
         },
         methods:{
             add(){
+                // 如果输入有空，不添加
                 if(!this.title.trim()) return
+                // nanoid()类似uuid--npm i -g nanoid下载
                 const todoObj = {id:nanoid(),title:this.title,done:false}
                 this.addTodo(todoObj)
+                // 清空输入
                 this.title = ''
             }
         },
@@ -5991,19 +5994,19 @@ new Vue({
 
    	(1).拆分静态组件：组件要按照功能点拆分，命名不要与html元素冲突。
 
-      	(2).实现动态组件：考虑好数据的存放位置，数据是一个组件在用，还是一些组件在用：
+    (2).实现动态组件：考虑好数据的存放位置，数据是一个组件在用，还是一些组件在用：
 
       			1).一个组件在用：放在组件自身即可。
 
       			2). 一些组件在用：放在他们共同的父组件上（<span style="color:red">状态提升</span>）。
 
-      	(3).实现交互：从绑定事件开始。
+    (3).实现交互：从绑定事件开始。
 
 2. props适用于：
 
    	(1).父组件 ==> 子组件 通信
 
-      	(2).子组件 ==> 父组件 通信（要求父先给子一个函数）
+    (2).子组件 ==> 父组件 通信（要求父先给子一个函数）
 
 3. 使用v-model时要切记：v-model绑定的值不能是props传过来的值，因为props是不可以修改的！
 
@@ -8769,13 +8772,683 @@ new Vue({
 
 
 
+### 4.13.过渡与动画
+
+#### 4.13.1.过渡与动画
+
+`src/components/Test.vue`：
+
+```vue
+<template>
+	<div>
+		<button @click="isShow = !isShow">显示/隐藏</button>
+		<transition name="hello" appear>
+			<h1 v-show="isShow">你好啊！</h1>
+		</transition>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'Test',
+		data() {
+			return {
+				isShow:true
+			}
+		},
+	}
+</script>
+
+<style scoped>
+	h1{
+		background-color: orange;
+	}
+
+	.hello-enter-active{
+		animation: sccs 0.5s linear;
+	}
+
+	.hello-leave-active{
+		animation: sccs 0.5s linear reverse;
+	}
+
+	@keyframes sccs {
+		from{
+			transform: translateX(-100%);
+		}
+		to{
+			transform: translateX(0px);
+		}
+	}
+</style>
+```
+
+`src/components/Test2.vue`：
+
+```vue
+<template>
+	<div>
+		<button @click="isShow = !isShow">显示/隐藏</button>
+		<transition-group name="hello" appear>
+			<h1 v-show="!isShow" key="1">你好啊！</h1>
+			<h1 v-show="isShow" key="2">四川城市职业学院！</h1>
+		</transition-group>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'Test',
+		data() {
+			return {
+				isShow:true
+			}
+		},
+	}
+</script>
+
+<style scoped>
+	h1{
+		background-color: orange;
+	}
+	/* 进入的起点、离开的终点 */
+	.hello-enter,.hello-leave-to{
+		transform: translateX(-100%);
+	}
+	.hello-enter-active,.hello-leave-active{
+		transition: 0.5s linear;
+	}
+	/* 进入的终点、离开的起点 */
+	.hello-enter-to,.hello-leave{
+		transform: translateX(0);
+	}
+
+</style>
+```
+
+`src/components/Test3.vue`：
+
+```vue
+<template>
+	<div>
+		<button @click="isShow = !isShow">显示/隐藏</button>
+		<transition-group 
+			appear
+			name="animate__animated animate__bounce" 
+			enter-active-class="animate__swing"
+			leave-active-class="animate__backOutUp"
+		>
+			<h1 v-show="!isShow" key="1">你好啊！</h1>
+			<h1 v-show="isShow" key="2">四川城市职业学院！</h1>
+		</transition-group>
+	</div>
+</template>
+
+<script>
+	import 'animate.css'
+	export default {
+		name:'Test',
+		data() {
+			return {
+				isShow:true
+			}
+		},
+	}
+</script>
+
+<style scoped>
+	h1{
+		background-color: orange;
+	}
+	
+
+</style>
+```
+
+`src/App.vue`：
+
+```vue
+<template>
+	<div>
+		<Test/>
+		<Test2/>
+		<Test3/>
+	</div>
+</template>
+
+<script>
+	import Test from './components/Test'
+	import Test2 from './components/Test2'
+	import Test3 from './components/Test3'
+
+	export default {
+		name:'App',
+		components:{Test,Test2,Test3},
+	}
+</script>
+```
+
+`src/main.js`：
+
+```javascript
+//引入Vue
+import Vue from 'vue'
+//引入App
+import App from './App.vue'
+//关闭Vue的生产提示
+Vue.config.productionTip = false
+
+//创建vm
+new Vue({
+	el:'#app',
+	render: h => h(App),
+	beforeCreate() {
+		Vue.prototype.$bus = this
+	},
+})
+```
 
 
 
+#### 4.13.2.TodoList过渡与动画
 
+`src/components/MyHeader.vue`：
 
+```vue
+<template>
+	<div class="todo-header">
+		<input type="text" placeholder="请输入你的任务名称，按回车键确认" v-model="title" @keyup.enter="add"/>
+	</div>
+</template>
 
+<script>
+	import {nanoid} from 'nanoid'
+	export default {
+		name:'MyHeader',
+		data() {
+			return {
+				//收集用户输入的title
+				title:''
+			}
+		},
+		methods: {
+			add(){
+				//校验数据
+				if(!this.title.trim()) return alert('输入不能为空')
+				//将用户的输入包装成一个todo对象
+				const todoObj = {id:nanoid(),title:this.title,done:false}
+				//通知App组件去添加一个todo对象
+				this.$emit('addTodo',todoObj,1,2,3)
+				//清空输入
+				this.title = ''
+			}
+		},
+	}
+</script>
 
+<style scoped>
+	/*header*/
+	.todo-header input {
+		width: 560px;
+		height: 28px;
+		font-size: 14px;
+		border: 1px solid #ccc;
+		border-radius: 4px;
+		padding: 4px 7px;
+	}
+
+	.todo-header input:focus {
+		outline: none;
+		border-color: rgba(82, 168, 236, 0.8);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+	}
+</style>
+```
+
+`src/components/MyList.vue`：
+
+```vue
+<template>
+	<ul class="todo-main">
+		<transition-group name="todo" appear>
+			<MyItem 
+				v-for="todoObj in todos"
+				:key="todoObj.id" 
+				:todo="todoObj" 
+			/>
+		</transition-group>
+	</ul>
+</template>
+
+<script>
+	import MyItem from './MyItem'
+
+	export default {
+		name:'MyList',
+		components:{MyItem},
+		//声明接收App传递过来的数据
+		props:['todos']
+	}
+</script>
+
+<style scoped>
+	/*main*/
+	.todo-main {
+		margin-left: 0px;
+		border: 1px solid #ddd;
+		border-radius: 2px;
+		padding: 0px;
+	}
+
+	.todo-empty {
+		height: 40px;
+		line-height: 40px;
+		border: 1px solid #ddd;
+		border-radius: 2px;
+		padding-left: 5px;
+		margin-top: 10px;
+	}
+
+	.todo-enter-active{
+		animation: sccs 0.5s linear;
+	}
+
+	.todo-leave-active{
+		animation: sccs 0.5s linear reverse;
+	}
+
+	@keyframes sccs {
+		from{
+			transform: translateX(100%);
+		}
+		to{
+			transform: translateX(0px);
+		}
+	}
+</style>
+```
+
+`src/components/MyItem.vue`：
+
+```vue
+<template>
+	<li>
+		<label>
+			<input type="checkbox" :checked="todo.done" @change="handleCheck(todo.id)"/>
+			<!-- 如下代码也能实现功能，但是不太推荐，因为有点违反原则，因为修改了props -->
+			<!-- <input type="checkbox" v-model="todo.done"/> -->
+			<span v-show="!todo.isEdit">{{todo.title}}</span>
+			<input 
+				type="text" 
+				v-show="todo.isEdit" 
+				:value="todo.title" 
+				@blur="handleBlur(todo,$event)"
+				ref="inputTitle"
+			>
+		</label>
+		<button class="btn btn-danger" @click="handleDelete(todo.id)">删除</button>
+		<button v-show="!todo.isEdit" class="btn btn-edit" @click="handleEdit(todo)">编辑</button>
+	</li>
+</template>
+
+<script>
+	import pubsub from 'pubsub-js'
+	export default {
+		name:'MyItem',
+		//声明接收todo
+		props:['todo'],
+		methods: {
+			//勾选or取消勾选
+			handleCheck(id){
+				//通知App组件将对应的todo对象的done值取反
+				// this.checkTodo(id)
+				this.$bus.$emit('checkTodo',id)
+			},
+			//删除
+			handleDelete(id){
+				if(confirm('确定删除吗？')){
+					//通知App组件将对应的todo对象删除
+					// this.deleteTodo(id)
+					// this.$bus.$emit('deleteTodo',id)
+					pubsub.publish('deleteTodo',id)
+				}
+			},
+			//编辑
+			handleEdit(todo){
+				if(todo.hasOwnProperty('isEdit')){
+					todo.isEdit = true
+				}else{
+					// console.log('@')
+					this.$set(todo,'isEdit',true)
+				}
+				this.$nextTick(function(){
+					this.$refs.inputTitle.focus()
+				})
+			},
+			//失去焦点回调（真正执行修改逻辑）
+			handleBlur(todo,e){
+				todo.isEdit = false
+				if(!e.target.value.trim()) return alert('输入不能为空！')
+				this.$bus.$emit('updateTodo',todo.id,e.target.value)
+			}
+		},
+	}
+</script>
+
+<style scoped>
+	/*item*/
+	li {
+		list-style: none;
+		height: 36px;
+		line-height: 36px;
+		padding: 0 5px;
+		border-bottom: 1px solid #ddd;
+	}
+
+	li label {
+		float: left;
+		cursor: pointer;
+	}
+
+	li label li input {
+		vertical-align: middle;
+		margin-right: 6px;
+		position: relative;
+		top: -1px;
+	}
+
+	li button {
+		float: right;
+		display: none;
+		margin-top: 3px;
+	}
+
+	li:before {
+		content: initial;
+	}
+
+	li:last-child {
+		border-bottom: none;
+	}
+
+	li:hover{
+		background-color: #ddd;
+	}
+	
+	li:hover button{
+		display: block;
+	}
+</style>
+```
+
+`src/components/MyFooter.vue`：
+
+```vue
+<template>
+	<div class="todo-footer" v-show="total">
+		<label>
+			<!-- <input type="checkbox" :checked="isAll" @change="checkAll"/> -->
+			<input type="checkbox" v-model="isAll"/>
+		</label>
+		<span>
+			<span>已完成{{doneTotal}}</span> / 全部{{total}}
+		</span>
+		<button class="btn btn-danger" @click="clearAll">清除已完成任务</button>
+	</div>
+</template>
+
+<script>
+	export default {
+		name:'MyFooter',
+		props:['todos'],
+		computed: {
+			//总数
+			total(){
+				return this.todos.length
+			},
+			//已完成数
+			doneTotal(){
+				//此处使用reduce方法做条件统计
+				/* const x = this.todos.reduce((pre,current)=>{
+					console.log('@',pre,current)
+					return pre + (current.done ? 1 : 0)
+				},0) */
+				//简写
+				return this.todos.reduce((pre,todo)=> pre + (todo.done ? 1 : 0) ,0)
+			},
+			//控制全选框
+			isAll:{
+				//全选框是否勾选
+				get(){
+					return this.doneTotal === this.total && this.total > 0
+				},
+				//isAll被修改时set被调用
+				set(value){
+					// this.checkAllTodo(value)
+					this.$emit('checkAllTodo',value)
+				}
+			}
+		},
+		methods: {
+			/* checkAll(e){
+				this.checkAllTodo(e.target.checked)
+			} */
+			//清空所有已完成
+			clearAll(){
+				// this.clearAllTodo()
+				this.$emit('clearAllTodo')
+			}
+		},
+	}
+</script>
+
+<style scoped>
+	/*footer*/
+	.todo-footer {
+		height: 40px;
+		line-height: 40px;
+		padding-left: 6px;
+		margin-top: 5px;
+	}
+
+	.todo-footer label {
+		display: inline-block;
+		margin-right: 20px;
+		cursor: pointer;
+	}
+
+	.todo-footer label input {
+		position: relative;
+		top: -1px;
+		vertical-align: middle;
+		margin-right: 5px;
+	}
+
+	.todo-footer button {
+		float: right;
+		margin-top: 5px;
+	}
+</style>
+```
+
+`src/App.vue`：
+
+```vue
+<template>
+	<div id="root">
+		<div class="todo-container">
+			<div class="todo-wrap">
+				<MyHeader @addTodo="addTodo"/>
+				<MyList :todos="todos"/>
+				<MyFooter :todos="todos" @checkAllTodo="checkAllTodo" @clearAllTodo="clearAllTodo"/>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script>
+	import pubsub from 'pubsub-js'
+	import MyHeader from './components/MyHeader'
+	import MyList from './components/MyList'
+	import MyFooter from './components/MyFooter'
+
+	export default {
+		name:'App',
+		components:{MyHeader,MyList,MyFooter},
+		data() {
+			return {
+				//由于todos是MyHeader组件和MyFooter组件都在使用，所以放在App中（状态提升）
+				todos:JSON.parse(localStorage.getItem('todos')) || []
+			}
+		},
+		methods: {
+			//添加一个todo
+			addTodo(todoObj){
+				this.todos.unshift(todoObj)
+			},
+			//勾选or取消勾选一个todo
+			checkTodo(id){
+				this.todos.forEach((todo)=>{
+					if(todo.id === id) todo.done = !todo.done
+				})
+			},
+			//更新一个todo
+			updateTodo(id,title){
+				this.todos.forEach((todo)=>{
+					if(todo.id === id) todo.title = title
+				})
+			},
+			//删除一个todo
+			deleteTodo(_,id){
+				this.todos = this.todos.filter( todo => todo.id !== id )
+			},
+			//全选or取消全选
+			checkAllTodo(done){
+				this.todos.forEach((todo)=>{
+					todo.done = done
+				})
+			},
+			//清除所有已经完成的todo
+			clearAllTodo(){
+				this.todos = this.todos.filter((todo)=>{
+					return !todo.done
+				})
+			}
+		},
+		watch: {
+			todos:{
+				deep:true,
+				handler(value){
+					localStorage.setItem('todos',JSON.stringify(value))
+				}
+			}
+		},
+		mounted() {
+			this.$bus.$on('checkTodo',this.checkTodo)
+			this.$bus.$on('updateTodo',this.updateTodo)
+			this.pubId = pubsub.subscribe('deleteTodo',this.deleteTodo)
+		},
+		beforeDestroy() {
+			this.$bus.$off('checkTodo')
+			this.$bus.$off('updateTodo')
+			pubsub.unsubscribe(this.pubId)
+		},
+	}
+</script>
+
+<style>
+	/*base*/
+	body {
+		background: #fff;
+	}
+	.btn {
+		display: inline-block;
+		padding: 4px 12px;
+		margin-bottom: 0;
+		font-size: 14px;
+		line-height: 20px;
+		text-align: center;
+		vertical-align: middle;
+		cursor: pointer;
+		box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+		border-radius: 4px;
+	}
+	.btn-danger {
+		color: #fff;
+		background-color: #da4f49;
+		border: 1px solid #bd362f;
+	}
+	.btn-edit {
+		color: #fff;
+		background-color: skyblue;
+		border: 1px solid rgb(103, 159, 180);
+		margin-right: 5px;
+	}
+	.btn-danger:hover {
+		color: #fff;
+		background-color: #bd362f;
+	}
+	.btn:focus {
+		outline: none;
+	}
+	.todo-container {
+		width: 600px;
+		margin: 0 auto;
+	}
+	.todo-container .todo-wrap {
+		padding: 10px;
+		border: 1px solid #ddd;
+		border-radius: 5px;
+	}
+</style>
+```
+
+`src/main.js`：
+
+```javascript
+//引入Vue
+import Vue from 'vue'
+//引入App
+import App from './App.vue'
+//关闭Vue的生产提示
+Vue.config.productionTip = false
+
+//创建vm
+new Vue({
+	el:'#app',
+	render: h => h(App),
+	beforeCreate() {
+		Vue.prototype.$bus = this
+	},
+})
+```
+
+**总结：**
+
+1. 作用：在插入、更新或移除 DOM元素时，在合适的时候给元素添加样式类名。
+
+2. 写法：
+
+   1. 准备好样式：
+
+      - 元素进入的样式：
+        1. v-enter：进入的起点
+        2. v-enter-active：进入过程中
+        3. v-enter-to：进入的终点
+      - 元素离开的样式：
+        1. v-leave：离开的起点
+        2. v-leave-active：离开过程中
+        3. v-leave-to：离开的终点
+
+   2. 使用```<transition>```包裹要过度的元素，并配置name属性：
+
+      ```vue
+      <transition name="hello">
+      	<h1 v-show="isShow">你好啊！</h1>
+      </transition>
+      ```
+
+   3. 备注：若有多个元素需要过度，则需要使用：```<transition-group>```，且每个元素都要指定```key```值。
 
 
 
