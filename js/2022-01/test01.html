@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .box01 {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+        }
+        .box02 {
+            width: 200px;
+            height: 200px;
+            background-color: yellow;
+        }
+        .box03 {
+            width: 100px;
+            height: 100px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- js的引入方式第一种：行内引入 -->
+    <div class="box01" onclick="alert('你好，JavaScript!!!')"></div>
+    <div class="box02"></div>
+    <div class="box03" ></div>
+    <script src="main.js"></script>
+    <!-- js的引入方式第二种：内部引入 -->
+    <script>
+        document.querySelector('.box02').onclick = function() {
+            alert('你好，JavaScript!!!')
+        }
+    </script>
+</body>
+</html>

@@ -1,8 +1,8 @@
 # JavaScript
 
-![image-20220620225907385](JavaScript.assets/image-20220620225907385.png)
+![image-20220620225907385](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845322.png)
 
-![](JavaScript.assets/web.png)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845333.png)
 
 ## 1.初识JavaScript
 
@@ -10,7 +10,7 @@
 
 ​	JavaScript在1995年由Netscape公司的Brendan Eich，在网景导航者浏览器上首次设计实现而成。因为Netscape与Sun合作，Netscape管理层希望它外观看起来像Java，因此取名为JavaScript。但实际上它的语法风格与Self及Scheme较为接近。 
 
-![](JavaScript.assets/a8773912b31bb051fc407cd93a7adab44bede0df.webp)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845334.webp)
 
 ​	JavaScript的标准是ECMAScript。截至 2012 年，所有浏览器都完整的支持ECMAScript 5.1，旧版本的浏览器至少支持ECMAScript 3 标准。2015年6月17日，ECMA国际组织发布了ECMAScript的第六版，该版本正式名称为 ECMAScript 2015，但通常被称为ECMAScript 6 或者ES2015。
 
@@ -423,7 +423,7 @@ document 对象中有innerHTML和innerText 两个属性， 这两个属性都是
 
 ​	变量就是存放数据的容器，我们可以从这个容器中取出变量来使用，它实际是在内存中开辟了一块空间。如果要使用这个变量必须经过两个步骤：声明变量和赋值。
 
-![image-20220620223327151](JavaScript.assets/image-20220620223327151.png)
+![image-20220620223327151](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845335.png)
 
 **声明变量的格式：**
 
@@ -626,7 +626,7 @@ const PI = 3.14;
 
 **引用数据类型（对象类型）**：对象(Object)、数组(Array)、函数(Function)，还有两个特殊的对象：正则（RegExp）和日期（Date）。
 
-<img src="JavaScript.assets/image-20220701110414893.png" alt="image-20220701110414893" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845337.png" alt="image-20220701110414893" style="zoom:67%;" />
 
 注：Symbol 是 ES6 引入了一种新的原始数据类型，表示独一无二的值。
 
@@ -787,7 +787,7 @@ console.log(typeof(n)); // string
 关系运算符
 > <  大于 等于
 >= <= 大于等于  小于等于
-==(相等) !=(相等)
+==(相等) !=(相等)    值相等
 ===(全等) !==(不全等)  值和类型都相等
 
 逻辑运算符
@@ -802,7 +802,7 @@ console.log(typeof(n)); // string
 如果表达式1不成立，执行表达式3；
 ```
 
-<img src="JavaScript.assets/2022-09-23_094123.png" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845338.png" style="zoom:50%;" />
 
 注意：
 
@@ -944,7 +944,7 @@ try {
 
 - **if语句**
 
-  <img src="JavaScript.assets/image-20220627155520005.png" alt="image-20220627155520005" style="zoom:67%;" />
+  <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845339.png" alt="image-20220627155520005" style="zoom:67%;" />
 
   - 简单if语句
 
@@ -1052,7 +1052,7 @@ try {
   }
   ```
 
-![image-20220624220251728](JavaScript.assets/image-20220624220251728.png)
+![image-20220624220251728](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845340.png)
 
 **案例：如果时间小于 10:00，则生成问候 "Good morning"，如果时间大于 10:00 小于 20:00，则生成问候 "Good day"，否则生成问候 "Good evening"：**
 
@@ -1168,7 +1168,7 @@ switch(value){
   		//以上任意一个值匹配全等都会执行的代码段
 ```
 
-![image-20220624220633491](JavaScript.assets/image-20220624220633491.png)
+![image-20220624220633491](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845341.png)
 
 案例1：判断今天是星期几：
 
@@ -1347,7 +1347,7 @@ do{
 
 
 
-![image-20220624222123895](JavaScript.assets/image-20220624222123895.png)
+![image-20220624222123895](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845342.png)
 
 
 
@@ -1372,7 +1372,7 @@ while(循环条件){
 }
 ```
 
-![image-20220624222320955](JavaScript.assets/image-20220624222320955.png)
+![image-20220624222320955](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845343.png)
 
 for语句：
 
@@ -1451,7 +1451,7 @@ JavaScript支持不同类型的循环，它们的区别是：
 
 JS中的break和continue语句和Java，Python都一样，**break 强制结束循环，continue 结束当次循环，开始下一次循环**。
 
-![image-20220624222508235](JavaScript.assets/image-20220624222508235.png)
+![image-20220624222508235](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845345.png)
 
 
 
@@ -2061,7 +2061,7 @@ function myFunction() {
 
 **练习：点击单选按钮显示不同的内容。**
 
-<img src="JavaScript.assets/image-20220702115824842.png" alt="image-20220702115824842" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845346.png" alt="image-20220702115824842" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -2134,7 +2134,7 @@ function myFunction() {
 
 **作业：根据下图思路，点击左右两边的按钮切换图片**-code/47
 
-![](JavaScript.assets/作业2-1656735514136.png)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845347.png)
 
 ## 8.对象
 
@@ -2567,7 +2567,7 @@ for(var i = 0;i < arr.length;i++) {
     
     **案例：用数组操作学生信息**
     
-    <img src="JavaScript.assets/image-20220703111247593.png" alt="image-20220703111247593" style="zoom:50%;" />
+    <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845348.png" alt="image-20220703111247593" style="zoom:50%;" />
     
     ```javascript
     <!DOCTYPE html>
@@ -3004,7 +3004,7 @@ var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
 
 **练习1：模拟百度，将搜索到的关键字以红色显示。**
 
-<img src="JavaScript.assets/2022-07.png" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845349.png" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -3056,7 +3056,7 @@ var d = new Date(year, month, day, hours, minutes, seconds, milliseconds);
 
 **练习2：根据新浪新闻做以下选项卡，一个标题对应一个内容，点击标题，对应内容发生变化。**
 
-![作业1](JavaScript.assets/作业1.png)
+![作业1](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845350.png)
 
 ```javascript
 <!DOCTYPE html>
@@ -3913,7 +3913,7 @@ var json = JSON.stringify({a: 'Hello', b: 'World'}); //结果是 '{"a": "Hello",
 
 以上是关于异步的概念的解释，接下来我们通俗地解释一下异步：异步就是从主线程发射一个子线程来完成任务。
 
-<img src="JavaScript.assets/image-20220709225753878.png" alt="image-20220709225753878" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845351.png" alt="image-20220709225753878" style="zoom:67%;" />
 
 
 
@@ -4048,7 +4048,7 @@ window.close()				// 关闭当前窗口-关闭的是通过window.open()打开的
 
 - **定时器方法**
 
-<img src="JavaScript.assets/image-20220710205603104.png" alt="image-20220710205603104" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845352.png" alt="image-20220710205603104" style="zoom:67%;" />
 
 1. 周期性定时器：每隔一段时间就执行一次代码。
 
@@ -4074,7 +4074,7 @@ clearInterval(timerID);
 
 2.一次性定时器：等待多久后执行一次代码。
 
-<img src="JavaScript.assets/image-20220710222118074.png" alt="image-20220710222118074" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845353.png" alt="image-20220710222118074" style="zoom:50%;" />
 
 ```javascript
 //开启超时调用:
@@ -4146,7 +4146,7 @@ var task=window.setInterval(function(){
 
 **案例3：页面展示实时时间。**
 
-![image-20220710214013914](JavaScript.assets/image-20220710214013914.png)
+![image-20220710214013914](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845354.png)
 
 ```javascript
 <!DOCTYPE html>
@@ -4488,11 +4488,11 @@ value:读取或设置表单控件的值
 
 1.获取 DOM 树中的属性值:
 
-<img src="JavaScript.assets/image-20220710232954285.png" alt="image-20220710232954285" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845355.png" alt="image-20220710232954285" style="zoom:67%;" />
 
 2.设置 DOM 树中的属性值：
 
-<img src="JavaScript.assets/image-20220710233016951.png" alt="image-20220710233016951" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845356.png" alt="image-20220710233016951" style="zoom:67%;" />
 
 ```javascript
 elem.getAttribute("attrname");//根据指定的属性名返回对应属性值
@@ -4603,7 +4603,7 @@ p.style.fontSize = "20px";
 
 案例：
 
-<img src="JavaScript.assets/image-20220722111311408.png" alt="image-20220722111311408" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845357.png" alt="image-20220722111311408" style="zoom:67%;" />
 
 ```javascript
 <!DOCTYPE html>

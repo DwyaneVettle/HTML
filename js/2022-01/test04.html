@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- 
+        onclick:单击事件
+        ondbclick:双击事件
+        onmouseover:鼠标移入元素
+     -->
+    <div class="abc" name="div" id="tips"></div>
+    <div class="abc" name="div"></div>
+    <script>
+        // 1.根据标签名选择-是多个元素，可以通过下标找到对应元素
+        /* var div =document.getElementsByTagName('div')
+        div[0].onclick = function() {
+            alert('abc')
+        } */
+        // 2.通过class属性名获取-多个元素
+       // var div = document.getElementsByClassName("abc")
+
+        // 3.通过name属性获取元素-多个元素
+       // var div = document.getElementsByName('div')
+
+        // *4.通过id名来获取元素-单个元素
+        var div = document.getElementById('tips')
+
+        // 通用方式：querySelector()-参数为css选择器
+        document.querySelector('#tips')
+        document.querySelector('.abc')
+        // 选择所有相同属性的元素-querySelectorAll()
+        document.querySelectorAll('.abc')
+    </script> 
+</body>
+</html>

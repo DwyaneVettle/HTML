@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="d1">
+        <p id="p1">
+            Hello World!!!
+        </p>
+    </div>
+    <script>
+        var context = document.getElementById("d1")
+        /* 
+            在js中获取文本内容使用的是连个属性
+            innerHTML:获取的是文本+文本外层的标签
+            innerText：只获取到文本
+            oeterHTML:获取文本和文本外层的标签外，还包含
+            对象本身的标签
+        */
+       console.log(context.innerHTML); //  <p id="p1">Hello World!!! </p>
+       console.log(context.innerText);
+       console.log(context.outerHTML);
+    </script>
+</body>
+</html>

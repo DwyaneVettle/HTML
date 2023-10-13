@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>如果时间小于20:00,在浏览器上填充"Good Day"</p>
+    <button onclick="getHours()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        function getHours() {
+            var text = ""
+            // 获取当前时间
+            var time = new Date().getHours() // 获取当前时间的小时
+            // 判断时间是否小于20
+            if(time < 20) {
+                text = 'Good Day'
+            }
+            var p = document.getElementById('demo')
+            p.innerText = text
+        }
+    </script>
+</body>
+</html>

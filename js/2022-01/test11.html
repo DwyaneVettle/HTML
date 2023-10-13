@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // / 除 % 取模
+        console.log(9/3);
+        console.log(10%3);
+        // 符合运算符 += -= *= /= %=
+        var a = 10
+        var b = 20
+        console.log(a+=b);
+        console.log("========");
+        // 自增/自减 ++ --
+        // ++/--在前先变化后使用，在后先使用后变化
+        var a = 2
+        console.log(a++);// 2 3
+        console.log(++a); // 4
+        console.log("========");
+        /* 
+         == 比较值是否相等
+         === 比较值和类型是否相等
+        */
+        var a = "100"
+        var b = 100
+        console.log(a == b); // true
+        console.log(a === b); // false
+
+        var c = 1
+        var d = true
+        console.log(c == d);
+        console.log(c === d);
+
+        /* 
+        三元运算符： 表达式 ? 结果1 : 结果2
+        如果表达式成立，则输出结果1
+        如果表达式不成立，则输出结果2
+        */
+       var result = 10>20 ? '哈哈' : '嘿嘿'
+       console.log(result);
+    </script>
+</body>
+</html>

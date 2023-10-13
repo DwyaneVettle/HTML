@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p id="demo"></p>
+    <script>
+        /* 
+        生成一个随机数，根据随机数的大小进行比较
+        如果小于0.5，在页面中弹出超链接可以访问百度
+        其他情况，在页面中访问腾讯视频   
+        */
+       var r = Math.random()  // 生成(0-1]之间的数据
+       var x = document.getElementById('demo')
+       if(r < 0.5) {
+            x.innerHTML='<a href="https://www.baidu.com">访问百度</a>'
+       } else {
+        x.innerHTML='<a href="http://v.qq.com">访问腾讯视频</a>'
+       }
+       console.log(r);
+    </script>
+</body>
+</html>

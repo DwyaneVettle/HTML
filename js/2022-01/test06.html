@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 1.用一个变量表示灯的状态
+        var flag = "off"
+        // 2.定义函数
+        function changeImg() {
+            // 3.获取图片的元素
+            var imgObj = document.getElementById("img1")
+            if(flag = "off") {
+                imgObj.src = "imgs/on.gif"
+                flag = "on" // 更新灯的状态
+            } else {
+                imgObj.src = "imgs/off.gif"
+                flag = "off"
+            }
+        }
+    </script>
+    <button onclick="changeImg()">开/关灯</button>
+    <br/>
+    <img src="imgs/off.gif" id="img1">
+
+   
+</body>
+</html>

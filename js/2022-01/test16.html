@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+        如果时间小于10，生成早上好
+        如果时间大于10且小于20，生成你好
+        否则生成晚上好
+        if(条件1) {
+            代码块1
+        } else if(条件2) {
+            代码块2
+        } else {
+            代码块3
+        }
+        */
+        var time = new Date().getHours()
+        if(time < 10) {
+            console.log('早上好');
+        } else if(time > 10 && time < 20) {
+            console.log('你好');
+        } else {
+            console.log('晚上好');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var a = "abc"
+        var b = 'abc'
+        console.log(typeof(a)); // string
+        console.log(typeof(b)); // string
+        /* 
+        js数据类型的转换-强制类型转换
+        toString()：将其他类型转换成字符串
+        Number()：将其他类型转换成数字
+        parseInt()：转换成整型
+        parseFloat()：转换成浮点类型
+        NaN:数值类型-Not a Number
+        */
+        var c = 100
+        console.log(c.toString());
+        var d = true
+        console.log(d.toString());
+        
+        var a = '100'
+        console.log(Number(a));
+        var b = '100qwerdf'
+        console.log(Number(b)); // NaN
+        console.log(typeof(NaN));
+
+        var c = true
+        console.log(Number(c)); // 1
+        var d = false
+        console.log(Number(d)); // 0
+        console.log("+++++++++");
+        var e = '123'
+        console.log(parseInt(e));
+        var b = '100qwer123df'
+        console.log(parseInt(b)); // 100
+
+        var f = 'qwer122df123'
+        console.log(parseInt(f)); // NaN
+
+        var g = 100
+        console.log(parseFloat(g));
+        var x = '10.1asdf'
+        y = parseFloat(x)
+        // alert(y)
+
+        console.log("++++++++++");
+        // 2.隐式转换
+        var x = 'abc'
+        var y = 100
+        console.log(x + y);
+        var a = true
+        console.log(y + a); // 101
+    </script>
+</body>
+</html>

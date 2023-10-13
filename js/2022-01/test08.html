@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            js中变量的定义使用var关键字
+            
+            var/let 变量名 = 值
+            在es6中还可以使用let定义变量,let在代码块中
+            定义的变量具有局部的作用域
+            const->定义常量，常量名所有单词大写
+        */
+    //    1.初始化变量
+    var name = "成都"
+    console.log(name);
+    var a = 123
+    var A = 345
+    console.log(A);
+    //级联定义变量
+    var a1,a2,a3 
+    a1=5,a2=6,a3=7
+    var a4=a5=a6=10
+    // 变量的命名不能使用关键字
+    // var if = 10
+    // 变量的命名不能以数字开头，可以使用$等特殊字符开头
+    $a=123
+    _a=123
+    // 多个单词组成的变量，使用小驼峰(第一个单词首字母小写，其他单词首字母大写)
+    var userName = "汪顺"
+    
+    {
+        // console.log(userName);
+        let userName = "姚明"
+        console.log("第一个:" + userName);
+    }
+    console.log("第二个：" + userName);
+    const USERNAME = "刘翔"
+    console.log(USERNAME);
+    </script>
+</body>
+</html>
