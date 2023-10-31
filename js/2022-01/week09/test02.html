@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button onclick="myFun()">点击按钮，显示所有属性</button>
+    <script>
+        // 每一个对象都有一个原型对象prototype
+        function myFun() {
+            var person = {
+                name: '刘德华',
+                age: 60,
+                height: 170
+            }
+            for(var x in person) {
+                console.log(person[x]);
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 定义字符串
+        var str01 = "hello"  // 直接定义
+        var str02 = new String('world')  // 使用构造函数定义
+        // 1.字符串也有长度-根据length属性获取
+        console.log(str01.length);
+        // 方法1：tpUpperCase()-将字母转成大写
+        console.log(str01.toUpperCase());
+        // 方法2：tpLowerCase()-将字母转成小写
+        console.log(str01.toLowerCase());
+        // 方法3：charAt(index)-获取指定下标的字符，参数省略默认为0
+        console.log(str01[2]);
+        console.log(str01.charAt(2));
+        console.log(str01.charAt());
+        // 方法4：charCodeAt(str,index)-获取指定下标的字符编码,str是要获取的字符，index默认从0开始
+        console.log(str01.charCodeAt('h'));
+        console.log('----');
+        console.log(str01.charCodeAt(0));
+    </script>
+</body>
+</html>

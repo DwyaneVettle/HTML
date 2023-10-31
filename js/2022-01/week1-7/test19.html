@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <p>点击下面的按钮来显示今天是周几：</p>
+    <button onclick="showDay()">点击这里</button>
+    <p id="demo"></p>
+    <script>
+        var x
+        function showDay() {
+            // 获取今天是星期几 0-6 其中0表示星期天
+            var d = new Date().getDay()
+            switch(d) {
+                case 0:
+                    x = '今天是星期天'
+                    break
+                case 1:
+                    x = '今天是星期一'
+                    break
+                case 2:
+                    x = '今天是星期二'
+                    break
+                case 3:
+                    x = '今天是星期三'
+                    break
+                case 4:
+                    x = '今天是星期四'
+                    break
+                case 5:
+                    x = '今天是星期五'
+                    break
+                case 6:
+                    x = '今天是星期六'
+                    break
+            }
+            document.getElementById('demo').innerText = x
+        }
+        /* 
+            需求：根据获取到的日期判断
+            6-输出‘放假真高兴’
+            7-输出‘明天要上班了’
+            其他-‘期待放假’
+            var d = new Date().getDay()
+        */
+    </script>
+</body>
+</html>

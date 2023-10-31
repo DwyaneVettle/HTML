@@ -50,11 +50,11 @@
 - 从jquery.com下载jQuery库；
 - 从CDN中载入jQuery，比如Google等加载。
 
-<img src="Jquery.assets/image-20220722120329308.png" alt="image-20220722120329308" style="zoom: 50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443996.png" alt="image-20220722120329308" style="zoom: 50%;" />
 
 当前版本为3.6.0，如需下载其他版本可在https://code.jquery.com进行下载。下载时会有两个版本的标准：一个是生产环境的，另一个是开发环境的，一般我们都是采用生产环境下的，因为其比较轻量，点击进入生产环境下的版本，全选中后粘贴到jquery.min.js文件中，在JS文件通过script标签引入这个文件即引入了jQuery函数库。
 
-![](Jquery.assets/2022-07-22_142819.png)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443719.png)
 
 在HTML文件中使用<script></script>标签的src属性就可引入jquery：
 
@@ -118,7 +118,7 @@ Staticfile CDN：
 
 ​	使用CDN加载jquery有一个很大的优势：许多用户在访问其他站点时，已经从百度、又拍云等网站加载过jquery，所以结果是，当他们访问你的网站时，会从缓存中加载jquery，这样可以减少加载时间，同时大多数CDN都可以确保当用户向其请求文件时，会从离用户最近的服务器上返回响应，这样也可以提高加载速度。
 
-<img src="Jquery.assets/2022-07-22_144430.png" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443720.png" style="zoom:50%;" />
 
 
 
@@ -277,7 +277,7 @@ load和ready的区别：
 
 ### 3.4.顶级对象$
 
-$是jQuery的别称，在代码中可以使用$代替jQuery，但一般为了方便，通常直接使用$。并且$是jQuery的顶级对象，相当于原生JS的window，把元素利用$包装成jQuery对象，就可以调用jQuery方法。
+`$`是jQuery的别称，在代码中可以使用`$`代替jQuery，但一般为了方便，通常直接使用$。并且$是jQuery的顶级对象，相当于原生JS的window，把元素利用$包装成jQuery对象，就可以调用jQuery方法。
 
 ```javascript
 jQuery(function() {
@@ -571,7 +571,7 @@ jQuery可以实现隐式迭代，因为其DOM元素内部是以伪数组的形�
 
 案例：新浪下拉菜单栏。
 
-<img src="Jquery.assets/image-20220722171505967.png" alt="image-20220722171505967" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443722.png" alt="image-20220722171505967" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -1787,7 +1787,7 @@ $(selector).stop(stopAll,goToEnd);
 
 案例：
 
-![image-20220723153623017](Jquery.assets/image-20220723153623017.png)
+![image-20220723153623017](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443723.png)
 
 ```javasscript
 <!DOCTYPE html>
@@ -2363,7 +2363,7 @@ jQuery拥有众多操作尺寸和位置的方法
 | position()                         | 获取距离带有定位父级位置的偏移量，如果没有定位父级则以文档为准，只能获取不能设置 |
 | scrollTop()/scrollLeft()           | 获取或设置被卷去的头部/左部                                  |
 
-<img src="Jquery.assets/image-20220724124850130.png" alt="image-20220724124850130" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443724.png" alt="image-20220724124850130" style="zoom:67%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -2412,7 +2412,7 @@ jQuery拥有众多操作尺寸和位置的方法
 </html>
 ```
 
-<img src="Jquery.assets/2022-07-24_125818.png" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443725.png" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -2477,7 +2477,7 @@ jQuery拥有众多操作尺寸和位置的方法
 </html>
 ```
 
-<img src="Jquery.assets/image-20220724130716010.png" alt="image-20220724130716010" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443726.png" alt="image-20220724130716010" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -2557,7 +2557,7 @@ jQuery 遍历，意为"移动"，用于根据其相对于其他元素的关系�
 
 下图展示了一个家族树。通过 jQuery 遍历，您能够从被选（当前的）元素开始，轻松地在家族树中向上移动（祖先），向下移动（子孙），水平移动（同胞）。这种移动被称为对 DOM 进行遍历。
 
-<img src="Jquery.assets/image-20220724132128702.png" alt="image-20220724132128702" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443727.png" alt="image-20220724132128702" style="zoom:67%;" />
 
 图示解析：
 
@@ -2760,7 +2760,7 @@ jq(document).ready(function(){
 
 Bootstrap框架是一个简洁、直观、强悍的前端开发框架，让web开发更迅速、简单。中文官网为：https://v3.bootcss.com/，点击进入下载使用Bootstrap。
 
-<img src="Jquery.assets/image-20220724145207381.png" alt="image-20220724145207381" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443728.png" alt="image-20220724145207381" style="zoom:50%;" />
 
 Bootstrap框架也是依赖jQuery开发的，因此里面的js插件使用也必须引入jQuery文件。在组件中找到任意你需要的组件复制粘贴到你的HTML文件中即可，但加入组件前需要一个盒子进行包裹，如以下代码，我们就是在组件中复制的导航条代码：
 
@@ -2878,7 +2878,7 @@ Echarts使用的五个步骤：
 
 需求：做如下柱状图标：
 
-<img src="Jquery.assets/image-20220724154335107.png" alt="image-20220724154335107" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443729.png" alt="image-20220724154335107" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -2928,7 +2928,7 @@ Echarts使用的五个步骤：
 
 除了上述示例外，官网https://echarts.apache.org/examples/zh/index.html#chart-type-pie示例中还有很多可以定义的图形，如折线图、柱状图、饼图、散点图等。如果我们要做如下圆角环形图，我们直接点击进去，按Echarts的5个步骤来操作就行了：
 
-<img src="Jquery.assets/image-20220724214038961.png" alt="image-20220724214038961" style="zoom:50%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443730.png" alt="image-20220724214038961" style="zoom:50%;" />
 
 ```javascript
 <!DOCTYPE html>
@@ -3120,11 +3120,11 @@ color:['#5470c6', '#91cc75', '#fac858', '#ee6666', '#73c0de', '#3ba272', '#fc845
 
 **以上配置为常用配置，其余配置需要借助文档进行操作。文档在https://echarts.apache.org/文档--配置项手册中。**
 
-!<img src="Jquery.assets/image-20220724224711695.png" alt="image-20220724224711695" style="zoom:50%;" />()
+!<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443731.png" alt="image-20220724224711695" style="zoom:50%;" />()
 
 案例：请制作如下图标：
 
-<img src="Jquery.assets/image-20220724221415339.png" alt="image-20220724221415339" style="zoom:67%;" />
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202310151443732.png" alt="image-20220724221415339" style="zoom:67%;" />
 
 ```javascript
 <!DOCTYPE html>

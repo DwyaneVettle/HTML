@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+        计算数组[2,6,1,7,4]中所有元素的和及
+        平均值
+        */
+       var arr = new Array(2,6,1,7,4)
+       // 1.定义求和变量
+       var sum = 0
+       // 2.遍历数组里面的所有元素
+       for(var i = 0;i < arr.length;i++) {
+            // console.log(arr[i]);
+            sum = sum+arr[i]  // 累加
+       }
+       console.log('该数组的和是：' + sum); // 20
+       // 求平均数
+       console.log('平均数是：' + (sum / arr.length));
+
+       // 求数组[2, 6, 77, 52, 25]的最大值
+       var arr02 = [2, 6, 77, 52, 25]
+       /* 
+        1.定义一个数组最大数的初始变量
+        2.遍历数组中所有的元素
+        3.和初始化变量进行判断，如果遍历出来的值
+        比初始化变量大，就替换初始化变量
+       */
+      var max = arr02[0] // 假设初始化变量最大
+      for(var i =0;i<arr02.length;i++) {
+        if(arr02[i] > max) {
+            max = arr02[i]
+        }
+      }
+      console.log(max);
+    </script>
+</body>
+</html>

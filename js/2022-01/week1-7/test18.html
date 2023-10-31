@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 进度条 -->
+    <input type="range" min="1" max="10" id="rng">
+    <script>
+        /* 
+            需求：
+            当拖动进度条时在控制台输出
+            1-A  2-B 3-c 4-D 其他-else
+        */
+       // var rng = document.getElementById("rng")
+       var rng = document.querySelector('#rng')
+       console.log(rng);
+       rng.onchange = function() {
+        // 获取进度条当前位置的数值 value
+        // 在js中指代当前对象用this关键字
+        console.log(this.value);
+        // 1-A  2-B 3-c 4-D 其他-else
+        if(this.value == 1) {
+            console.log(this.value, 'A');
+        }else if(this.value == 2) {
+            console.log(this.value, 'B');
+        } else if(this.value==3) {
+            console.log(this.value, 'C');
+        } else if(this.value == 4) {
+            console.log(this.value, 'D');
+        } else {
+            console.log('else');
+        }
+       }
+    </script>
+</body>
+</html>

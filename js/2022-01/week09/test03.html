@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        function person(firstname, lastname, age) {
+            this.firstname = firstname
+            this.lastname = lastname
+            this.age = age
+            // return [this.firstname, this.lastname,this.age]
+        }
+        /* 
+            js中new与不new区别：
+            1.如果有new，那么this会指代当前对象，并且函数内部不
+            ruturn也会返回一个对象
+            2.如果没有new，函数内部的this会指向window
+        */
+       var friend = new person('Jone', 'Gates', 30)
+       var friend02 = person('Micheal', 'Gates', 30)
+       console.log(friend);
+       console.log(friend02);
+       
+    </script>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            函数内部定义的变量具有局部作用域，只能在函数内部访问
+            当函数调用结束，变量也随之销毁
+            在函数中变量没有关键字var来定义，那么
+            这个变量具有全局作用域
+            es6中新增了一个关键字叫let：定义的变量具有局部作用域的效果
+
+            全局作用：在函数外部定义，在该js代码中的任意位置都有效
+        */
+        var y = 1000
+        console.log("y的值是:" + y);
+        function myFun01() { 
+            var a = 100
+            console.log("函数内部:" + a);
+            b = 200
+            console.log("函数内部:" + b);
+            let x = 300
+            console.log(x);
+            console.log("y的值是(函数内部):" + y);
+        }
+        
+        myFun01()
+        console.log("函数外部b:" + b);
+        // console.log("函数外部：" + a);
+        console.log("y的值是(函数下面):" + y);
+
+        {
+            let c = 101
+            console.log("代码块内部" + c);
+        }
+        console.log("代码块外部" + c);
+    </script>
+</body>
+</html>

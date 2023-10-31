@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+      // 案例：定义函数求用户输入的数之间的所有数的和
+      /* var start = parseInt(prompt("请输入开始的数字："))
+      var end = parseInt(prompt("请输入结束的数字："))
+      function getSum(start, end) {
+        var sum = 0  // 求和的初始化变量
+        for(var i = start; i <= end;i++) {
+            sum += i
+        }
+        console.log(sum);
+      }
+      getSum(start, end) */
+      /* 
+      arguments：每一个函数都有内置的一个对象，
+      当实参个数不确定的情况下，可以使用arguments来接收所有的
+      不确定个数的实参
+      */
+      function test() {
+        console.log(arguments);
+      }
+      test('你好','世界')
+    </script>
+</body>
+</html>

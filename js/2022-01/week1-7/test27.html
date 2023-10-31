@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+        求学生成绩：要求用户输入班级人数，然后依次输入每个学生成绩，最后打印出该班平均成绩和总成绩。
+            学生不少于5个
+            1.弹出输入框，输入班级人数，输入学生成绩；
+            2.计算总成绩；
+            3.求出平均成绩。
+        */
+       // 定义求总成绩的变量
+       var sum = 0; 
+       // 定义求平均成绩的变量
+       var avg = 0;
+       var num = prompt('请输入班级的人数')
+       for(var i = 0;i < num; i++) {
+            var score = prompt('请输入' + (i+1) + '同学的成绩')
+            sum = sum +  parseFloat(score)
+           
+       }
+       avg = sum / num
+       alert('班级的总成绩为' + sum)
+       alert('班级的平均成绩为' + avg)
+    </script>
+</body>
+</html>
