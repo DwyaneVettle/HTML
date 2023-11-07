@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        // 日期类对象 Date
+        var date01=new Date()
+        var date02=new Date('2023-11-07')
+        console.log(date01);
+        console.log(date02);
+        // 方法1：getFullYear()-获取年份
+        console.log(date01.getFullYear());
+        // 方法2：getMonth()-获取月份
+        // 获取到0-11之间的数值
+        console.log(date01.getMonth());
+        // 方法3：getDate()-获取几号
+        console.log(date01.getDate());
+        // 方法4：getDay()-获取星期几
+        // 获取到的值是0-6，0表示星期天
+        console.log(date01.getDay());
+        // 方法5：getHours()-获取消失
+        console.log(date01.getHours());
+        console.log(date01.getMinutes()); // 获取分钟
+        console.log(date01.getSeconds()); // 获取秒钟
+        console.log(date01.getMilliseconds()); // 获取毫秒
+
+    </script>
+</body>
+</html>

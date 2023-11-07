@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #tabs {
+            width: 416px;
+            height: 218px;
+            border: 1px solid red;
+        }
+        #tabs > .nav {
+            overflow: hidden;
+        }
+        #tabs > .nav > div {
+            float: left;
+            text-align: center;
+            padding: 5px 0;
+            width: 104px;
+        }
+        .focus {
+            background-color: blue;
+            color: white;
+        }
+        .bg {
+            border-color: c5c5c5;
+        }
+        .hid {
+            display: none;
+        }
+        .show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="tabs">
+        <div class="nav">
+            <div class="bg" id="div1">热点新闻</div>
+            <div class="bg" id="div2">合作播报</div>
+            <div class="bg" id="div3">行业资讯</div>
+            <div id="div4" class="focus">运营攻略</div>
+        </div>
+        <div class="con">
+            <div id="d01">11</div>
+            <div id="d02">22</div>
+            <div id="d03">33</div>
+            <div id="d04">44</div>
+        </div>
+
+    </div>
+    <script>
+        function getEle(id) {
+           return document.getElementById(id)
+        }
+        // 点击第一个div，获取焦点样式，清除其他盒子的样式
+        getEle("div1").onclick = function() {
+            getEle('div1').className = "focus"
+            getEle('div2').className = 'bg'
+            getEle('div3').className = 'bg'
+            getEle('div4').className = 'bg'
+            getEle('d01').className = 'show'
+            getEle('d02').className = 'hid'
+            getEle('d03').className = 'hid'
+            getEle('d04').className = 'hid'
+        }
+        getEle("div2").onclick = function() {
+            getEle('div1').className = "bg"
+            getEle('div2').className = 'focus'
+            getEle('div3').className = 'bg'
+            getEle('div4').className = 'bg'
+            getEle('d01').className = 'hid'
+            getEle('d02').className = 'show'
+            getEle('d03').className = 'hid'
+            getEle('d04').className = 'hid'
+        }
+        getEle("div3").onclick = function() {
+            getEle('div1').className = "bg"
+            getEle('div2').className = 'bg'
+            getEle('div3').className = 'focus'
+            getEle('div4').className = 'bg'
+            getEle('d01').className = 'hid'
+            getEle('d02').className = 'hid'
+            getEle('d03').className = 'show'
+            getEle('d04').className = 'hid'
+        }
+        getEle("div4").onclick = function() {
+            getEle('div1').className = "bg"
+            getEle('div2').className = 'bg'
+            getEle('div3').className = 'bg'
+            getEle('div4').className = 'focus'
+            getEle('d01').className = 'hid'
+            getEle('d02').className = 'hid'
+            getEle('d03').className = 'hid'
+            getEle('d04').className = 'show'
+        }
+    </script>
+</body>
+</html>

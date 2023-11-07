@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box {
+            margin: 0 auto;
+            border: 1px solid red;
+            width: 130px;
+            overflow: hidden;
+        }
+        #box > span {
+            width: 20px;
+            font-size: 21px;
+            float: left;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="box">
+        <span id="hou">00</span>
+        <span style="width: 30px">:</span>
+        <span id="min">00</span>
+        <span style="width: 30px">:</span>
+        <span id="sec">00</span>
+    </div>
+    <script>
+        function getEle(id) {
+            return document.getElementById(id)
+        }
+        var taskId = setInterval(function() {
+            // 获取系统当前时间
+            var dt = new Date()
+            // 获取小时
+            var hour = dt.getHours()
+            getEle('hou').innerText = change(hour)
+            // 获取分钟
+            var min = dt.getMinutes()
+            getEle('min').innerText = change(min)
+            // 获取秒钟
+            var sec = dt.getSeconds()
+            getEle('sec').innerText = change(sec)
+        },1000)
+        function change(n) {
+            if(n < 10) {
+                return "0" + n
+            } else {
+                return n
+            }
+        }
+    </script>
+</body>
+</html>

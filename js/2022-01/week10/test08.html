@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="btn">点击+1</button>
+    <div id="tips"></div>
+    <script>
+        // 点击增加即增加，不点击则自动隔1秒加1
+        // 1.定义一个初始化变量
+        var i = 0
+        // 2.点击即增加
+        document.getElementById("btn").onclick = function() {
+            i++
+            document.getElementById('tips').innerText = i
+        }
+        var timer = window.setInterval(function() {
+            i++
+            if(i == 20) {
+                clearInterval(timer)
+            }
+            document.getElementById('tips').innerText = i
+            
+        },1000)
+        
+    </script>
+</body>
+</html>

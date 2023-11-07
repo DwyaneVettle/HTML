@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #search {
+            width: 300px;
+            margin: 0 auto;
+            border: 1px solid red;
+            padding: 20px 15px;
+        }
+        #p1 > span {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="search">
+        <input type="text" id="key">
+        <button id="btnSearch" onclick="search()">查找</button>
+    </div>
+    <p id="p1">
+        今天是个好天气，明天可能会下雨，后天还会晴起来，每天都有好心情。 
+        白日依山尽，黄河入海流。天气好不好，代码不会少。
+    </p>
+    <script>
+        var key = document.getElementById('key')
+        var btnSearch = document.getElementById('btnSearch')
+        var p1 = document.getElementById('p1')
+        function search() {
+           /* 
+           用正则表达式匹配查找的内容
+           reg = new RegExp(要查找的值,修饰符(ig))
+           reg = /要查找的值/ig
+           */
+          var reg = new RegExp(key.value2,'ig')
+          console.log(reg);
+          // 获取内容
+          var newStr = p1.innerHTML.replace(reg,
+                        '<span>' + key.value +'</span>')
+          // 更新新的字符串
+          p1.innerHTML = newStr
+         
+        }
+
+    </script>
+</body>
+</html>

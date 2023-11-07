@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- // 每隔一秒输出一个OK，点击停止按钮停止 -->
+    <button id="stop">点击停止输出</button>
+    <script>
+        /*
+        周期性的任务：var id = setInterval(func,time)  
+            func:是定时的动作
+            time：定时的时间，单位ms
+                     clearInterval(id)
+        一次性的任务：var id = setTimeout(func,time)
+                     clearTimeout(id)
+        */
+       // 设置定时器
+       var timerId = setInterval(function(){
+            console.log('OK');
+       },1000)
+       document.getElementById('stop').onclick = function(){
+         // 停止输出-清除定时器
+         clearInterval(timerId)
+       }
+    </script>
+</body>
+</html>

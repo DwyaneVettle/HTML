@@ -24,6 +24,22 @@
         console.log(str01.charCodeAt('h'));
         console.log('----');
         console.log(str01.charCodeAt(0));
+        console.log('+++++');
+        // 方法5：indexOf(str,startIndex),查找到立即返回对应下标
+        console.log(str01.indexOf('l'));
+        var str03 = 'anabalfgfjdkg'
+        console.log(str03.indexOf('f',5));
+        // 方法6：lastIndexOf(str, startIndex),返回字符对应最后一次出现的下标
+        console.log('+++++');
+        console.log(str03.lastIndexOf('f'));
+        // 方法7：subString(startIndex,endIndex)-包含开始，不包含结束来截取字符串
+        console.log(str03.substring(2,5));
+
+        // 方法8：subStr(startIndex,len)-从开始下标截取固定长度的字符串
+        console.log(str03.substr(0,3));
+
+        // 方法9：split(param)：指定参数分割字符串,用逗号替换指定字符进行分割
+        console.log(str03.split('f'));
     </script>
 </body>
 </html>
