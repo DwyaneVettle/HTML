@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        span:hover {
+            color: white;
+            background-color: orange;
+        }
+        .a{
+            font-size: 50px;
+        }
+        .b {
+            font-size: 35px;
+        }
+        .c {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <span>首页</span>
+    <span>新闻</span>
+    <span class="focus">图片</span>
+    <span class="b">热点</span>
+    <div id="div1">新的标签</div>
+    <script>
+        var spans = document.getElementsByTagName('span')
+        // 设置属性-title,'这是首页'
+        spans[0].setAttribute('title','这是首页')
+        spans[1].setAttribute('class','a')
+        // 移除属性
+        spans[3].removeAttribute('class')
+        // 获取属性
+        // alert(spans[2].getAttribute('class'))
+
+        // className可以直接设置或获取class属性
+        var div1 = document.getElementById("div1")
+        div1.className = 'c'
+        console.log(spans[1].className);
+    </script>
+</body>
+</html>

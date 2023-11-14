@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="box"></div>
+    <script>
+        function antitime() {
+            // 设置到期的时间
+            var to = new Date("2024/01/12 00:00:00")
+            // 获取当前时间
+            var now = new Date()
+            // 获取指定时间到现在的时间差 -s
+            var deltatime = (to - now) / 1000
+            if(deltatime <= 0) {
+                clearInterval(antitime)
+            }
+            // 计算天时分秒
+            var d = Math.floor(deltatime / 60 / 60 / 24)
+            var h = Math.floor(deltatime / 60 / 60 % 24)
+            var m = Math.floor(deltatime / 60 % 60)
+            var s = Math.floor(deltatime % 60)
+            if(d < 10) {
+                d = '0' + d
+            } else if(h < 10) {
+                h = '0' + h
+            } else if(m < 10) {
+                m = '0' + m
+            } else if(s < 10) {
+                s = '0' + s
+            }
+            // 定义一个空字符串
+            var timer = ''
+            timer = '距离2024年1月12日还有' + d + 
+                    '天' + h + '小时' + m + '分钟' + s + '秒钟'
+            // 获取盒子
+           var box = document.getElementById('box')
+           box.innerText = timer
+        }
+        // 设置周期定时器
+        setInterval(antitime,1000)
+    </script>
+</body>
+</html>

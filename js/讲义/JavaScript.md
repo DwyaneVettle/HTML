@@ -4231,7 +4231,7 @@ var task=window.setInterval(function(){
         //    指定计时器到期时间，首先先封装函数antitime()
         function antitime() {
             var now = new Date(); //获取当前时间
-            var to = new Date(2032, 7, 10, 0, 0, 0); //指定到期时间
+            var to = new Date(2032, 1, 1, 0, 0, 0); //指定到期时间
             // 然后拿到当前时间和指定时间的时间差，注意 是毫秒数
             var deltaTime = (to - now) / 1000; //到期时间和当前时间相差的毫秒数/1000换算出总的秒数，方便后边用
             // console.log(deltaTime)

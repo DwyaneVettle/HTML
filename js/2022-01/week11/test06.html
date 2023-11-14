@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #box {
+            border: 1px solid red;
+            width: 300px;
+            padding: 5px;
+        }
+        .focus {
+            color:black;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- 
+        1.添加节点元素标签
+        2.为节点元素添加样式
+        3.优化样式
+     -->
+     <div id="box">
+       <div class="title">
+         <!-- href="javascript::void"表示不跳转 -->
+         <a href="javascript::void">大</a>
+         <a href="javascript::void">中</a>
+         <a href="javascript::void" class="focus">小</a>
+       </div>
+        <p id="p1">操作元素的行内样式，访问元素节点的style属性，获取样式对象，
+            样式对象中包含css属性，使用点语法操作</p>
+     </div>
+     <script>
+        /* 
+            用js修改/设置样式的方式是通过style属性
+            格式：ele.style.css样式 = ""
+            css样式使用小驼峰，值使用字符串，有单位
+            必须带单位
+        
+        */
+        // 获取所有的a标签
+        var as = document.getElementsByTagName('a')
+        var p1 = document.getElementById('p1')
+        // 清除全部链接的样式，并绑定单击事件，变为focus的样式
+        function clearFocus() {
+            for(var i =0;i<as.length;i++) {
+                as[i].removeAttribute('class')
+            }
+        }
+        // 点击第一个a标签
+        as[0].onclick = function() {
+            // 设置大的字体
+            p1.style.fontSize = "22px"
+            // as[0].style.textDecoration = 'none'
+            // as[0].style.color = 'black'
+            clearFocus()
+            this.className = 'focus'
+        }
+
+         // 点击第2个a标签
+         as[1].onclick = function() {
+            // 设置大的字体
+            p1.style.fontSize = "19px"
+            // as[0].style.textDecoration = 'none'
+            // as[0].style.color = 'black'
+            clearFocus()
+            this.className = 'focus'
+        }
+
+         // 点击第3个a标签
+         as[2].onclick = function() {
+            // 设置大的字体
+            p1.style.fontSize = "16px"
+            // as[0].style.textDecoration = 'none'
+            // as[0].style.color = 'black'
+            clearFocus()
+            this.className = 'focus'
+        }
+     </script>
+</body>
+</html>
