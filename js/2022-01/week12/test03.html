@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        .father {
+            width: 200px;
+            height: 200px;
+            background-color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="yeye">
+        爷爷
+        <div class="father">
+            爸爸
+            <div class="family">
+                儿子
+                <p class="family">孙子</p>
+            </div>
+        </div>
+    </div>
+    <span>111</span>
+    <span>222</span>
+    <span>333</span>
+    <span>444</span>
+    <span>555</span>
+    <span>666</span>
+    <button>点击</button>
+    <ul>
+        <li>111</li>
+        <li>222</li>
+        <li>333</li>
+        <li>444</li>
+        <li>555</li>
+    </ul>
+    <script>
+        $(function() {
+            // 选择所有的元素$('*')
+            // $('*').css('color','red')
+           /*  $('.father').click(function() {
+                // $(this)表示当前对象
+                $(this).hide()
+            }) */
+            // $('ele.class')表示选择class属性的ele
+            // $('p.family').css('font-size','40px')
+            // $('span:first')表示选择span的第一个
+            // $('span:first').css('color', 'red')
+            // $('span:last').css('color', 'red')
+            // $("tr:even")偶数 $("tr:odd")奇数-下标0开始
+            $('span:odd').css('font-size','20px')
+            $('span:even').css('font-size','30px')
+            $('ul li:nth-child(3)').css('font-size', '60px')
+        })
+    </script>
+</body>
+</html>

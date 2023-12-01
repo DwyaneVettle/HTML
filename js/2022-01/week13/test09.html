@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    <a id="baidu" href="https://www.baidu.com">百度一下</a>
+    <button class="btn">更改href属性</button>
+    <script>
+        $('.btn').click(function() {
+            // 修改多个属性可以用对象传递
+            $('#baidu').attr({
+                href: 'https://www.jd.com',
+                title: '京东两下'
+            })
+            // 通过修改tile修改超链接名称
+            title = $('#baidu').attr('title')
+            $('#baidu').html(title)
+        })
+    </script>
+</body>
+</html>

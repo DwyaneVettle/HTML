@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    <div>htllo jq</div>
+    <div>htllo jq</div>
+    <div>htllo jq</div>
+    <div>htllo jq</div>
+    <script>
+        /* 
+        jq具有隐式迭代的特征，所迭代出的元素具有伪数组的特点
+        伪数组：只具有数组的length属性，不具备其他方法
+        */
+        $('div').css('font-size','30px')
+        console.log($('div'));
+    </script>
+</body>
+</html>

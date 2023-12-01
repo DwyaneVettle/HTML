@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        .div01 {
+            width: 100px;
+            height: 100px;
+            background-color: green;
+            margin-top: 10px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <button>点击生成动画</button>
+    <div class="div01"></div>
+    <script>
+        /* 
+        在jq中动画的效果使用animate()
+        参数：
+            {params}表示执行动画的css样式,必填
+            speed:动画速度
+            easing：动画切换换过
+            callback:回调函数
+        */
+       $('button').click(function() {
+            $('.div01').animate({
+                left: '300px',
+                width: '+=200px',
+                // height: '+=200px',
+                opcity: '0.5',
+                height:'show'
+            },2000,)
+            $('.div01').animate({
+                left: '300px',
+                width: '+=200px',
+                // height: '+=200px',
+                opcity: '0.5',
+                height:'show'
+            },2000,)
+            $('.div01').animate({
+                left: '300px',
+                width: '+=200px',
+                // height: '+=200px',
+                opcity: '0.5',
+                height:'show'
+            },2000,)
+            $('.div01').animate({
+                left: '300px',
+                width: '+=200px',
+                // height: '+=200px',
+                opcity: '0.5',
+                height:'show'
+            },2000,)
+       })
+    </script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    <p class="p1">
+        这是一个段落
+    </p>
+    <script>
+        /* 
+        hover()鼠标悬停事件
+        触发这个事件会经过两个步骤
+        mouseenter
+        mouseleave
+        */
+        $('.p1').hover(
+            function() {
+                alert('你进入了这个元素')
+            },
+            function() {
+                alert('你离开了这个元素')
+            }
+        )
+    </script>
+</body>
+</html>

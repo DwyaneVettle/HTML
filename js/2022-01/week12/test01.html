@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        #d1 {
+            width: 200px;
+            height: 200px;
+            background-color: blue;
+        }
+        #d2 {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="d1"></div>
+    <div id="d2"></div>
+    <script>
+        // 获取js对象div
+        var myDiv = document.querySelector('#d1')
+        // 获取jq对象span
+        console.log(myDiv);
+        console.log($('#d2'));  
+        /* 
+        js的对象只能使用js的属性和方法
+        jq的对象也只能使用jq的属性和方法
+        */
+        myDiv.style.display = 'none'
+        // $('#d2').style.display = 'none'
+        $('#d2').hide()
+    </script>
+</body>
+</html>

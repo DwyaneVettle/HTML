@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    <p>双击元素1消失</p>
+    <p>双击元素2消失</p>
+    <p>双击元素3消失</p>
+    <p id="p1">鼠标经过时，显示其他元素</p>
+    <p id="p2">鼠标离开时，隐藏其他元素</p>
+    <p id="p3">鼠标按下时，显示其他元素</p>
+    <script>
+        // 双击事件
+        $('p').dblclick(function() {
+            $(this).hide()
+        })
+        // 指针经过事件
+        /* $('#p1').mouseenter(function() {
+            $('p').show()
+        })
+        // 指针离开事件
+        $('#p2').mouseleave(function() {
+            $('p').hide()
+        }) */
+        // 鼠标按下但未弹起
+       /*  $('#p3').mousedown(function() {
+            $('p').show()
+        }) */
+        // 鼠标按下并弹起
+        $('#p3').mouseup(function() {
+            $('p').show()
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    <p>这是一个段落1</p>
+    <p>这是一个段落2</p>
+    <button id="btn">点击</button>
+    <script>
+        /* 
+            hide(speed,easing,callback)/show()
+                speed:表示显示或隐藏的速度,可以传递slow，fast,normal，ms
+                easing：表示切换效果，swing快慢结合，liner匀速
+                callback表示效果完成之后的动作
+            toggle(speed,easing,callback)
+                作用：显示和隐藏之间进行切换
+        */
+        $(function() {
+            $('#btn').click(function() {
+               /*  $('p').hide(5000,"swing",function() {
+                    $('p').show(5000)
+                    alert(123)
+                }) */
+                $('p').toggle()
+            })
+            
+        })
+    </script>
+</body>
+</html>

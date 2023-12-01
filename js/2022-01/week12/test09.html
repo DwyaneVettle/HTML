@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    用户名：<input type="text" name="username">
+    <br>
+    密码：<input type="password" name="passwd" >
+    <script>
+        /* 
+        focus()用于获取焦点，一般用于输入框或其他表单
+        */
+       $('input').focus(function() {
+            $(this).css('background','red')
+       })
+       /* 
+       blur()用于失去焦点
+       */
+      $('input').blur(function() {
+        $(this).css('background','white')
+      })
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        #flip, #panel {
+            text-align: center;
+            background-color: bisque;
+            padding: 5px;
+            border: 1px solid red;
+        }
+        #panel {
+            display: none;
+            height: 150px;
+        }
+    </style>
+</head>
+<body>
+    <button id="btn">点我停止滑动</button>
+    <div id="flip">点我向下滑动</div>
+    <div id="panel">hello world!</div>
+    <script>
+        $('#flip').click(function() {
+            $('#panel').slideDown(5000)
+            $('#panel').slideUp(5000)
+        })
+        // stop() 用于所有的效果停止
+        $('#btn').click(function() {
+            $('#panel').stop()
+        })
+    </script>
+</body>
+</html>

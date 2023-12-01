@@ -364,7 +364,7 @@ JS对象通过选择获取，jQuery对象通过顶级对象$获取：
 
 ## 4.jQuery选择器
 
-jQuery 选择器允许你对 HTML 元素组或单个元素进行操作。jQuery 选择器基于元素的 id、类、类型、属性、属性值等"查找"（或选择）HTML 元素。 它基于已经存在的 CSS 选择器，除此之外，它还有一些自定义的选择器。
+​	jQuery 选择器允许你对 HTML 元素组或单个元素进行操作。jQuery 选择器基于元素的 id、类、类型、属性、属性值等"查找"（或选择）HTML 元素。 它基于已经存在的 CSS 选择器，除此之外，它还有一些自定义的选择器。
 
 **jQuery 中所有选择器都以美元符号开头：$()。**
 
@@ -766,137 +766,138 @@ jQuery可以实现隐式迭代，因为其DOM元素内部是以伪数组的形�
 
 **练习：淘宝案例：**
 
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202311211611308.png" alt="image-20231121161124064" style="zoom:50%;" />
 
-
-```html
-<!DOCTYPE html>
-<html>
-
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-    <style type="text/css">
-        * {
-            margin: 0;
-            padding: 0;
-            font-size: 12px;
-        }
-        
-        ul {
-            list-style: none;
-        }
-        
-        a {
-            text-decoration: none;
-        }
-        
-        .wrapper {
-            width: 250px;
-            height: 248px;
-            margin: 100px auto 0;
-            border: 1px solid pink;
-            border-right: 0;
-            overflow: hidden;
-        }
-        
-        #left,
-        #content {
-            float: left;
-        }
-        
-        #left li {
-            background: url(images/lili.jpg) repeat-x;
-        }
-        
-        #left li a {
-            display: block;
-            width: 48px;
-            height: 27px;
-            border-bottom: 1px solid pink;
-            line-height: 27px;
-            text-align: center;
-            color: black;
-        }
-        
-        #left li a:hover {
-            background-image: url(images/abg.gif);
-        }
-        
-        #content {
-            border-left: 1px solid pink;
-            border-right: 1px solid pink;
-        }
-    </style>
-    <script src="jquery.min.js"></script>
-    <script>
-        $(function() {
-            // 1. 鼠标经过左侧的小li 
-            $("#left li").mouseover(function() {
-                // 2. 得到当前小li 的索引号
-                var index = $(this).index();
-                console.log(index);
-                // 3. 让我们右侧的盒子相应索引号的图片显示出来就好了
-                // $("#content div").eq(index).show();
-                // 4. 让其余的图片（就是其他的兄弟）隐藏起来
-                // $("#content div").eq(index).siblings().hide();
-                // 链式编程
-                $("#content div").eq(index).show().siblings().hide();
-
-            })
-        })
-    </script>
-</head>
-
-<body>
-    <div class="wrapper">
-        <ul id="left">
-            <li><a href="#">女靴</a></li>
-            <li><a href="#">雪地靴</a></li>
-            <li><a href="#">冬裙</a></li>
-            <li><a href="#">呢大衣</a></li>
-            <li><a href="#">毛衣</a></li>
-            <li><a href="#">棉服</a></li>
-            <li><a href="#">女裤</a></li>
-            <li><a href="#">羽绒服</a></li>
-            <li><a href="#">牛仔裤</a></li>
-        </ul>
-        <div id="content">
-            <div>
-                <a href="#"><img src="images/女靴.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/雪地靴.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/冬裙.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/呢大衣.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/毛衣.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/棉服.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/女裤.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/羽绒服.jpg" width="200" height="250" /></a>
-            </div>
-            <div>
-                <a href="#"><img src="images/牛仔裤.jpg" width="200" height="250" /></a>
-            </div>
-
-        </div>
-
-
-    </div>
-</body>
-
-</html>
-```
+> ```html
+> <!DOCTYPE html>
+> <html>
+> 
+> <head lang="en">
+>     <meta charset="UTF-8">
+>     <title></title>
+>     <style type="text/css">
+>         * {
+>             margin: 0;
+>             padding: 0;
+>             font-size: 12px;
+>         }
+>         
+>         ul {
+>             list-style: none;
+>         }
+>         
+>         a {
+>             text-decoration: none;
+>         }
+>         
+>         .wrapper {
+>             width: 250px;
+>             height: 248px;
+>             margin: 100px auto 0;
+>             border: 1px solid pink;
+>             border-right: 0;
+>             overflow: hidden;
+>         }
+>         
+>         #left,
+>         #content {
+>             float: left;
+>         }
+>         
+>         #left li {
+>             background: url(images/lili.jpg) repeat-x;
+>         }
+>         
+>         #left li a {
+>             display: block;
+>             width: 48px;
+>             height: 27px;
+>             border-bottom: 1px solid pink;
+>             line-height: 27px;
+>             text-align: center;
+>             color: black;
+>         }
+>         
+>         #left li a:hover {
+>             background-image: url(images/abg.gif);
+>         }
+>         
+>         #content {
+>             border-left: 1px solid pink;
+>             border-right: 1px solid pink;
+>         }
+>     </style>
+>     <script src="jquery.min.js"></script>
+>     <script>
+>         $(function() {
+>             // 1. 鼠标经过左侧的小li 
+>             $("#left li").mouseover(function() {
+>                 // 2. 得到当前小li 的索引号
+>                 var index = $(this).index();
+>                 console.log(index);
+>                 // 3. 让我们右侧的盒子相应索引号的图片显示出来就好了
+>                 // $("#content div").eq(index).show();
+>                 // 4. 让其余的图片（就是其他的兄弟）隐藏起来
+>                 // $("#content div").eq(index).siblings().hide();
+>                 // 链式编程
+>                 $("#content div").eq(index).show().siblings().hide();
+> 
+>             })
+>         })
+>     </script>
+> </head>
+> 
+> <body>
+>     <div class="wrapper">
+>         <ul id="left">
+>             <li><a href="#">女靴</a></li>
+>             <li><a href="#">雪地靴</a></li>
+>             <li><a href="#">冬裙</a></li>
+>             <li><a href="#">呢大衣</a></li>
+>             <li><a href="#">毛衣</a></li>
+>             <li><a href="#">棉服</a></li>
+>             <li><a href="#">女裤</a></li>
+>             <li><a href="#">羽绒服</a></li>
+>             <li><a href="#">牛仔裤</a></li>
+>         </ul>
+>         <div id="content">
+>             <div>
+>                 <a href="#"><img src="images/女靴.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/雪地靴.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/冬裙.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/呢大衣.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/毛衣.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/棉服.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/女裤.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/羽绒服.jpg" width="200" height="250" /></a>
+>             </div>
+>             <div>
+>                 <a href="#"><img src="images/牛仔裤.jpg" width="200" height="250" /></a>
+>             </div>
+> 
+>         </div>
+> 
+> 
+>     </div>
+> </body>
+> 
+> </html>
+> ```
+>
 
 
 
@@ -1012,7 +1013,7 @@ click() 方法是当按钮点击事件被触发时会调用一个函数。该函
 
 #### 5.1.4.mouseenter()
 
-当鼠标指针**穿过**元素时，会发生 mouseenter 事件。mouseenter() 方法触发 mouseenter 事件，或规定当发生 mouseenter 事件时运行的函数。
+当鼠标指针**穿过**元素时，会发生 mouseenter 事件。mouseenter() 方法触发 mouseenter 事件，或规定当发生 mouseenter 事件时运行的函数。等效mouseover
 
 ```javascript
 <!DOCTYPE html>
@@ -1042,7 +1043,7 @@ click() 方法是当按钮点击事件被触发时会调用一个函数。该函
 
 #### 5.1.5.mouseleave()
 
-当鼠标指针离开元素时，会发生 mouseleave 事件。mouseleave() 方法触发 mouseleave 事件，或规定当发生 mouseleave 事件时运行的函数。
+当鼠标指针离开元素时，会发生 mouseleave 事件。mouseleave() 方法触发 mouseleave 事件，或规定当发生 mouseleave 事件时运行的函数。等效mouseout
 
 ```javascript
 <!DOCTYPE html>
@@ -1166,7 +1167,7 @@ $(document).ready(function(){
 
 #### 5.1.9.focus()
 
-当元素获得焦点时，发生 focus 事件。当通过鼠标点击选中元素或通过 tab 键定位到元素时，该元素就会获得焦点。focus() 方法触发 focus 事件，或规定当发生 focus 事件时运行的函数。
+​	当元素获得焦点时，发生 focus 事件。当通过鼠标点击选中元素或通过 tab 键定位到元素时，该元素就会获得焦点。focus() 方法触发 focus 事件，或规定当发生 focus 事件时运行的函数。
 
 ```javascript
 <!DOCTYPE html>
@@ -2707,7 +2708,7 @@ $.each(function(index,domElement){
 
 ## 9.noConflict()方法
 
-jQuery 使用 $ 符号作为 jQuery 的简写。**如果其他 JavaScript 框架也使用 $ 符号作为简写怎么办？**
+jQuery 使用` $ `符号作为 jQuery 的简写。**如果其他 JavaScript 框架也使用 $ 符号作为简写怎么办？**
 
 其他一些 JavaScript 框架包括：MooTools、Backbone、Sammy、Cappuccino、Knockout、JavaScript MVC、Google Web Toolkit、Google Closure、Ember、Batman 以及 Ext JS。
 

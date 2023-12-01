@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+</head>
+<body>
+    <p>
+        这是段落中的<b>粗体</b>文本
+    </p>
+    <input type="text" name="" id="">
+    <a href="https://www.baidu.com">百度</a>
+    <button class="btn1">获取文本</button>
+    <button class="btn2">获取文本+标签</button>
+    <button class="btn3">显示输入框的值</button>
+    <button class="btn4">显示属性</button>
+    <script>
+        /* 
+            jq中通过以下方法可以捕获html的相关元素
+            text():获取文本
+            html():获取标签+文本
+            val():获取表单值
+            attr(attr):获取属性
+        */
+        $('.btn1').click(function() {
+            alert("文本内容是：" + $('p').text())
+        })
+        $('.btn2').click(function() {
+            alert("文本内容是：" + $('p').html())
+        })
+
+        $('.btn3').click(function() {
+            alert("输入框的值为：" + $('input').val())
+        })
+
+        $('.btn4').click(function() {
+            alert("属性为：" + $('a').attr('href'))
+        })
+    </script>
+</body>
+</html>

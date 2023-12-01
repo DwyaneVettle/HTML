@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        div {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <button>淡入</button>
+    <button>淡出</button>
+    <button>淡入淡出切换</button>
+    <button>修改透明度</button>
+    <div></div>
+    <script>
+        /* 
+        fadeIn(speed,easing,callback)-淡入
+        fadeOut(speed,easing,callback)-淡出
+        fadeToggle(speed,easing,callback)-切换
+        fadeTo()-修改透明度-[0-1)
+        */
+       $('button').eq(0).click(function(){
+            // 淡入效果
+            $('div').fadeIn(3000,"swing")
+       })
+
+       $('button').eq(1).mouseenter(function() {
+            // 淡出效果
+            $('div').fadeOut(3000)
+       })
+
+       $('button').eq(2).click(function() {
+            // 切换淡入淡出
+            $('div').fadeToggle()
+       })
+
+       $('button').eq(3).click(function() {
+            // 修改透明度(0-1]n
+            $('div').fadeTo(1000,0.3)
+       })
+    </script>
+</body>
+</html>
