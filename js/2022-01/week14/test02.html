@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        div {
+            width: 200px;
+            height: 200px;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        /* 
+            在jq中，通过css()方法可以获取或改变元素的样式
+            如果参数只传递属性，则是获取该属性的值
+            如果参数传递属性和值，则是设置该属性的值
+        */
+       console.log($('div').css('width'));
+       // 注意：如果参数值为像素值，可以有两种传递方式
+       // 1.不带单位，不加引号；2.带单位必须加引号
+       // $('div').css('width',300)
+       // $('div').css('width','300px','height',400)
+       // 如果要设置多个样式，可以通过对象来传递样式
+       // 样式由多个单词组成，采用驼峰命名法
+       $('div').css({
+        'width':300,
+        'height':400,
+        'backgroundColor': 'yellow'
+       })
+    </script>
+</body>
+</html>

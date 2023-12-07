@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        div {
+            width: 300px;
+            height: 300px;
+            background-color: red;
+            padding: 10px;
+            border: 5px solid yellow;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <script>
+        // width()/height()获取设置对应元素的宽高
+        console.log($('div').width());
+        // $('div').width(400)
+        // innerWidth()/innerHeight()获取包含padding宽高
+        console.log($('div').innerHeight());
+        // outerWidth()/outerHeight()获取包含padding,border
+        console.log($('div').outerHeight());
+        // outerWidth(true)/outerHeight(true)获取包含padding,border,margin
+        console.log($('div').outerHeight(true));
+    </script>
+</body>
+</html>

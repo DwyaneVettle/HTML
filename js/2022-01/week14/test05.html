@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .father {
+            width: 400px;
+            height: 400px;
+            background-color: pink;
+            margin: 100px;
+            overflow: hidden;
+            position: relative;
+        }
+        .son {
+            width: 150px;
+            height: 150px;
+            background-color: blue;
+            position: absolute;
+            left: 10px;
+            top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="father">
+        <div class="son"></div>
+    </div>
+    <script>
+        // 1.获取位置距离文档的偏移量-offset()
+        console.log($('.son').offset().top); // 110
+        // 设置偏移量
+       /*  $('.son').offset({
+            top:100,
+            left:200
+        }) */
+        // position()获取带有父级定位的偏移量(相对于父级的top和left)
+        console.log($('.son').position());
+        // 只能获取不能设置
+        /* $('.son').position({
+            left: 30,
+            top: 50
+        }) */
+    </script>
+</body>
+</html>

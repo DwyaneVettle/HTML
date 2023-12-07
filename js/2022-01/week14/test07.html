@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        body {
+            display: block;
+            border: 2px solid red;
+            color: blue;
+            padding: 5px;
+            margin: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        div（父元素）
+        <p>p</p>
+        <span>span</span>
+        <h2>h2</h2>
+        <h3>h3</h3>
+        <p>p</p>
+    </div>
+    <script>
+        // parent()表示当前元素的父元素
+        $('h2').parent().css({
+            "color":'yellow',
+            'border':'3px solid black'
+        })
+        // 所有跟随它的兄弟元素
+        $('h3').nextAll().css({
+            "color":'skyblue',
+            'fontSize': 50
+        })
+        $('body').children().css({
+            'color': 'red'
+        })
+    </script>
+</body>
+</html>

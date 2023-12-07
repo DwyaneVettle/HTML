@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        div {
+            width: 150px;
+            height: 150px;
+            background-color: pink;
+            margin: 100px auto;
+            /* 过渡效果-配合旋转 */
+            transition: all 0.5s;
+        }
+        
+        .current {
+            background-color: red;
+            /* 旋转 */
+            transform: rotate(360deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="current"></div>
+    <script>
+        /* 
+            通过切换类的属性来改变样式
+            addClass()-增加类
+            removeClass()-移除类
+            toggleClass()-切换类
+        */
+       // 1.添加类
+       $('div').click(function() {
+            $(this).toggleClass('current')
+       })
+    </script>
+</body>
+</html>

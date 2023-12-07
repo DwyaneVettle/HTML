@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../lib/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    姓名：<input type="text" id="userName">
+    密码：<input type="password" id="pwd">
+    <button onclick="login()">登录</button>
+    <script>
+        function login() {
+            /* $.ajax({
+                type:"get",
+                url: 'index.html',
+                success: function(res) {
+                    var userName = $("#userName").val();
+                    var pwd = $("#pwd").val();
+                    if(userName == "ajax" && pwd == "123456") {
+                        location.href = "index.html"
+                    }
+                }
+            }) */
+            axios.get("index.html").then(res => {
+                var userName = $("#userName").val();
+                var pwd = $("#pwd").val();
+                if(userName == "ajax" && pwd == "123456") {
+                        location.href = "index.html"
+                } else {
+                    alert('用户名或密码错误！')
+                }
+            })
+        }
+    </script>
+</body>
+</html>

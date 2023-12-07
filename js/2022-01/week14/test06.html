@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../jquery.min.js"></script>
+    <style>
+        body {
+            height: 2000px;
+        }
+        .back {
+            position: fixed;
+            width: 65px;
+            height: 20px;
+            background-color: red;
+            right: 30px;
+            bottom: 100px;
+            display: none;
+        }
+        .container {
+            width: 900px;
+            height: 500px;
+            background-color: skyblue;
+            margin: 400px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="back">返回顶部</div>
+    <div class="container"></div>
+    <script>
+        /* 
+        被卷去的部分：
+            scrollTop()被卷去的上部
+            scrollLeft()被卷去的左边
+        */
+       $(function() {
+        $(document).scrollTop(100)
+        // 页面的滚动事件-scroll
+        var boxTop = $('.container').offset().top
+        $(window).scroll(function() {
+            if($(document).scrollTop() >= boxTop) {
+                $('.back').fadeIn()
+            } else {
+                $('.back').fadeOut()
+            }
+        })
+        // 点击事件，点击back回到页面顶部
+        $('.back').click(function() {
+            $('body,html').stop().animate({
+                scrollTop:0
+            })
+        })
+       })
+    </script>
+</body>
+</html>
