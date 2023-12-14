@@ -4737,7 +4737,7 @@ new Vue({
         <div id="root">
             <!-- 父组件 -->
             <my-parent></my-parent>
-          </div>
+         </div>
         
           <!-- 父组件模板 -->
           <template id="parent">
@@ -9485,3 +9485,4 @@ arguments 对象，用来存储实际传递的参数。但是箭头函数并没�
 箭头函数不具有 new.target
 ```
 
+​	

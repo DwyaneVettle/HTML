@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!--  -->
+            <my-component></my-component>
+            <!-- 以下方式报错，多个单词组成在标签中只能使用-隔开 -->
+            <!-- <myComponent></myComponent> -->
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 1.定义组件
+                var com1 = Vue.extend({
+                    template:`<p>我是局部组件</p>`
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        components:{
+                            // 2.注册组件，以k-v格式，k是组件名，v为配置对象
+                            myComponent:com1,
+                            // 注册组件时，如果-命名，则需用字符串形式
+                            // 'my-component':com1
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

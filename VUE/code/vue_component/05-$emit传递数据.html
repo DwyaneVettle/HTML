@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <parent></parent>
+        </div>
+        <!-- 子组件的模板 -->
+        <template id="child">
+            <div>
+                <button @click="send()">发送</button>
+                <input type="text" v-model="message">
+            </div>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建子组件child
+                var child = {
+                    template:"#child",
+                    data() {
+                        return {
+                            message: ''
+                        }
+                    },
+                    methods: {
+                        send() {
+                            this.$emit('childFun',this.message)
+                        }
+                    },
+                }
+                // 创建父组件parent
+                var parent = {
+                    template:`
+                        <div>
+                            <child @childFun="transContent"/>
+                            子组件传递的消息：{{message}}    
+                        </div>
+                    `,
+                    data() {
+                        return {
+                            message:''
+                        }
+                    },
+                    methods: {
+                        transContent(transData) {
+                            this.message = transData
+                        }
+                    },
+                    components:{
+                        child:child
+                    }
+                }
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        components:{
+                            child:child,
+                            parent:parent
+                        }
+                })
+        </script>
+</body>
+</html>
