@@ -624,7 +624,7 @@ const PI = 3.14;
 
 **值类型(基本类型)**：字符串（String）、数字(Number)、布尔(Boolean)、空（Null）、未定义（Undefined）、Symbol。
 
-**引用数据类型（对象类型）**：对象(Object)、数组(Array)、函数(Function)，还有两个特殊的对象：正则（RegExp）和日期（Date）。
+**引用数据类型（对象类型）**：对象(	)、数组(Array)、函数(Function)，还有两个特殊的对象：正则（RegExp）和日期（Date）。
 
 <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202309261845337.png" alt="image-20220701110414893" style="zoom:67%;" />
 

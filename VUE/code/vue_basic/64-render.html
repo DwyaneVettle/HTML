@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <my-component>渲染函数的使用</my-component>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.component('my-component',{
+                    // 通过渲染函数渲染，接收h参数，创建元素p
+                    render(h) {
+                        return h('p',{
+                            style:{
+                                color:'red',
+                                fontSize: '30px'
+                            }
+                        },
+                        // 插槽获取内容
+                        this.$slots.default)
+                    }
+
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>

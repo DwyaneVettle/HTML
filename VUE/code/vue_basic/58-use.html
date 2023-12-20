@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root' v-my-plugin>
+            
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 1.定义插件对象
+                let myPlugin = {}
+                // 2.编写Install方法
+                myPlugin.install = function(Vue,options) {
+                    console.log(options);
+                    Vue.directive('my-plugin',{
+                        bind(el,binding) {
+                            el.style = "width:100px;height:100px;background-color:red"
+                        }
+                    })
+                }
+                // 3.安装插件
+                Vue.use(myPlugin,{
+                    // 参数可以对插件进行配置
+                    someOptions:true
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+
+        </script>
+</body>
+</html>

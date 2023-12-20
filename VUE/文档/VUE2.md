@@ -3033,3 +3033,442 @@ Vue中使用组件的三大步骤：
 </html>
 ```
 
+
+
+## 3.常用API、全局属性和全局配置
+
+### 3.1.Vue.use
+
+​	`Vue`是一个扩展性较强的框架，可以使用插件完善一些功能。`Vue.use`主要用于在Vue中安装插件，插件可以是一个对象或函数，如果是对象，必须提供`install`方法；如果是函数，它会被作为`install`方法。`install`方法调用时，会将Vue作为参数传入。
+
+​	案例：通过安装插件的方式让div盒子背景颜色为红色。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312191511631.png" alt="image-20231219151053510" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root' v-my-plugin>
+            
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 1.定义插件对象
+                let myPlugin = {}
+                // 2.编写Install方法
+                myPlugin.install = function(Vue,options) {
+                    console.log(options);
+                    Vue.directive('my-plugin',{
+                        bind(el,binding) {
+                            el.style = "width:100px;height:100px;background-color:red"
+                        }
+                    })
+                }
+                // 3.安装插件
+                Vue.use(myPlugin,{
+                    // 参数可以对插件进行配置
+                    someOptions:true
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+
+        </script>
+</body>
+</html>
+```
+
+​	在组件化开发中，我们常常会用到第三方提供的插件库，如ElementUI，我们也会通过`Vue.use`来使用第三方插件，ElementUI使用参考：https://element.eleme.cn/#/zh-CN
+
+
+
+### 3.2.Vue.set
+
+​	`Vue`的核心具有一套响应式系统，简单来说就是通过监听器监听数据层的数据变化，当数据改变后，通知视图也自动更新。如果在Vue示例中已经配置好数据，后期如果想要再添加其他属性，这时就不再是响应式数据了。但Vue提供了一个API，即`Vue.set()`，它不仅可以完成属性和值的添加，还可以以响应式的方式进行添加。`set(target,key,val)`的三个参数分别代表：要`添加的对象`；`属性名`；`属性值`。
+
+​	案例：通过点击事件为学生添加性别属性，并响应式的显示出来。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312191532570.png" alt="image-20231219153222444" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h2>学生信息</h2>
+            <button @click="addSex">添加一个性别属性，默认为男</button>
+            <h3>学生姓名：{{student.name}}</h3>
+            <h3>学生年龄：真实{{student.age.rAge}},对外{{student.age.sAge}}</h3>
+            <h3 v-if="student.sex">学生性别：{{student.sex}}</h3>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            student:{
+					            name:'tom',
+					            age:{
+                                    rAge:40,
+                                    sAge:29,
+                                },
+                                // sex:'男',
+				            }
+                          },
+                          methods:{
+                                addSex(){
+                                    /* 
+                                        Vue.set(target,key,val)
+                                        target:要添加属性的对象
+                                        key:属性
+                                        val:值
+                                        Vue.set()等效于vm.$set()
+                                    */
+                                    // Vue.set(this.student,'sex','男')
+                                    this.$set(this.student,'sex','男')
+                                }
+                            }  
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+### 3.3.Vue.mixin
+
+​	`Vue.mixin`用于全局注册一个混入，它将影响之后创建的每个Vue实例。该接口主要是提供给插件作者使用，在插件中向组件注入自定义的行为。该接口**不推荐在应用代码中使用**。
+
+![image-20231220160402841](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312201604011.png)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 全局注册一个混入
+                Vue.mixin({
+                    created() {
+                        var myOption = this.$options.myOption
+                        if(myOption) {
+                            console.log(myOption.toUpperCase());
+                        }
+                    },
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        // 自定义属性myOption
+                        myOption: 'hello'
+                })
+                new Vue({
+                        el: '#root',
+                        myOption: 'world'
+                })
+        </script>
+</body>
+</html>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312201612194.png" alt="image-20231220161250068" style="zoom:50%;" />
+
+​	通过以上案例，我们发现全局混入对所有的Vue实例都有影响。
+
+### 3.4.vm.$slots
+
+​	Vue中的组件中使用`template`模板定义HTML结构，为了方便使用`template`公共模板结构，Vue提出了插槽(Slots)的概念。插槽就是定义在组件内部的`template`模板，可以通过`$slots`动态获取。
+
+​	在使用[渲染函数](https://v2.cn.vuejs.org/v2/guide/render-function.html)书写一个组件时，访问 `vm.$slots` 最有帮助--https://v2.cn.vuejs.org/v2/api/#vm-slots
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- “你好”两字只能启用插槽才能显示 -->
+            <my-component>你好</my-component>
+        </div>
+        <template id="temp">
+            <div>
+                <!-- 启用插槽 -->
+                <slot></slot>
+            </div>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.component('my-component',{
+                    template:'#temp'
+                })
+                // 创建Vue对象
+                var vm = new Vue({
+                        el: '#root',
+                        data: {}   
+                })
+        </script>
+</body>
+</html>
+```
+
+### 3.5.vm.$attrs
+
+​	`vm.$attrs`可以获取组件的属性，但其获取的属性中不包含class、style以及被声明的props的属性。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <my-component id="testId" class="testClass"></my-component>
+        </div>
+        <template id="temp">
+            <div>
+                <button @click="showAttrs()">点击显示属性</button>
+            </div>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.component('my-component',{
+                    template:'#temp',
+                    methods: {
+                        showAttrs() {
+                            console.log(this.$attrs)
+                        }
+                    },
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312201649249.png" style="zoom:50%;" />
+
+### 3.6.silent
+
+​	Vue全局配置对象中，`silent`可以取消Vue日志和警告，值类型为boolean，默认值为false，设置为true则忽略警告和日志。下面代码中控制台会报错，因为通过插值语法绑定的变量msg没有定义在data中，我们可以通过`silent`忽略该警告：
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            {{msg}}
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 通过silent忽略警告
+                Vue.config.silent = true
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+### 3.7.devtools
+
+​	在此之前我们已经使用过了调式工具vue-devtools，我们也可以通过全局配置中的devtools对其进行配置，设置成true表示允许调试，否则不允许调试，用法如下：
+
+```vue
+Vue.config.devtools = true
+```
+
+
+
+### 3.8.render
+
+​	在Vue中可以使用Vue.render()对虚拟DOM进行操作。在Vue中一般使用template来创建HTML，但这种方式可编程性不强，而使用Vue.render()可以更好的发挥JS的编程能力。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <my-component>渲染函数的使用</my-component>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.component('my-component',{
+                    // 通过渲染函数渲染，接收h参数，创建元素p
+                    render(h) {
+                        return h('p',{
+                            style:{
+                                color:'red',
+                                fontSize: '30px'
+                            }
+                        },
+                        // 插槽获取内容
+                        this.$slots.default)
+                    }
+
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312201718632.png" alt="image-20231220171835549" style="zoom:50%;" />
+
+### 3.9.createElement
+
+​	在`3.8`中我们看到了一个函数`h`，实际上这个函数的原样是`createElement`，它用来创建元素。需要注意的是`createElemtnt`返回的并不是一个实际的DOM元素，它返回的其实是一个描述节点(createNodeDescription)，它用来高速Vue在页面上需要渲染什么样的节点。这个描述节点也可以称为虚拟节点(Virtual Node)，简称为VNode。而虚拟DOM是对由Vue组件树建立起来的整个VNode树的称呼。
+
+​	`createElement()`函数的使用非常灵活，它的第一个参数可以是一个HTML标签名或组件选项对象；第二个参数是可选的，可以传入一个与模板中属性对应的数据对象；第三个参数是由`createElement`构建而成的子级虚拟节点，也可以使用字符串来生成文本虚拟节点。
+
+​	案例：创建组件`my-component`，通过`v-slot`的方式定义header、content、footer插槽，再通过`createElement()`渲染到页面上：
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <my-component>
+                <template v-slot:header>
+                    <div style="background-color:#ccc;height:50px">
+                        这里是导航栏
+                    </div>
+                </template>
+                <template v-slot:content>
+                    <div style="background-color:#ddd;height:50px">
+                        这里是展示信息
+                    </div>
+                </template>
+                <template v-slot:footer>
+                    <div style="background-color:#eee;height:50px">
+                        这里是底部信息
+                    </div>
+                </template>
+            </my-component>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建组件
+                Vue.component('my-component',{
+                    render(createElement) {
+                        return createElement('div',[
+                            createElement('header',this.$slots.header),
+                            createElement('content',this.$slots.content),
+                            createElement('footer',this.$slots.footer)
+                        ])
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312202214495.png" alt="image-20231220221417356" style="zoom:50%;" />
+
+## 4.过渡和动画
+
+​	

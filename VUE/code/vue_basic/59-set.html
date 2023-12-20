@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h2>学生信息</h2>
+            <button @click="addSex">添加一个性别属性，默认为男</button>
+            <h3>学生姓名：{{student.name}}</h3>
+            <h3>学生年龄：真实{{student.age.rAge}},对外{{student.age.sAge}}</h3>
+            <h3 v-if="student.sex">学生性别：{{student.sex}}</h3>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                const vm = new Vue({
+                        el: '#root',
+                        data: {
+                            student:{
+					            name:'tom',
+					            age:{
+                                    rAge:40,
+                                    sAge:29,
+                                },
+                                // sex:'男',
+				            }
+                          },
+                          methods:{
+                                addSex(){
+                                    /* 
+                                        Vue.set(target,key,val)
+                                        target:要添加属性的对象
+                                        key:属性
+                                        val:值
+                                        Vue.set()等效于vm.$set()
+                                    */
+                                    // Vue.set(this.student,'sex','男')
+                                    this.$set(this.student,'sex','男')
+                                }
+                            }  
+                })
+        </script>
+</body>
+</html>
