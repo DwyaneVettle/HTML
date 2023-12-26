@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <style>
+        .list-item {
+          display: inline-block;
+          margin-right: 10px;
+          background-color: red;
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          text-align: center;
+          line-height: 25px;
+          color: #fff;
+        }
+        /* 元素定位改变时动画 */
+        .list-move {
+          transition: transform 1s;
+        }
+    </style>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/lodash.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="shuffle">洗牌</button>
+            <transition-group name="list" tag="p">
+                <span v-for="item in items" :key="item" class="list-item">
+                    {{ item }}
+                </span>
+            </transition-group>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data() {
+                            return { items: [1, 2, 3, 4, 5] }
+                        },
+                        methods: {
+                            shuffle () {
+                                // shuffle()函数把数组中的元素按随机顺序重新排列
+                                this.items = _.shuffle(this.items)
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

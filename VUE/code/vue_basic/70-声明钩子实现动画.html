@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue使用模板</title>
+    <!--  1.导入vue.js库  -->
+    <script src="../js/vue.js"></script>
+ 
+    <!--  编写小球的显示样式  -->
+    <style>
+        #boll{
+            margin-top: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: lightpink;
+        }
+    </style>
+</head>
+<body>
+ 
+    <div id="app">
+ 
+        <!-- 使用v-on绑定click事件执行切换show变量,用于控制下面p标签的v-if -->
+        <button @click="show = !show">
+            加入购物车
+        </button>
+ 
+        <!-- 设置动画小球 -->
+        <transition
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:after-enter="afterEnter"
+                v-on:enter-cancelled="enterCancelled"
+        >
+            <div v-if="show" id="boll"></div>
+        </transition>
+ 
+    </div>
+ 
+    <script>
+        // 2\. 创建一个Vue的实例
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                show: true
+            },
+            methods:{
+                // --------
+                // 进入中
+                // --------
+ 
+                beforeEnter: function (el) {
+                    // 开始准备进入动画状态
+                    console.log("执行进入动画中的beforeEnter钩子函数");
+                    // 设置小球开始动画之前的，起始位置
+                    el.style.transform = "translate(0, 0)";
+                },
+                // 当与 CSS 结合使用时
+                // 回调函数 done 是可选的
+                enter: function (el, done) {
+                    // 已经进入动画状态，用于设置动画效果
+                    console.log("执行进入动画中的enter钩子函数");
+                    // 这句话，没有实际的作用，但是，如果不写，出不来动画效果；
+                    // 可以认为 el.offsetWidth 会强制动画刷新
+                    el.offsetWidth;
+                    // enter 表示动画 开始之后的样式，这里，可以设置小球完成动画之后的，结束状态
+                    el.style.transform = "translate(150px, 450px)";
+                    el.style.transition = 'all 1s ease';
+                    // 执行完毕，使用done方法回调afterEnter
+                    done()
+                },
+                afterEnter: function (el) {
+                    // 进入动画状态之后，执行结束恢复的操作
+                    console.log("执行进入动画中的afterEnter钩子函数");
+                    // 执行动画完毕后，再次隐藏小球
+                    this.show = !this.show
+                },
+                enterCancelled: function (el) {
+                    // 当取消进入动画状态的时候执行
+                    console.log("执行进入动画中的enterCancelled钩子函数");
+                },
+            }
+        })
+    </script>
+ 
+</body>
+</html>

@@ -3471,4 +3471,1867 @@ Vue.config.devtools = true
 
 ## 4.过渡和动画
 
-​	
+### 4.1.过渡和动画基础
+
+#### 4.1.1.什么是过渡和动画
+
+​	Vue在插入、更新或移除DOM时，提供了多种过渡效果。这里所说的过渡，简而言之，就是从一个状态向另一个状态插入值，新的状态替换了旧的状态。
+
+​	Vue提供了内置的过渡封装组件，即`transition`组件，语法格式如下：
+
+```vue
+<transition name="fade">
+    <!-- 需要添加过渡的div标签 -->
+    <div>
+        
+    </div>
+</transition>
+```
+
+​	上述代码中，`<transition>`标签中用来放置需要添加过渡的div元素，使用name属性可以设置前缀，将name属性设为fade，那么"fade-"就是在过渡中切换的类名前缀，如fade-enter、fade-leave等。如果`<transition>`标签上没有设置name属性名，那么"v-"就是这些类名的默认前缀，如v-enter、v-leave等。推荐设置name值进行命名，这样在应用到另一个过渡时就不会产生冲突。
+
+​	通过`<transition>`标签搭配CSS动画（如@keyframes）可以实现动画效果。动画相比过渡来说，可以在一个声明中设置多个状态，例如，可以在动画20%的位置设置一个关键帧，然后在动画50%的位置设置一个完全不同的状态。另外，`<transition>`标签还提供了一些钩子函数，可以结合JavaScript代码来完成动画效果。
+
+#### 4.1.2.transition组件
+
+​	Vue为`<transition>`标签内部的元素提供了3个进入过渡的类和3个离开过渡的类，如下表：
+
+| 过渡状态  | 过渡类型       | 说明                                 | 生效时间                                                     |
+| --------- | -------------- | ------------------------------------ | ------------------------------------------------------------ |
+| 进入enter | v-enter        | 进入过渡的开始状态，作用于开始的一帧 | 在元素被插入之前生效，在元素被插入之后的下一帧移除           |
+|           | v-enter-active | 进入过渡生效时的状态，作用于整个过程 | 在整个进入过渡的阶段中应用，在元素被插入之前生效，在过渡动画完成后移除 |
+|           | v-enter-to     | 进入过渡的结束状态，作用于结束的一帧 | 在元素被插入之后的下一帧生效（与此同时v-enter被移除），在过渡动画完成之后移除 |
+| 离开leave | v-leave        | 离开过渡的开始状态，作用于开始的一帧 | 在离开过渡被触发时立刻生效，下一帧被移除                     |
+|           | v-leave-active | 离开过渡生效时的状态，作用于整个过程 | 在整个离开过渡阶段中应用，在离开过渡被触发时立刻生效，在过渡完成之后移除 |
+|           | v-leave-to     | 离开过渡的结束状态，作用于结束的一帧 | 在离开过渡被触发之后的下一帧生效（与此同时v-leave被移除），在过渡动画完成之后移除 |
+
+​	案例：通过单击按钮实现图形宽度的隐藏与现实。切换显示状态时，让宽度从0增长到200px；切换隐藏状态时，让宽度从200px减少到0的过渡效果。
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312211013317.gif)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <style>
+        /* 图形初始状态 */
+        .chart {
+            width: 200px;
+            height: 50px;
+            background-color: orange;
+        }
+        /* 进入和离开的过程 */
+        .box-enter-active, .box-leave-active {
+            /* width的变化，动画时间时3s */
+            transition: width 3s;  
+        }
+        /* 进入的初始状态和离开的结束状态 */
+        .box-enter, .box-leave-to {
+            width: 0;
+        }
+        
+        /* 进入的结束状态和离开的初始状态 */
+        .box-enter-to, .box-leave {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="toggle()">改变图形宽度</button>
+            <transition name="box">
+                <div class="chart" v-if="show"></div>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            show:true
+                        },
+                        methods: {
+                            toggle() {
+                                this.show = !this.show  // 每次都取反
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 4.1.3.自定义类名
+
+​	Vue中的transition组件允许使用自定义类名。如果使用自定义类名，则不需要给`<transition>`标签设置name属性。自定义类名是通过属性来设置的，具体属性如下：
+
+- enter-class
+- enter-active-class
+- enter-to-class
+- leave-class
+- leave-active-class
+- leave-to-class
+
+
+
+​	自定义类名的优先级高于普通类名，所以能够很好地与其他第三方CSS库结合使用。
+
+1. **自定义类名结合animate.css实现动画**
+
+`animate.css`是一个跨浏览器的CSS3动画库，它内置了很多经典的CSS3动画，使用起来很方便。点击进入`animate.css`的<a href="https://animate.style/">官方网站</a>，我们可以采用CDN的方式引入：
+
+```html
+<head>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+  />
+</head>
+```
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312211109280.gif)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="show=!show">显示/隐藏</button>
+            <!-- 
+                下面两个自定义类名，animated是基本类名，任何
+                想实现动画的元素都要添加它,bounceInLeft是入场动画
+                bounceOutLeft是出场动画
+             -->
+            <transition enter-active-class="animated bounceInLeft"
+            leave-active-class="animated bounceOutLeft">
+                <p v-if="show">过渡文字效果</p>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            show:true
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+2.**appear初始渲染动画**
+
+之前的案例都是通过时间方法控制动画，如果希望给元素添加初始渲染的动画效果，可以通过给transition组件设置appear属性来实现。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="show=!show">显示/隐藏</button>
+            <transition appear appear-active-class="animated swing"
+            enter-active-class="animated bounceIn"
+            leave-actice-class="animated bounceOut">
+                <div v-if="show">过渡文字效果</div>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            show:true
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 4.1.4.使用@keyframes创建CSS动画
+
+​	使用`@keyframes`创建CSS动画的额用法与之前的CSS过渡用法类似，区别在于动画中`v-enter`类名在节点插入DOM后不会立即删除，二十在`animationend`动画结束时间触发时产出。`@keyframes`在创建动画过程中，可以多次改变CSS样式，通过百分比或关键词from和to来实现动画状态，其语法格式如下：
+
+```css
+@keyframes animation-name {
+    keyframes-selector {
+        样式;
+    }
+}
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312211133137.gif" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <style>
+        div.circular {
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 100px;
+            color: aqua;
+        }
+        .bounce-enter-active {
+            animation: Ami 0.5s;
+        }
+        .bounce-leave-active {
+            animation: Ami 0.5s;
+        }
+
+        @keyframes Ami {
+            0% {
+                /* 缩放 */
+                transform:scale(0);
+                background-color: red;
+            }
+            25% {
+                transform:scale(1);
+                background-color: orange;
+            }
+            50% {
+                transform:scale(1.5);
+                background-color: blue;
+            }
+            25% {
+                transform:scale(1);
+                background-color: yellow;
+            }
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="show=!show">使用@keyframes创建动画</button>
+            <transition name="bounce">
+                <div class="circular" v-if="show">圆形</div>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            show:true
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 4.1.5.使用钩子函数实现动画
+
+​	根据Vue的声明钩子也能随着生命周期的进行而创建动画。使用方式如下：
+
+```vue
+<transition
+v-on:before-enter=“beforeEnter”
+v-on:enter=“enter”
+v-on:after-enter=“afterEnter”
+v-on:enter-cancelled=“enterCancelled”
+
+v-on:before-leave=“beforeLeave”
+v-on:leave=“leave”
+v-on:after-leave=“afterLeave”
+v-on:leave-cancelled=“leaveCancelled”>
+</transition>
+```
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312211141629.gif)
+
+```vue
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Vue使用模板</title>
+    <!--  1.导入vue.js库  -->
+    <script src="../js/vue.js"></script>
+ 
+    <!--  编写小球的显示样式  -->
+    <style>
+        #boll{
+            margin-top: 10px;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: lightpink;
+        }
+    </style>
+</head>
+<body>
+ 
+    <div id="app">
+ 
+        <!-- 使用v-on绑定click事件执行切换show变量,用于控制下面p标签的v-if -->
+        <button @click="show = !show">
+            加入购物车
+        </button>
+ 
+        <!-- 设置动画小球 -->
+        <transition
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:after-enter="afterEnter"
+                v-on:enter-cancelled="enterCancelled"
+        >
+            <div v-if="show" id="boll"></div>
+        </transition>
+ 
+    </div>
+ 
+    <script>
+        // 2\. 创建一个Vue的实例
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                show: true
+            },
+            methods:{
+                // --------
+                // 进入中
+                // --------
+ 
+                beforeEnter: function (el) {
+                    // 开始准备进入动画状态
+                    console.log("执行进入动画中的beforeEnter钩子函数");
+                    // 设置小球开始动画之前的，起始位置
+                    el.style.transform = "translate(0, 0)";
+                },
+                // 当与 CSS 结合使用时
+                // 回调函数 done 是可选的
+                enter: function (el, done) {
+                    // 已经进入动画状态，用于设置动画效果
+                    console.log("执行进入动画中的enter钩子函数");
+                    // 这句话，没有实际的作用，但是，如果不写，出不来动画效果；
+                    // 可以认为 el.offsetWidth 会强制动画刷新
+                    el.offsetWidth;
+                    // enter 表示动画 开始之后的样式，这里，可以设置小球完成动画之后的，结束状态
+                    el.style.transform = "translate(150px, 450px)";
+                    el.style.transition = 'all 1s ease';
+                    // 执行完毕，使用done方法回调afterEnter
+                    done()
+                },
+                afterEnter: function (el) {
+                    // 进入动画状态之后，执行结束恢复的操作
+                    console.log("执行进入动画中的afterEnter钩子函数");
+                    // 执行动画完毕后，再次隐藏小球
+                    this.show = !this.show
+                },
+                enterCancelled: function (el) {
+                    // 当取消进入动画状态的时候执行
+                    console.log("执行进入动画中的enterCancelled钩子函数");
+                },
+            }
+        })
+    </script>
+ 
+</body>
+</html>
+```
+
+
+
+#### 4.1.6.结合Velocity.js实现动画
+
+​	`Velocitu.js`是一个简单易用、高性能且功能丰富的轻量级JS动画库，它拥有颜色动画、转换动画(transforms)、循环、欢动、SVG动画和滚动动画等功能，并且支持链式编程。点击进入<a href="https://www.velocityjs.org/">官方网站</a>。
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312211520710.gif)
+
+````vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/velocity.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="show=!show">动画效果</button>
+            <transition 
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @leave="leave"
+            :css="false">
+                <p v-if="show">文字动画效果</p>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                        show:false
+                    },
+                    methods: {
+                        beforeEnter(el) {
+                            el.style.opcity = 0 // 透明度为0
+                            el.style.transformOrigin = 'left'  // 设置旋转元素的基点位置
+                            el.style.color = 'red' // 颜色为红色
+                        },
+                        enter(el, done) {
+                            Velocity(el, {
+                                opcity:1,
+                                fontSize: '1.4em',
+                            },
+                            {
+                                duration: 300  // 为动画的执行时间
+                            }
+                            )
+                            Velocity(el,{
+                                fontSize: '1em'
+                            },
+                            {
+                                complete: done
+                            })
+                        },
+                        leave(el, done) {
+                            Velocity(el, {
+                                translateX: '15px',
+                                rotateZ:'50deg'
+                            },
+                            {
+                                duration: 300  // 为动画的执行时间
+                            }
+                            )
+                            Velocity(el,{
+                                rotateZ: '45deg',
+                                translateY: '30px',
+                                translateX: '30px',
+                                opcity: 0
+                            },
+                            {
+                                complete: done
+                            })
+                        }
+                    }
+                        
+                })
+        </script>
+</body>
+</html>
+````
+
+### 4.2.多个元素过渡
+
+​	`transition`组件在同一时间内只能有一个元素显示，当有多个元素时，需要使用`v-if`和`v-else`或`v-else-if`来区别显示条件，并且元素需要绑定不同的key值，否则Vue会复用元素，无法产生动画效果。
+
+#### 4.2.1.相同标签名元素的过渡
+
+​	当有相同标签名的元素切换时，需要通过**key**特性设置唯一值来标记，从而让Vue区分它们。
+
+​	案例：单击button按钮，切换“保存”和“编辑”，当变量`isEditing`为true时，显示“保存”按钮，为false时，显示“编辑”按钮。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="isEditing=!isEditing">切换保存和编辑按钮</button>
+            <div>
+                <transition name="fade">
+                    <button v-if="isEditing" key="save">保存</button>
+                    <button v-else key="edit">编辑</button>
+                </transition>
+            </div>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isEditing:true
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 4.2.2.过渡模式
+
+​	新旧两个元素参与过渡的时候，新元素的进入和旧元素的离开会同时触发，这是因为`<transition>`的默认行为进入和离开同时发生了。如果要求离开的元素完全消失后，进入的元素再显示出来，可以使用`transition`提供的过的模式`mode`。
+
+​	过渡模式的原理是，设置有序的过渡而不是同时发生过渡，完成之后新元素过渡进入，`in-out`表示新元素先进行过渡，完成之后当前元素过渡离开。
+
+​	官方参考：https://v2.cn.vuejs.org/v2/guide/transitions.html#%E8%BF%87%E6%B8%A1%E6%A8%A1%E5%BC%8F
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251540639.gif)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <style>
+        .fade-enter, .fade-leave-to { opacity: 0; }
+        .fade-enter-active, .fade-leave-active { transition: opacity .5s; }
+    </style> 
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <transition name="fade" mode="out-in">
+                <button :key="isOff" @click="isOff = !isOff">{{isOff ? 'Off' : 'On'}}</button>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isOff: false 
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+### 4.3.多个组件过渡
+
+​	多个组件之间的过渡，只需要使用动态组件即可，动态组件需要通过Vue中的`<component>`元素绑定`is`属性来实现多组件的过渡。
+
+​	以下案例中，使用`component`组件的`is`属性来实现组件切换，`is`属性用于根据组件名称的不同来切换显示不同的组件控件。当 切换“登录”和“注册”时，新元素会先进行过渡，完成之后当前元素过渡离开。
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251557983.gif)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <style>
+        .fade-enter-active, .fade-leave-active {
+          transition: opacity .5s ease;
+        }
+        .fade-enter, .fade-leave-to {
+          opacity: 0;
+        }
+    </style>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <a href="javascript:;" @click="compontentName='example1'">登录</a>
+            <a href="javascript:;" @click="compontentName='example2'">注册</a>
+            <transition name="fade" mode="in-out">
+                <component :is="compontentName"></component>
+            </transition>
+        </div>
+        <!-- 定义登录组件 -->
+        <template id="example1">
+            <span>我是登录组件</span>
+        </template>
+        <!-- 定义注册组件 -->
+        <template id="example2">
+            <span>我是注册组件</span>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                Vue.component('example1', {template: '#example1'})
+                Vue.component('example2', {template: '#example2'})
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            compontentName: ''
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+### 4.4.列表过渡
+
+#### 4.4.1.什么是列表过渡
+
+​	列表过渡，需要使用`v-for`和`transition-group`组件来实现。
+
+```vue
+<transition-group name="list" tag="div">
+  <span v-for="item in items" :key="item">
+    {{ item }}
+  </span>
+</transition-group>
+```
+
+​	`transition-group`组件会以一个真实元素呈现，在页面中默认渲染成`<span>`标签，可以通过`tag`属性来修改，如`<transition-group tag="div">`渲染出来就是`div`标签。
+
+​	**注意：**列表的每一项都需要进行过渡，列表在循环时要给每一个列表项添加唯一的key属性值，这样列表才会有过渡效果。在进行列表过渡时，过渡模式不可用，因为不再互相切换特有的元素。
+
+#### 4.4.2.列表的进入和离开过渡
+
+​	以下案例，通过name属性自定义CSS类名前缀，来实现进入和离开的过渡效果。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251607763.png" alt="image-20231225160725610" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <style>
+        /* 数字圆圈样式 */
+        .list-item {
+          display: inline-block;
+          margin-right: 10px;
+          background-color: red;
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          text-align: center;
+          line-height: 25px;
+          color: #fff;
+        }
+        /* 插入或移除元素的过程 */
+        .list-enter-active, .list-leave-active {
+          transition: all 1s;
+        }
+        /* 开始插入或移除结束的位置变化 */
+        .list-enter, .list-leave-to {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="add">随机插入一个数字</button>
+            <button @click="remove">随机移除一个数字</button>
+            <transition-group name="list" tag="p">
+                <span v-for="item in items" :key="item" class="list-item">
+                    {{item}}
+                </span>
+            </transition-group>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            items: [1, 2, 3, 4, 5], // 定义数字数组
+                            nextNum: 6	// 下一个数字从6开始
+                        },
+                        methods: {
+                            randomIndex () {
+                                return Math.floor(Math.random() * this.items.length)
+                            },
+                            add () {		   // 单击“随机插入一个数字”时触发
+                                this.items.splice(this.randomIndex(), 0, this.nextNum++)
+                            },
+                            remove () {		 // 单击“随机移除一个数字”时触发
+                                this.items.splice(this.randomIndex(), 1)
+                            }
+                        }   
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 4.4.3.列表的排序过渡
+
+​	上述案例中，当插入或移除元素的时候，虽然有过渡动画， 但是周围的元素会瞬移到新的位置，而不是平滑地过渡。为了实现列表平滑过渡，可以借助`v-move`特性。`v-move` 对于设置过渡的切换时机和过渡曲线非常有用。`v-move`特性会在元素改变定位的过程中应用，它同之前的类名一样，可以通过`name`属性来自定义前缀（例如`name=“list”`，则对应的类名就是`list-move`），当然也可以通过`move-class`属性手动设置自定义类名。
+
+​	修改上述代码地CSS部分，借助`v-mode`和定位来实现元素平滑过渡到新位置地效果：
+
+```css
+<style>
+    /* 数字圆圈部分样式 */
+    .list-item {
+      display: inline-block;
+      margin-right: 10px;
+      background-color: red;
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      text-align: center;
+      line-height: 25px;
+      color: #fff;
+    }
+    /* 插入元素过程 */
+    .list-enter-active {
+      transition: all 1s;
+    }
+    /* 移除元素过程 */
+    .list-leave-active {
+      transition: all 1s;
+      position: absolute;
+    }
+    /* 开始插入/移除结束的位置变化 */
+    .list-enter, .list-leave-to {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    /* 元素定位改变时动画 */
+    .list-move {
+      transition: transform 1s;
+    }
+</style>
+```
+
+​	Vue使用了FLIP(First、Last、Invert、Play)简单动画队列来实现**排序过渡**，所以即使没有插入或者移除元素，对于元素顺序的变化也支持过渡动画。FLIP动画能提高动画的流畅度，可以解决动画的卡顿、闪烁等不流畅的现象，它不仅可以实现单列过渡，也可以实现多维网格的过渡。
+
+​	引入`ladash.js`文件，重构上述代码，对数字进行排序，效果如下：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251644133.gif" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <style>
+        .list-item {
+          display: inline-block;
+          margin-right: 10px;
+          background-color: red;
+          border-radius: 50%;
+          width: 25px;
+          height: 25px;
+          text-align: center;
+          line-height: 25px;
+          color: #fff;
+        }
+        /* 元素定位改变时动画 */
+        .list-move {
+          transition: transform 1s;
+        }
+    </style>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/lodash.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="shuffle">洗牌</button>
+            <transition-group name="list" tag="p">
+                <span v-for="item in items" :key="item" class="list-item">
+                    {{ item }}
+                </span>
+            </transition-group>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data() {
+                            return { items: [1, 2, 3, 4, 5] }
+                        },
+                        methods: {
+                            shuffle () {
+                                // shuffle()函数把数组中的元素按随机顺序重新排列
+                                this.items = _.shuffle(this.items)
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 4.4.4.列表交错过渡
+
+​	在Vue中可以实现列表的交错过渡效果，它是通过data属性与JavaScript通信来实现的。
+
+​	案例：使用钩子函数结合`Velocity.js`库实现搜索功能，根据关键字来筛选出符合要求的列表数据，并添加过渡效果。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251652845.png" alt="image-20231225165226756" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/velocity.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <input placeholder="请输入要查找的内容" v-model="query">
+            <transition-group name="item" tag="ul" @before-enter="beforeEnter"
+             @enter="enter" @leave="leave" v-bind:css="false">
+              <li v-for="(item, index) in ComputedList" :key="item.msg"
+               :data-index="index">
+                {{ item.msg }}
+              </li>
+            </transition-group>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data() {
+                            return {
+                                query: '', // v-model绑定的值
+                                items: [
+                                    { msg: '杜鑫' },
+                                    { msg: '黄鑫' },
+                                    { msg: '杜林均' },
+                                    { msg: '周林' },
+                                    { msg: '张益' },
+                                    { msg: '张宇' },
+                                    ]
+                                }
+                        },
+                        computed: {                     // 计算属性
+                            ComputedList () {
+                                var vm = this.query		      // 获取到input输入框中的内容
+                                var nameList = this.items	  // 数组
+                                return nameList.filter(function (item) {
+                                    return item.msg.toLowerCase().indexOf(vm.toLowerCase()) !== -1
+                                })
+                            }
+                        },
+                        methods: {
+                            beforeEnter (el) {
+                                el.style.opacity = 0
+                                el.style.height = 0
+                            },
+                            enter (el, done) {
+                                var delay = el.dataset.index * 150
+                                setTimeout(function () {
+                                    Velocity(el, { opacity: 1, height: '1.6em' }, { complete: done })
+                                }, delay)
+                            },
+                                leave (el, done) {
+                                var delay = el.dataset.index * 150
+                                setTimeout(function () {
+                                    Velocity(el, { opacity: 0, height: 0 }, { complete: done })
+                                }, delay)
+                            }
+                        }
+                                            
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 4.4.5.可复用过渡
+
+​	在Vue中，过渡代码可以通过组件实现复用。若要创建一个可复用的过渡组件，需要将`transition`或者`transition-group`作为组件模板结构，然后在其内部通过插槽的方式编写列表结构即可。
+
+​	将`4.4.4`的案例改造为可复用过渡，效果一样，代码更精简：
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/velocity.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <input placeholder="请输入要查找的内容" v-model="query">
+            <fade :query="query" :items="items">
+            <li v-for="(item, index) in ComputedList"
+            :key="item.msg" :data-index="index">
+                {{ item.msg }}
+            </li>
+            </fade>
+        </div>
+        <template id="temp">
+            <transition-group name="item" tag="ul" @before-enter="beforeEnter"
+             @enter="enter" @leave="leave" :css="false">
+              <slot></slot>
+            </transition-group>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建组件
+                Vue.component('fade', {		    // 定义组件名为fade
+                    props: ['query', 'items'],	// 组件实例的属性
+                    template: '#temp', 
+                    methods: {
+                        beforeEnter (el) {
+                            el.style.opacity = 0
+                            el.style.height = 0
+                        },
+                        enter (el, done) {
+                            var delay = el.dataset.index * 150
+                            setTimeout(function () {
+                                Velocity(el, {opacity: 1, height: '1.6em'}, {complete: done})
+                            }, delay)
+                        },
+                        leave (el, done) {
+                            var delay = el.dataset.index * 150
+                            setTimeout(function () {
+                                Velocity(el, {opacity: 0, height: 0}, {complete: done})
+                            }, delay)
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data() {
+                            return {
+                                query: '', // v-model绑定的值
+                                items: [
+                                    { msg: '杜鑫' },
+                                    { msg: '黄鑫' },
+                                    { msg: '杜林均' },
+                                    { msg: '周林' },
+                                    { msg: '张益' },
+                                    { msg: '张宇' },
+                                    ]
+                                }
+                        },
+                        computed: {	 // 计算属性
+                            ComputedList () {
+                            var vm = this.query
+                            var nameList = this.items
+                            return nameList.filter(function (item) {
+                                return item.msg.toLowerCase().indexOf(vm.toLowerCase()) !== -1
+                            })
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+## 5.Vue路由
+
+​	Vue中的路由允许使用不同的URL来访问不同的类容。
+
+### 5.1.什么是路由
+
+- **后端路由**：后端路由通过请求的URL分支到具体的处理程序，浏览器每次跳转到不同的URL，都会重新访问服务器。服务器接收到请求后，将数据和模板组合，返回HTML页面，或直接返回HTML模板，由前端JS程序再去请求数据，使用前端模板和数据进行组合，生成最终的HTML页面。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251732283.png" alt="image-20231225173227165" style="zoom:50%;" />
+
+- **前端路由：**前端路由就是把不同路由对应不同的内容或页面的任务交给前端来做。对于单页面应用（SPA）来说，主要通过URL中的hash（#号）来实现不同页面之间的切换。hash有一个特点，就是HTTP请求中不会包含hash相关的内容，所以单页面程序中的页面跳转主要用hash来实现。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312251738042.png" alt="image-20231225173822890" style="zoom:50%;" />
+
+​	对于上图中“#/home”就是hash方式的路由，由前端路由来处理，将hash值与页面中的组件对应，当hash值为“#/home”时，就显示“首页”组件。
+
+### 5.2.vue-router
+
+​	`vue-router`是Vue官方推出的路由管理器，主要用于管理URL，实现URL和组件的对应，以及通过URL进行组件间的切换，从而使构建单页面应用变得更加简单。
+
+#### 5.2.1.vue-router的工作原理
+
+​	单页面应用（SPA）的核心思想之一就是更新视图而不重新请求页面，简单来说，它在加载页面时，不会加载整个页面。只会更新某个指定的容器中的内容。
+
+​	在实现单页面前端路由时，提供了两种方式：`hash`模式和`history`模式，根据mode参数来决定采用哪一种模式。
+
+- **hash模式**：默认模式。使用URL的hash来模拟一个完整的URL，当URL改变时，页面不会重新加载。`#`就是hash符号，中文名为哈希符或锚点，在hash符号后的值称为hash值。路由的hash模式是利用了window可以监听`onhashchange`事件来实现的，也就是说hash是用来知道浏览器动作的，对服务器没有影响，HTTP请求中也不会包括hash值，同时每次改变hash值，都会在浏览器的访问历史中增加一条记录，使用“后退”按钮，就可以回到上一个位置。所以hash模式是根据hash值来发生改变的，根据不同的值，渲染指定DOM位置的不同数据。
+- **history模式**：hash模式的URL会自带`#`，影响URL的美观，而history模式不会出现`#`，这种模式充分利用了`history.pushState()`来完成URL的跳转，而且无须重新加载页面。使用history模式时，需要配置`mode:'history'`，示例如下：
+
+```vue
+// main.js文件
+const router = new VueRouter({
+	mode:'history',
+	routes:[...]
+})
+```
+
+
+
+#### 5.2.2.vue-router的基本使用
+
+​	`vue-router`可以实现当用户单击页面中的A按钮时，页面显示内容A；单击B按钮时，页面显示内容B。换言之，用户单击的按钮和页面显示的内容，两者是映射的关系。
+
+- <font color="blue">route</font> ：表示它是一条路由，单数形式；
+- <font color="blue">routes</font>：表示它是一组路由，把route的每一条路由组合起来，形成一个数组；
+- <font color="blue">router</font>：表示它是一个机制，充当管理路由的管理者角色
+
+
+
+​	引入Vue的：
+
+```javascript
+<script src="../js/vue-router.js"></script>
+```
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 
+                router-link支持用户在具有路由功能的应用中
+                导航，to属性指定目标地址，默认渲染成带有
+                正确链接的<a>标签，此处通过配置tag属性生成span
+                标签
+                router-view用来当作占位符使用，将路由规则
+                匹配到的组件展示到其中
+             -->
+             <router-link to="/login" tag="span">前往登录</router-link>
+             <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建login组件
+                var login = {
+                    template: '<h1>登录组件</h1>',
+                }
+                var routerObj = new VueRouter({
+                    routes:[
+                        // 配置路由匹配规则,
+                        // path表示监听哪个路由链接地址，
+                        // component表示如果路由是前面匹配到的path则展示该组件
+                        {path:'/login', component:login}
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        router:routerObj // 将路由规则对象注册到vm实例上
+                })
+        </script>
+</body>
+</html>
+```
+
+​	以上方面默认使用的是hash模式，如果在`routerObj`中添加` mode:'history'`就变成了history模式，该模式下没有#前缀：
+
+```vue
+var routerObj = new VueRouter({
+                    routes:[
+                        {path:'/login', component:login}
+                    ],
+                    mode:'history'
+ })
+```
+
+
+
+#### 5.2.3.路由对象属性
+
+​	路由对象（route object）表示当前激活的路由的状态信息，包含了当前URL解析得到的信息，还有URL匹配到的路由记录。路由对象是不可变的，每次成功地导航后都会产生一个新的对象。
+
+​	`this.$router`表示全局路由器对象，项目中通过router路由参数注入路由之后，在任何一个页面都可以通过此属性获取到路由器对象，并调用其`push()`、`go()`等方法。`this.$route`表示当前正在用于跳转的路由器对象，可以访问其`name、path、query、params`等属性。
+
+​	路由对象`$route`的常用属性信息如下：
+
+| 属性名                | 类型   | 说明                                                         |
+| --------------------- | ------ | ------------------------------------------------------------ |
+| $route.path           | String | 对应当前路由的名字                                           |
+| $route.query          | Object | 一个{key:value}对象，表示 URL查询参数                        |
+| $route.params         | Object | 一个{key:value}对象，路由转跳携带参数                        |
+| $route.hash           | String | 在history模式下获取当前路由的hash值（带#），如果没有hash值，则为空字符串 |
+| $route.fullPath       | String | 完成解析后的URL，包含查询参数和hash的完整路径                |
+| $route.name           | String | 当前路由的名称                                               |
+| $route.matched        | Array  | 路由记录，当前路由下路由声明的所有信息，从父路由（如果有）到当前路由为止 |
+| $route.redirectedFrom | String | 如果存在重定向，即为重定向来源的路由                         |
+
+
+
+### 5.3.用户登录注册案例
+
+​	结构：
+
+```txt
+|-index.html       	    // 首页入口文件
+|-components      	    // 存放vue组件
+     |-Login.vue          // 登录组件
+     |-Register.vue      // 注册组件
+|-lib		    // 存放库文件
+|-App.vue          	    // vue文件，推荐使用首字母大写来命名
+|-main.js          	    // 程序逻辑入口文件
+|-router.js        	    // 路由文件
+|-package.json    	    // 工程文件，记录需要的依赖包
+|-webpack.config.js //webpack配置文件
+```
+
+#### 5.3.1.环境配置
+
+- **创建login目录，在该目录下运行以下命令，生成一个`package.json`的工程文件：**
+
+```shell
+npm inti -y
+```
+
+- **安装vue和vue-router，生成一个`package-lock.json`的文件：**
+
+```shell
+npm install vue@2.7.x vue-router@3.1.x
+```
+
+- **安装webpack：**
+
+```shell
+npm install webpack@4.39.x webpack-cli@3.3.x webpack-dev-server@3.8.x html-webpack-plugin@3.2.x -D
+```
+
+​	然后修改`package.json`文件，在`scripts`中添加`dev`，使用`webpack-dev-server`来启动项目：
+
+```javascirpt
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev":"webpack-dev-server --inline --hot --port 8088"
+},
+```
+
+- **安装vue-loader和vue-template-compiler**：`vue-loader`的作用分别是解析和转换vue文件，提取其中的script、style、HTML、template，然后分别把它们交给各自对应的loader去处理；`vue-template-compiler`的作用是把vue-loader提取的HTML模板编译成对应可执行的JS代码：
+
+```shell
+npm install vue-loader vue-template-compiler -D
+```
+
+
+
+- **编写webpack.config.js文件**：设置入口文件、出口文件以及一些规则配置：
+
+```javascript
+const htmlWebpackPlugin = require('html-webpack-plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+
+module.exports = {
+  entry: './main.js', 		    	// 配置入口文件
+  output: { 						        // 配置输出文件
+    path: __dirname, 		       	// 输出文件的路径，此处设为当前路径
+    filename: 'bundle.js',    	// 指定输出的文件名称
+  },
+  resolve: {			 			        // 其他的配置选项
+    alias: {
+      'vue': 'vue/dist/vue.js'	// vue.js文件路径配置
+    }
+  },
+  devServer: {
+    historyApiFallback: true	  // 开启服务器对history模式支持
+  },
+  module: {
+    rules: [				          	// 模块规则
+      {
+        test: /\.vue$/,
+        use: 'vue-loader'
+      },
+      {
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.less$/,
+        use: ['style-loader', 'css-loader', 'less-loader']
+      },
+      {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader']
+      },
+      {
+        test: /\.(jpg|png|gif|bmp|jpeg)$/,
+        use: 'url-loader'
+      },
+      {
+        test: /\.(ttf|eot|svg|woff|woff2)$/,
+        use: 'url-loader'
+      }      
+      // 在此处可以添加更多rules
+    ]
+  }, 
+  plugins: [				         		// 插件
+    new htmlWebpackPlugin({
+      template: 'index.html'		// 为index.html自动引入打包好的bundle.js
+    }),
+    new VueLoaderPlugin()
+  ]
+}
+```
+
+- **安装css-loader和style-loader**：这两个依赖用来处理样式文件。css-loader用于加载由vue-loader提取出的CSS文件，再用style-loader添加到页面中：
+
+```shell
+npm install css-loader@3.2.x style-loader@1.0.x -D
+```
+
+- **安装CSS预处理器：**CSS预处理器可以使用专门的语言来编写页面样式，然后编译成正常的CSS文件,Vue中常用的CSS预处理器有Less、Sass/SCSS和Stylus。
+
+1.安装less：
+
+```shell
+npm install --save less less-loader@5
+```
+
+​	安装后，在页面中使用less的地方添加如下代码即可：
+
+```css
+<style lang="less"></style>
+```
+
+​	下面的两个预处理器也是一样，只需要修改`lang`属性为`scss`和`stylus`。
+
+2.安装Sass/SCSS：
+
+```shell
+npm install sass-loader@7.2.x node-sass@4.12.x -D
+# 如果下载报错或缓慢，可使用以下方式
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+cnpm i node-sass
+cnpm i sass-loader
+```
+
+3.安装Stylus：
+
+```shell
+cnpm install stylus stylus-loader
+```
+
+- **安装MUI：**MUI是一款接近原生APP体验的高性能前端框架。参考<a href="https://dev.dcloud.net.cn/mui/getting-started/">官方文档</a>，下载文件放到lib\mui目录中，并在`main.js`中引入MUI：
+
+```javascript
+import './lib/mui/css/mui.css'
+```
+
+- **安装图片和字体文件处理：**
+
+```shell
+cnpm install url-loader@2.1.x file-loader@4.2.x -D
+```
+
+
+
+#### 5.3.2.代码实现
+
+- 在根目录下创建index.html，该文件是首页，用来展示页面：
+
+```html
+<body>
+    <div id="app"></div>
+</body>
+```
+
+- 编写逻辑入口，在根目录下创建mian.js，并引入依赖：
+
+```javascript
+import Vue form 'vue'
+import app form './App.vue'
+import VueRouter  form 'vue-router'
+Vue.use(VueRouter)
+import router from './router.js'
+new Vue({
+    el:'#app',
+    render:c => c(app),
+    router
+})
+```
+
+- 编写路由文件，在根目录下创建router.js文件：
+
+```javascript
+import VueRouter from 'vue-router'
+
+// 导入登录和注册对应的路由组件
+import Login from './components/Login.vue'
+import Register from './components/Register.vue'
+
+var router = new VueRouter({	              // 创建路由对象
+  mode: 'history',                        	// 使用history模式
+  routes: [						                      // 配置路由规则
+    { path: '/', redirect: '/login' },
+    { path: '/login', component: Login, meta: { title: '登录' } },
+    { path: '/register', component: Register, meta: { title: '注册' } }
+  ]
+})
+
+export default router
+
+```
+
+- 渲染路由组件，在根目录下创建App.vue：
+
+```vue
+<template>
+    <div id="app">
+      <div class="login-container">
+        <router-link to="/login" tag="span">登录</router-link>
+        <router-link to="/register" tag="span">注册</router-link>
+      </div>
+      <router-view></router-view>
+    </div>
+</template>
+  
+<style lang="scss" scoped>
+    .login-container {
+      display: flex;
+      justify-content: center;
+      padding-top: 10px;
+      span {
+        padding: 5px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+      }
+    }
+</style>
+```
+
+- 创建components\Login.vue文件，该文件是登录页面：
+
+```vue
+<template>
+  <div class="login">
+    <div class="content">
+      <form class="mui-input-group login-form">
+        <div class="mui-input-row">
+          <label>账号</label>
+          <input type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+        </div>
+        <div class="mui-input-row">
+          <label>密码</label>
+          <input type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+        </div>
+      </form>
+      <div class="mui-content-padded">
+        <button type="button" class="mui-btn mui-btn-block mui-btn-primary">登录</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {}
+  }
+}
+</script>
+
+<style scoped>
+  .login-form {
+    margin: 30px 0;
+    background-color: transparent;
+  }
+  .mui-input-group .mui-input-row {
+    margin-bottom:10px;
+    background:#fff;
+  }
+  .mui-btn-block {
+    padding: 10px 0;
+  }
+</style>
+```
+
+- 创建components\Register.vue文件，该文件是注册页面：
+
+```vue
+<template>
+  <div class="register">
+    <div class="content">
+      <form class="mui-input-group login-form">
+        <div class="mui-input-row">
+          <label>账号</label>
+          <input type="text" class="mui-input-clear mui-input" placeholder="请输入账号">
+        </div>
+        <div class="mui-input-row">
+          <label>密码</label>
+          <input type="password" class="mui-input-clear mui-input" placeholder="请输入密码">
+        </div>
+        <div class="mui-input-row">
+          <label>密码确认</label>
+          <input type="password" class="mui-input-clear mui-input" placeholder="请确认密码">
+        </div>
+        <div class="mui-input-row">
+          <label>邮箱</label>
+          <input type="password" class="mui-input-clear mui-input" placeholder="请输入邮箱">
+        </div>
+      </form>
+      <div class="mui-content-padded">
+        <button type="button" class="mui-btn mui-btn-block mui-btn-primary">注册</button>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  data () {
+    return {}
+  }
+}
+</script>
+
+<style scoped>
+  .register-form {
+    margin: 30px 0;
+    background-color: transparent;
+  }
+  .mui-input-group .mui-input-row {
+    margin-bottom:10px;
+    background:#fff;
+  }
+  .mui-btn-block {
+    padding: 10px 0;
+  }
+</style>
+```
+
+- 运行项目，在根目录下输入以下命令：
+
+```vue
+npm run dev
+```
+
+
+
+### 5.4.动态路由
+
+​	上面讲到的路由，都是严格定义匹配好的，只有router-link中的to属性和JavaScript中定义的路由中的path一样时，才会显示对应的component。但在实际开发时，这种方式是明显不足的，例如，在不同角色登录网站时，在去配置路由的时候，需要把用户id作为参数传入，这就需要利用动态路由来实现。在vue-router的路由路径中，可以使用动态路径参数给路径的动态部分匹配不同的id。
+
+```vue
+{ path: "/user/:id", component: user }
+// :id表示用户id，它就是一个动态的值
+```
+
+​	动态路由在来回切换时，由于它们都是指向同一组件，Vue不会销毁再重新创建这个组件，而是复用这个组件。如果想要在组件来回切换时进行一些操作，那就需要在组件内部利用watch来监听`$route`的变化：
+
+```vue
+watch: {
+  $route (to, from) {
+    console.log(to)		// to表示要去的那个组件
+    console.log(from)	// from表示从哪个组件过来的
+  }
+}
+```
+
+#### 5.4.1.query传参
+
+​	通过query方式传递参数，使用path属性给定对应的跳转路径（类似于GET请求），在页面跳转的时候，可以在地址栏看到请求参数。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312261649664.png" alt="image-20231226164851210" style="zoom: 33%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 指定目标地址user组件，并使用
+            查询字符串的形式把参数id,name传递过去 -->
+            <router-link to="/user?id=1&name=杜鑫">登录</router-link>
+            <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义user组件 
+                var user = {
+                    template: '<h3>id: {{this.$route.query.id}} ' + 
+                    'name: {{$route.query.name}}</h3>',
+                    created () {					      // 组件的生命周期钩子函数
+                        console.log(this.$route)	// 用this.$route来接收参数
+                    }
+                }
+                var router = new VueRouter({
+                    routes: [
+                        { path: '/user', component: user }
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 5.4.2.params传参
+
+​	使用params方式则不需要通过查询字符串传参，通常会搭配路由的history模式，将参数放在路径中或隐藏。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312261652228.png" alt="image-20231226165218075" style="zoom:33%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 指定目标地址user组件，并使用
+            查询字符串的形式把参数id,name传递过去 -->
+            <router-link to="/user/1/杜鑫">登录</router-link>
+            <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义user组件 
+                var user = {
+                    template: '<h3>id: {{$route.params.id}} ' + 
+                    'name: {{$route.params.name}}</h3>',
+                    created () {					      // 组件的生命周期钩子函数
+                        console.log(this.$route)	// 用this.$route来接收参数
+                    }
+                }
+                var router = new VueRouter({
+                    routes: [
+                        { path: '/user/:id/:name', component: user }
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router
+                })
+        </script>
+</body>
+</html>
+```
+
+### 5.5.动态路由
+
+​	是否是嵌套路由主要是由页面结构来决定的，实际项目中的应用界面，通常由多层嵌套的组件组合而成。简而言之，嵌套路由就是在路由里面嵌套它的子路由。
+
+​	嵌套子路由的关键属性是children，children也是一组路由，相当于前面讲到的routes，children可以像routes一样的去配置路由数组。每一个子路由里面可以嵌套多个组件，子组件又有路由导航和路由容器。
+
+```html
+<router-link to="/父路由的地址/要去的子路由"></router-link>
+```
+
+​	当使用children属性实现子路由时，子路由的path属性前不要带“/”，否则会永远以根路径开始请求，这样不方便用户去理解URL地址：
+
+```javascript
+var router = new VueRouter({
+  routes: [{
+      path: '/home',
+      component: home,
+      children: [ // 子路由
+        { path: 'login', component: login },
+        { path: 'register', component: register }] 
+  }]
+})
+```
+
+
+
+​	案例：页面打开后会自动重定向到about组件（关于公司），在该页面下有两个子页面，分别是”公司简介“和”公司治理“：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312261709775.png" alt="image-20231226170950662" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        ul, li, h1 {
+          padding: 0;
+          margin: 0; 
+          list-style: none
+        }
+        #app {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+        }
+        ul {
+          width: 200px;
+          flex-direction: column;
+          color: #fff;
+        }
+        li {
+          flex: 1;
+          background: #000;
+          margin:5px auto;
+          text-align: center;
+          line-height: 30px;
+        }
+        .about-detail {
+          flex:1;
+          margin-left: 30px;
+        }
+        .about-detail h1{
+          font-size: 24px;
+          color: blue;
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <ul>
+                <router-link to="/about" tag="li">关于公司</router-link>
+                <router-link to="/contact" tag="li">联系我们</router-link>
+            </ul>
+            <router-view></router-view>
+        </div>
+        <!-- 定义子组件模板 -->
+        <template id="about-tmp">
+            <div class="about-detail">
+              <h1>甲骨文OAEC教学中心</h1>
+              <router-link to="/about/detail">公司简介</router-link> |
+              <router-link to="/about/governance">公司治理</router-link>
+              <router-view></router-view>
+            </div>
+        </template>
+
+        <template id="contact-tmp">
+            <div class="about-detail">
+              <h1>联系我们</h1>
+              <p>上海市静安区万荣路777号大宁音乐广场H座</p>
+            </div>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 组件的模板对象
+                var about = { template: '#about-tmp' }
+                var contact = { template: '#contact-tmp' }
+                // 子路由的组件模板对象
+                var detail = {
+                    template:'<p>abc教学平台是全球领先的。。。</p>'
+                }
+                var governance = {
+                    template:'<p>公司坚持以客户为中心，以奋斗者为本。。。</p>'
+                }
+
+                // 创建路由
+                var router = new VueRouter({
+                    routes:[
+                        {path:'/',redirect:'/about'}, // 路由重定向
+                        {
+                            path:'/about',
+                            component:about,
+                            // 子路由
+                            children:[
+                                {path:'detail',component:detail},
+                                {path:'governance',component:governance},
+                            ]
+                        },
+                        {path:'/contact',component:contact}
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router // 路由挂载
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+### 5.6.命名路由
+
+​	`vue-router`提供了一种隐式的引用路径，即命名路由，可以在创建Router实例的时候，在 routes 中给某个路由设置名称name值。通过一个名称来标识一个路由显得更方便一些，特别是在链接一个路由，或者是执行一些跳转的时候，通过路由的名称取代路径地址直接使用。像这种命名路由的方式，无论path多长、多烦琐，都能直接通过name来引用，十分方便。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312261714524.png" alt="image-20231226171454364" style="zoom: 33%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- name表示组组件名，params表示传参id -->
+            <router-link :to="{name:'user',params:{id:123}}">登录</router-link>
+            <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建user组件
+                var user = {
+                    template: '<h3>我是user组件</h3>',
+                    created () {
+                        console.log(this.$route)
+                    }
+                }
+                // 创建路由对象
+                var router = new VueRouter({
+                    routes: [{
+                        path: '/user/:id', 
+                        name: 'user',
+                        component: user
+                    }]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router
+                })
+        </script>
+</body>
+</html>
+```
+
+### 5.7.命名视图
+

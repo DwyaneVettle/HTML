@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 指定目标地址user组件，并使用
+            查询字符串的形式把参数id,name传递过去 -->
+            <router-link to="/user?id=1&name=杜鑫">登录</router-link>
+            <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义user组件 
+                var user = {
+                    template: '<h3>id: {{this.$route.query.id}} ' + 
+                    'name: {{$route.query.name}}</h3>',
+                    created () {					      // 组件的生命周期钩子函数
+                        console.log(this.$route)	// 用this.$route来接收参数
+                    }
+                }
+                var router = new VueRouter({
+                    routes: [
+                        { path: '/user', component: user }
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router
+                })
+        </script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="isEditing=!isEditing">切换保存和编辑按钮</button>
+            <div>
+                <transition name="fade">
+                    <button v-if="isEditing" key="save">保存</button>
+                    <button v-else key="edit">编辑</button>
+                </transition>
+            </div>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            isEditing:true
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

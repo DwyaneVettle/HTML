@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+        />
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="show=!show">显示/隐藏</button>
+            <!-- 
+                下面两个自定义类名，animated是基本类名，任何
+                想实现动画的元素都要添加它,bounceInLeft是入场动画
+                bounceOutLeft是出场动画
+             -->
+            <transition enter-active-class="animated bounceInLeft"
+            leave-active-class="animated bounceOutLeft">
+                <p v-if="show">过渡文字效果</p>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            show:true
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

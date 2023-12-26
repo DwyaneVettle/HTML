@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/velocity.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="show=!show">动画效果</button>
+            <transition 
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @leave="leave"
+            :css="false">
+                <p v-if="show">文字动画效果</p>
+            </transition>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                        show:false
+                    },
+                    methods: {
+                        beforeEnter(el) {
+                            el.style.opcity = 0 // 透明度为0
+                            el.style.transformOrigin = 'left'  // 设置旋转元素的基点位置
+                            el.style.color = 'red' // 颜色为红色
+                        },
+                        enter(el, done) {
+                            Velocity(el, {
+                                opcity:1,
+                                fontSize: '1.4em',
+                            },
+                            {
+                                duration: 300  // 为动画的执行时间
+                            }
+                            )
+                            Velocity(el,{
+                                fontSize: '1em'
+                            },
+                            {
+                                complete: done
+                            })
+                        },
+                        leave(el, done) {
+                            Velocity(el, {
+                                translateX: '15px',
+                                rotateZ:'50deg'
+                            },
+                            {
+                                duration: 300  // 为动画的执行时间
+                            }
+                            )
+                            Velocity(el,{
+                                rotateZ: '45deg',
+                                translateY: '30px',
+                                translateX: '30px',
+                                opcity: 0
+                            },
+                            {
+                                complete: done
+                            })
+                        }
+                    }
+                        
+                })
+        </script>
+</body>
+</html>

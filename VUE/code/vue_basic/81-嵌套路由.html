@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        ul, li, h1 {
+          padding: 0;
+          margin: 0; 
+          list-style: none
+        }
+        #app {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+        }
+        ul {
+          width: 200px;
+          flex-direction: column;
+          color: #fff;
+        }
+        li {
+          flex: 1;
+          background: #000;
+          margin:5px auto;
+          text-align: center;
+          line-height: 30px;
+        }
+        .about-detail {
+          flex:1;
+          margin-left: 30px;
+        }
+        .about-detail h1{
+          font-size: 24px;
+          color: blue;
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <ul>
+                <router-link to="/about" tag="li">关于公司</router-link>
+                <router-link to="/contact" tag="li">联系我们</router-link>
+            </ul>
+            <router-view></router-view>
+        </div>
+        <!-- 定义子组件模板 -->
+        <template id="about-tmp">
+            <div class="about-detail">
+              <h1>甲骨文OAEC教学中心</h1>
+              <router-link to="/about/detail">公司简介</router-link> |
+              <router-link to="/about/governance">公司治理</router-link>
+              <router-view></router-view>
+            </div>
+        </template>
+
+        <template id="contact-tmp">
+            <div class="about-detail">
+              <h1>联系我们</h1>
+              <p>上海市静安区万荣路777号大宁音乐广场H座</p>
+            </div>
+        </template>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 组件的模板对象
+                var about = { template: '#about-tmp' }
+                var contact = { template: '#contact-tmp' }
+                // 子路由的组件模板对象
+                var detail = {
+                    template:'<p>abc教学平台是全球领先的。。。</p>'
+                }
+                var governance = {
+                    template:'<p>公司坚持以客户为中心，以奋斗者为本。。。</p>'
+                }
+
+                // 创建路由
+                var router = new VueRouter({
+                    routes:[
+                        {path:'/',redirect:'/about'}, // 路由重定向
+                        {
+                            path:'/about',
+                            component:about,
+                            // 子路由
+                            children:[
+                                {path:'detail',component:detail},
+                                {path:'governance',component:governance},
+                            ]
+                        },
+                        {path:'/contact',component:contact}
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router // 路由挂载
+                        
+                })
+        </script>
+</body>
+</html>

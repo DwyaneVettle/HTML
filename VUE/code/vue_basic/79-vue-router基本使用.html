@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 
+                router-link支持用户在具有路由功能的应用中
+                导航，to属性指定目标地址，默认渲染成带有
+                正确链接的<a>标签，此处通过配置tag属性生成span
+                标签
+                router-view用来当作占位符使用，将路由规则
+                匹配到的组件展示到其中
+             -->
+             <router-link to="/login" tag="span">前往登录</router-link>
+             <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建login组件
+                var login = {
+                    template: '<h1>登录组件</h1>',
+                }
+                var routerObj = new VueRouter({
+                    routes:[
+                        // 配置路由匹配规则,
+                        // path表示监听哪个路由链接地址，
+                        // component表示如果路由是前面匹配到的path则展示该组件
+                        {path:'/login', component:login}
+                    ],
+                    mode:'history'
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        router:routerObj // 将路由规则对象注册到vm实例上
+                })
+        </script>
+</body>
+</html>
