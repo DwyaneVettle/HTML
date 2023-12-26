@@ -7,23 +7,33 @@
     <title>vue使用模板</title>
     <!-- 引入vue -->
     <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
 </head>
 <body>
         <!-- 准备一个容器 -->
         <div id='root'>
-            <button @click="count += Math.random()">点击生成随机数</button>
-            <p>自动生成随机数为{{count}}</p>
+            <!-- 将state中name的值插入p标签 -->
+            <p>{{name}}</p>
         </div>
         <script>
                 // 设置为 false 以阻止 vue 在启动时生成生产提示
                 Vue.config.productionTip = false;
+                // 创建Vuex实例对象store
+                var store = new Vuex.Store({
+                    state:{
+                        name:'vuex.js直接引入'
+                    }
+                })
                 // 创建Vue对象
                 new Vue({
                         el: '#root',
-                        data: {
-                            count:0
+                        data: {},
+                        store,
+                        computed:{
+                            name() {
+                                return this.$store.state.name
+                            }
                         }
-                        
                 })
         </script>
 </body>

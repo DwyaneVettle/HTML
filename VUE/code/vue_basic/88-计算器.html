@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="increment">+</button>
+            <p>{{ this.$store.state.count }}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建store对象
+                const store = new Vuex.Store({
+                    state: {
+                        count: 0
+                    },
+                    // 修改count的值
+                    mutations: {
+                        // 接收state初始数据
+                        increase (state) {
+                            state.count++
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store,
+                        methods: {
+                            increment () {
+                                // commit()提交状态变更
+                                this.$store.commit('increase')
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

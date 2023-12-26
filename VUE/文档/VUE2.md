@@ -5335,3 +5335,484 @@ var router = new VueRouter({
 
 ### 5.7.命名视图
 
+​	在开发中，有时候想同时或同级展示多个视图，而不是嵌套展示，则可以在页面中定义多个单独命名的视图。使用`<router-view>`可以为视图进行命名，它主要用来负责路由跳转后组件的展示。在`<router-view>`上定义name属性表示视图的名字，然后就可以根据不同的name值展示不同的页面，如left、main等。如果`<router-view>`没有设置名字，那么默认为default。
+
+![image-20231226210412313](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312262104490.png)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+    <style>
+        html, body {
+          margin: 0;
+          padding: 0;
+        }
+        h1 {
+          margin: 0;
+          padding: 0;
+          font-size: 16px;
+        }
+        .header {
+          background-color: lightblue;
+          height: 80px;
+        }
+        .container {
+          display: flex;
+          height: 600px;
+        }
+        .sidebar {
+          background-color: lightgreen;
+          flex: 2;
+        }
+        .main {
+          background-color: lightpink;
+          flex: 8;
+        }
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 默认渲染 -->
+            <router-view></router-view>
+            <div class="container">
+                <!-- 渲染对应的组件 -->
+                <router-view name="left"></router-view>
+                <router-view name="main"></router-view>
+            </div>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                var header = { template: '<h1 class="header">header头部区域</h1>' }
+                var sidebar = { template: '<h1 class="sidebar">sidebar侧导航区域</h1>' }
+                var mainBox = { template: '<h1 class="main">mainBox主体区域</h1>' }
+                var router = new VueRouter({
+                    routes: [{
+                        path: '/',
+                        components: {
+                        'default': header,
+                        'left': sidebar,
+                        'main': mainBox
+                        }
+                    }]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        router
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+### 5.8.编程式导航
+
+​	在前面的开发中，当进行页面切换时，都是通过<router-link>来实现的，这种方式属于声明式导航。为了更方便地在项目中开发导航功能，Vue提供了编程式导航，也就是利用JavaScript代码来实现地址的跳转，通过router实例方法来实现。
+
+#### 5.8.1.router.push()
+
+​	使用`router.push()`方法可以导航到不同的URL地址。这个方法会向`history`栈添加一条新的记录，当用户单击浏览器后退按钮时，可以回到之前的URL。
+
+​	在单击`<router-link>`时，`router.push()`方法会在内部调用，也就是说，单击`“<route-link :to="...">”`等同于调用`router.push(...)`方法。
+
+​	`router.push()`方法的参数可以是一个字符串路径，或者是一个描述路径的对象。
+
+```vue
+// 先获取router实例
+var router = new VueRouter()
+// 字符串形式
+router.push('user')
+// 对象形式
+router.push({ path: '/login?url=' + this.$route.path })
+// 命名路由
+router.push({ name: 'user', params: { userId: 123 }})
+// 带查询参数 /user?id=1
+router.push({ path: 'user', query: { id: '1' }})
+```
+
+​	在参数对象中，如果提供了path，params会被忽略，为了传参数，需要提供路由的name或者手写带有参数的path。
+
+```vue
+const userId = '123'
+router.push({ name: 'user', params: { userId }})  // /user/123
+router.push({ path: `/user/${userId}` })                // /user/123
+// 这里的 params 不生效
+router.push({ path: '/user', params: { userId }})  // /user
+```
+
+- **query传参**
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="goStart">跳转</button>
+            <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义user组件
+                var user = {
+                    template: '<p>用户名：{{ this.$route.query.name }}</p>'
+                }
+                var router = new VueRouter({
+                    routes: [
+                        { path: '/user', component: user }
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        methods: {
+                            goStart () {
+                                this.$router.push({ path: '/user', query: { name: 'admin' } })
+                            }
+                        },
+                        router
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+- **params传参：**
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="goStart">跳转</button>
+            <router-view></router-view>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 定义user组件
+                var user = {
+                    template: '<p>用户名：{{ this.$route.params.name }}</p>'
+                }
+                var router = new VueRouter({
+                    routes: [
+                        { path: '/user', component: user, name:'user'}
+                    ]
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        methods: {
+                            goStart () {
+                                this.$router.push({ name: 'user', params: { name: 'admin' } })
+                            }
+                        },
+                        router
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+
+
+#### 5.8.2.router.replace()
+
+​	`router.replace()`方法和`router.push()`方法类似，区别在于，为`<router-link>`设置replace属性后，当单击时，就会调用`router.replace()`，导航后不会向history栈添加新的记录，而是替换当前的history记录。
+
+```vue
+/ 编程式
+router.replace({ path: 'user' })
+// 声明式
+<router-link :to="{path:'user'}" replace></router-link>
+```
+
+#### 5.8.3.router.go()
+
+​	`router.go()`方法的参数是一个整数，表示在history历史记录中向前或者后退多少步，类似于`window.history.go()`。`this.$router.go(-1)`相当于`history.back()`，表示后退一步，`this.$router.go(1)`相当于`history.forward()`，表示前进一步，功能类似于浏览器上的后退和前进按钮，相应的地址栏也会发生改变。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vue-router.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="goBack">后退</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                var router = new VueRouter()
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        methods: {
+                            goBack () {
+                                this.$router.go(-1)   // 使用this.$router.go()进行后退操作
+                            }
+                        },
+                        router
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+​	可以创建一个测试页面，用路由或超链接跳转到以上代码页面，跳转后点击“后退”，浏览器就会执行后退操作。
+
+
+
+## 6.Vuex状态管理
+
+### 6.1.Vuex初体验
+
+​	Vuex是Vue团队提供的一套组件状态管理维护的解决方案。Vuex 是一个专为 Vue.js 应用程序开发的**状态管理模式**。它采用集中式存储管理应用的所有组件的状态，并以相应的规则保证状态以一种可预测的方式发生变化。Vuex 也集成到 Vue 的官方调试工具 [devtools extension (opens new window)](https://github.com/vuejs/vue-devtools)，提供了诸如零配置的 time-travel 调试、状态快照导入导出等高级调试功能。它有以下有点：
+
+- 进一步完善了Vue基础代码功能
+- 使Vue组件状态更加容易维护
+- 为大型项目开发提供了强大的技术支持
+
+![vuex](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312262239922.png)
+
+​	Vuex3官网：https://v3.vuex.vuejs.org/zh/
+
+#### 6.1.1.Vuex下载和安装
+
+​	Vuex通常有两种安装方式：一种是通过script标签引入`vuex.js`文件，一种是使用npm安装。
+
+- **vuex.js单文件引入**：从官网下载保存到vuex.js文件，并引入。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 将state中name的值插入p标签 -->
+            <p>{{ this.$store.state.name}}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vuex实例对象store
+                var store = new Vuex.Store({
+                    state:{
+                        name:'vuex.js直接引入'
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store
+                })
+        </script>
+</body>
+</html>
+```
+
+​	`store`中的状态是响应式的，在组件中调用`store`中的状态时仅需要在计算属性中返回即可，所以上面的代码也可以修改为：
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 将state中name的值插入p标签 -->
+            <p>{{name}}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vuex实例对象store
+                var store = new Vuex.Store({
+                    state:{
+                        name:'vuex.js直接引入'
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store,
+                        computed:{
+                            name() {
+                                return this.$store.state.name
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+​	当一个组件需要获取多个状态时，将这些状态都声明为计算属性有些麻烦，这时候可以使用`mapState 辅助函数`来生成计算属性。
+
+```vue
+var mapState = Vuex.mapState
+var vm = new Vue({
+  el: '#app',
+  store,
+  computed: mapState({
+    // 箭头函数可使代码更简短
+    name: state => state.name
+  }
+})
+```
+
+- **npm或yarn下载vuex**：命令如下：
+
+```shell
+vue init webpack vuex的引入.html
+cd vuex的引入.html
+# npm安装
+npm install vuex --save
+# yarn安装
+yarn add vuex
+
+# 下载后引入并使用vuex
+import Vuex from "vuex"
+Vue.use(Vuex)
+```
+
+
+
+#### 6.1.2.计算器案例
+
+​	每一个Vuex应用的核心就是`store（仓库）`，即响应式容器，它用来定义应用中数据以及数据处理工具。Vuex的状态存储是响应式的，当`store`中数据状态发生变化，那么页面中的store数据也发生相应变化。改变store中的状态的唯一途径就是显式地提交`mutation`，这样可以方便地跟踪每一个状态的变化。
+
+![image-20231226223657398](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312262236531.png)
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="increment">+</button>
+            <p>{{ this.$store.state.count }}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建store对象
+                const store = new Vuex.Store({
+                    state: {
+                        count: 0
+                    },
+                    // 修改count的值
+                    mutations: {
+                        // 接收state初始数据
+                        increase (state) {
+                            state.count++
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store,
+                        methods: {
+                            increment () {
+                                // commit()提交状态变更
+                                this.$store.commit('increase')
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 6.1.3.Vuex状态管理模式
+
+​	在Vue中，组件的状态是通过Vue单项数据流的设计理念实现的：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312262239046.png" alt="img" style="zoom: 33%;" />
+
+Vue中的单项数据流主要包含以下3个部分：
+
+- **State**：驱动应用的数据源
+
+- **View**：以声明方式将state映射到视图
+
+- **Action**：响应在View上的用户输入导致的状态变化
+
+  
