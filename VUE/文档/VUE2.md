@@ -5619,7 +5619,7 @@ router.replace({ path: 'user' })
 - 使Vue组件状态更加容易维护
 - 为大型项目开发提供了强大的技术支持
 
-![vuex](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312262239922.png)
+
 
 ​	Vuex3官网：https://v3.vuex.vuejs.org/zh/
 
@@ -5810,9 +5810,601 @@ Vue.use(Vuex)
 Vue中的单项数据流主要包含以下3个部分：
 
 - **State**：驱动应用的数据源
-
 - **View**：以声明方式将state映射到视图
-
 - **Action**：响应在View上的用户输入导致的状态变化
 
-  
+Vue的单项数据流增强了组件之间的独立性，但是存在多个组件共享状态的时候，单项数据流状态就会被破坏。为了数据维护更加方便，需要将组件共享状态抽离出来，用全局单例模式来管理。在这种模式下，任何组件都能获取状态或触发行为，这就是所谓的Vuex数据状态管理。Vuex是专门为Vue设计的状态管理库，以利用Vue的细粒度数据响应机制来进行高效的状态更新。
+
+​	在单项数据流的图示中，Actions中定义事件回调方法，通过Dispatch触发事件处理方法，例如`store.dispatch('事件处理方法名称')`，并且Actions是异步的。Mutations通过Commit提交，例如，`store.commit('事件处理方法名称')`，并且Mutations是同步的。从职责上，Actions负责业务的代码，而Mutations专注于修改State。在提交Mutations时，devtools调试工具完成Mutations状态变化的跟踪。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312262239922.png" alt="vuex" style="zoom: 67%;" />
+
+### 6.2.Vuex配置选项
+
+#### 6.2.1.actions
+
+​	`actions`选项用来定义事件处理方法，用于处理state数据。`actions`类似于`mutations`，不同之处在于`actions`是异步执行的，事件处理函数可以接收{commit}对象，完成`mutation`提交，从而方便devtools调试工具跟踪状态的state变化。
+
+​	在使用时，需要在`store`仓库中注册`actions`选项，在里面定义事件处理方法。事件处理方法接收`context`作为第一个参数，`payload`作为第二个参数。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312271420708.png" alt="image-20231227142029517" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="mut">查看mutations接收的参数</button>
+            <button @click="act">查看actions接收的参数</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建store对象
+                var store = new Vuex.Store({
+                    state: {
+                        name: '张三',
+                        age: 38,
+                        gender: '男'
+                    },
+                    mutations: {
+                        test (state) {
+                            console.log(state)
+                        }
+                    },
+                    actions: {
+                        test (context, param) {
+                            console.log(context)
+                            console.log(param)
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store,
+                        methods: {
+                            mut () {
+                                this.$store.commit('test')
+                            },
+                            act () {
+                                this.$store.dispatch('test')
+                                // this.$store.dispatch('test', '我是传递的参数')
+                                // this.$store.dispatch({ type: 'test', name: '我是传递的参数' })
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 6.2.2.mutations
+
+​	`mutations`选项中的事件处理方法接收state对象作为参数，即初始数据，使用时只需要在store实例配置对象中定义state即可。`mutations`中的方法用来进行state数据操作，在组件中完成`mutations`提交就可以完成组件状态更新。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="param">传递参数</button>
+            <p>{{ this.$store.state.param }}</p>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                var store = new Vuex.Store({
+                    state: { param: '' },
+                    mutations: {
+                        receive (state, param) {
+                            state.param = param
+                            // console.log(param)        // 查看接收到的param值
+                            // state.param = param.name
+                        }
+                    },
+                    actions: {
+                        param (context){
+                            context.commit('receive', '我是传递的参数')
+                        // context.commit({ type: 'receive', name: '我是传递的参数' })
+                            }
+                        }
+                    })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store,
+                        methods: {
+                            param () {
+                                this.$store.dispatch('param')
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 6.2.3.getters
+
+​	store实例允许在store中定义`getters`计算属性，类似于Vue实例的`computed`。`getters`返回值会根据它的依赖进行处理然后缓存起来，且只有当它的依赖值发生改变时才会被重新计算。
+
+​	案例：根据列表id查询：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312271502846.gif" style="zoom:50%;" />
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h2>列表查询</h2>
+            <input type="text" v-model="id">
+            <button @click="search">搜索</button>
+            <p>搜索结果：{{ this.$store.getters.search }}</p>
+            <ul>
+                <li v-for="item in this.$store.state.todos">{{ item }}</li>
+            </ul>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                const store = new Vuex.Store({
+                    state: {
+                        todos: [
+                            { id: 1, name: '杜鑫' },
+                            { id: 2, name: '谢岳岚' },
+                        ],
+                        id: 0
+                    },
+                    mutations: {
+                        search (state, id) {
+                            state.id = id
+                        }
+                    },
+                    getters: {
+                        search: state => {
+                            return state.todos.filter(todo => todo.id == state.id)
+                        }
+                    }
+                    })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {id:''},
+                        store,
+                        methods: {
+                            search() {
+                                this.$store.commit('search', this.id)
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>
+```
+
+#### 6.2.4.modules
+
+​	`modules`用来在store实例中定义模块对象。在项目开发中，页面组件存在多种状态，且时通过单一状态树形式实现数据状态可跟踪的，Vue为了解决当前这种复杂应用状态，提出了类似于模块化开发的方法对store对象仓库进行标准化管理。
+
+```vue
+key: {  // key表示模块名称
+  state, // 初始数据
+  mutations, // 状态提交，同步
+  actions, // 状态分发，异步
+  getters, // 计算属性
+  modules // 模块
+}
+```
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                const moduleA = {
+                    state: { nameA: 'A' },
+                    }
+                const moduleB = {
+                    state: { nameB: 'B' },
+                    }
+                const store = new Vuex.Store({
+                    modules: {
+                        a: moduleA,
+                        b: moduleB
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store
+                })
+                console.log(store.state.a)
+                console.log(store.state.b)
+        </script>
+</body>
+</html>
+```
+
+​	控制台打印出A、B两个模块，说明这两个模块已被注册。
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312271508364.png" alt="image-20231227150857231" style="zoom:50%;" />
+
+#### 6.2.5.plugins
+
+​	Vuex中的插件配置选项为`plugins`，插件本身为函数。函数接收参数store对象作为参数，store实例对象的`subscribe`函数可以用来处理`mutation`，函数接收参数为`mutation`和`state`。
+
+```vue
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                const myPlugin = store => {
+                    // 当store初始化后调用
+                    store.subscribe((mutation, state) => {
+                        // 每次mutation提交后调用，mutation格式为 {type, payload}
+                        console.log(mutation.type, mutation.payload)
+                    })
+                    }
+                    const store = new Vuex.Store({
+                        mutations: {
+                            do (state) {
+                            console.log(state)
+                        }
+                    },
+                    plugins: [myPlugin]
+                    })
+                    store.commit('do', 'plugin')
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {}
+                })
+        </script>
+</body>
+</html>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312271513325.png" alt="image-20231227151332206" style="zoom:50%;" />
+
+## 7.Vue-cli脚手架工具
+
+​	当使用Vue构建项目时，在页面中通过`<script>`标签引入`vue.js`文件，这种方式仅适用于简单的案例，在实际的开发中，往往需要处理复杂的业务逻辑，那么通过`<script>`引入的方式就不太合适了，此时需要借助Vue脚手架工具，它可以帮助我们快速的构建一个适用于实际项目中的环境。
+
+​	Vue脚手架是Vue官方提供的标准化**开发工具**。它可以自动生成vue.js+webpack的项目模板。可用于定制新项目、配置原型、添加插件和检查webpack配置等。
+
+​	**特别注意**：[Vue脚手架](https://so.csdn.net/so/search?q=Vue脚手架&spm=1001.2101.3001.7020)是用来方便开发的，但vue脚手架不是最终发布到生产环境的产品。很多人会误认为生产环境也要安装vue脚手架。
+
+​	官方文档：https://cli.vuejs.org/zh/
+
+### 7.1.安装脚手架
+
+卸载旧版：
+
+```shell
+npm uninstall vue-cli -g
+```
+
+```shell
+npm uninstall @vue/cli -g
+```
+
+**安装和创建推荐使用yarn的方式，因为该方式比npm更快：**
+
+`npm config set registry https://registry.npm.taobao.org`
+
+```shell
+npm uninstall -g yarn				# 卸载yarn
+npm i yarn -g						# 安装yarn
+yarn -v								# 检查yarn是否安装
+yarn global add @vue/cli			# 通过yarn下载cli
+vue create demo						# 创建项目（如出现vue不是内部命令提示，可按下面操作）
+yarn global bin						# 将路径配置到环境变量Path中
+```
+
+
+
+
+
+1.全局安装@vue/cli(仅安装一次即可)：
+
+```shell
+npm install -g vue-cli												# 安装旧版2.9.6
+
+npm install -g @vue/cli --registry=https://registry.npm.taobao.org    # 安装新版3.x-5.x
+# OR
+yarn global add @vue/cli --registry=https://registry.npm.taobao.org
+```
+
+![image-20230222191150414](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302221911748.png)
+
+查看版本：
+
+```shell
+vue -V  V大写
+```
+
+
+
+2.创建一个项目（切换到要创建的文件夹）：
+
+```shell
+vue create hello_vue
+# OR
+vue ui
+```
+
+如出现如下安装情况说明vue-cli版本过低，可参考链接：
+
+![image-20230223113657767](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302231137002.png)
+
+https://blog.csdn.net/zlzbt/article/details/110136755
+
+![image-20230302222042657](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303022220850.png)
+
+​	在创建项目时，Vue CLI提示用户选取一个preset(预设)，Default是默认选项，包含基本的babel+eslint设置，适合快速创建一个新项目；Manually select features表示手动配置，提供可选择的npm包，更适合生产时的项目，在实际工作中推荐使用该种方式。
+
+3.进入项目目录`cd hello_vue`启动项目：
+
+```shell
+npm run serve
+
+# or
+
+yarn serve
+```
+
+运行加载后，会出来两个地址：
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092014025.png)
+
+复制任意一个地址到浏览器中就可以访问，这是Vue为我们写好的helloworld案例：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092015957.png" alt="image-20230509201545668" style="zoom:50%;" />
+
+
+
+
+
+webpack创建参考：https://blog.csdn.net/u013034585/article/details/106763710?ops_request_misc=&request_id=&biz_id=102&utm_term=%E5%88%9B%E5%BB%BAvue%E8%84%9A%E6%89%8B%E6%9E%B6%E5%BE%88%E5%8D%A1&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduweb~default-0-106763710.142^v76^pc_new_rank,201^v4^add_ask,239^v2^insert_chatgpt&spm=1018.2226.3001.4187
+
+注意：
+
+1.如出现下载缓慢，需要把npm切换为淘宝镜像：`npm config set registry https://registry.npm.taobao.org`
+
+2.Vue脚手架隐藏了所有webpack相关配置，若想查看具体配置，请执行：`vue inspect > output.js`。
+
+3.如果一直创建脚手架工程出现卡顿，参考https://www.jb51.net/article/265182.htm
+
+https://www.jianshu.com/p/180f645fcccc
+
+
+
+### 7.2.脚手架工程文件介绍
+
+```text
+├── node_modules 
+├── public
+│   ├── favicon.ico: 页签图标
+│   └── index.html: 主页面
+├── src
+│   ├── assets: 存放静态资源
+│   │   └── logo.png
+│   │── component: 存放组件
+│   │   └── HelloWorld.vue
+│   │── App.vue: 汇总所有组件
+│   │── main.js: 入口文件
+├── .gitignore: git版本管制忽略的配置
+├── babel.config.js: babel的配置文件
+├── package.json: 应用包配置文件 
+├── README.md: 应用描述文件
+├── package-lock.json：包版本控制文件
+```
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092045385.png)
+
+脚手架测试：创建`hello_vue`工程并添加以下代码：
+
+**School.vue：**
+
+```vue
+<template>
+	<div class="demo">
+		<h2>学校名称：{{name}}</h2>
+		<h2>学校地址：{{address}}</h2>
+		<button @click="showName">点我提示学校名</button>	
+	</div>
+</template>
+
+<script>
+	 export default {
+		name:'School',
+		data(){
+			return {
+				name:'四川城市职业学院',
+				address:'成都龙泉'
+			}
+		},
+		methods: {
+			showName(){
+				alert(this.name)
+			}
+		},
+	}
+</script>
+
+<style>
+	.demo{
+		background-color: orange;
+	}
+</style>
+```
+
+
+
+**Student.vue:**
+
+```vue
+<template>
+	<div>
+		<h2>学生姓名：{{name}}</h2>
+		<h2>学生年龄：{{age}}</h2>
+	</div>
+</template>
+
+<script>
+	 export default {
+		name:'Student',
+		data(){
+			return {
+				name:'张三',
+				age:18
+			}
+		}
+	}
+</script>
+```
+
+
+
+**App.vue:**
+
+```vue
+<template>
+	<div>
+    <img src="./assets/logo.png" alt="log">
+		<School></School>
+		<Student></Student>
+	</div>
+</template>
+
+<script>
+	//引入组件
+	import School from './components/School.vue'
+	import Student from './components/Student.vue'
+
+	export default {
+		name:'App',
+		components:{
+			School,
+			Student
+		}
+	}
+</script>
+```
+
+
+
+**main.js:**
+
+```javascript
+// 创建Vue对象，引入App.vue文件
+import App from './App.vue'
+import Vue from 'vue'
+    
+new Vue({
+    render: h => h(App),
+}).$mount('#app')
+```
+
+
+
+**index.html:**
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="root"></div>
+    <script src="../../js/vue.js"></script>
+    <script src="../src/main.js"></script>
+</body>
+</html>
+```
+
+​	执行命令`npm run serve`运行程序，按住`Ctrl`点击进入。如出现以下问题则是Vue的风格规范中需要将组将名命名为多个单词，你可以改变组件名，也可以在`vue.config.js`(该文件为配置项文件，和`package.js同级`)中添加**关闭语法检测**的代码`lintOnSave:false`：
+
+![image-20230509210350996](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092103164.png)
+
+![image-20230509210405378](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092104938.png)
+
+
+
+
+
+页面正常显示：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092106678.png" alt="image-20230509210608539" style="zoom:50%;" />
+
+
+
+​	**使用vue.config.js可以对脚手架进行个性化定制，参考：https://cli.vuejs.org/zh/config/#vue-config-js**

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='../js/vue.js'></script>
+    <script src="../js/vuex.js"></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button @click="mut">查看mutations接收的参数</button>
+            <button @click="act">查看actions接收的参数</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建store对象
+                var store = new Vuex.Store({
+                    state: {
+                        name: '张三',
+                        age: 38,
+                        gender: '男'
+                    },
+                    mutations: {
+                        test (state) {
+                            console.log(state)
+                        }
+                    },
+                    actions: {
+                        test (context, param) {
+                            console.log(context)
+                            console.log(param)
+                        }
+                    }
+                })
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        store,
+                        methods: {
+                            mut () {
+                                this.$store.commit('test')
+                            },
+                            act () {
+                                this.$store.dispatch('test')
+                                // this.$store.dispatch('test', '我是传递的参数')
+                                // this.$store.dispatch({ type: 'test', name: '我是传递的参数' })
+                            }
+                        }
+                })
+        </script>
+</body>
+</html>
