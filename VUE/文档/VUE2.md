@@ -6408,3 +6408,139 @@ new Vue({
 
 
 ​	**使用vue.config.js可以对脚手架进行个性化定制，参考：https://cli.vuejs.org/zh/config/#vue-config-js**
+
+
+
+## 8.Nuxt.js服务器端渲染框架
+
+​	服务器端渲染（Server Side Hendering，SSR），简单理解就是将页面在服务器中完成渲染，然后在客户端直接显示。
+
+​	`Nuxt.js`是一个基于Vue.js的轻量级应用框架，可用来创建服务端渲染应用，也可充当静态站点引擎生成静态站点应用，具有优雅的代码结构分层和热加载等特性。
+
+### 8.1.创建Nuxt.js项目
+
+​	`Nuxt.js`提供了利用`vue.js`开发服务端渲染的应用所需要的各种配置，为了快速入门，`Nuxt.js`团队创建了脚手架工具`create-nuxt-app`，使用步骤如下：
+
+- 全局安装`create-nuxt-app`脚手架工具：
+
+```shell
+cnpm install create-nuxt-app@2.9.x -g
+```
+
+- 在指定目录下执行以下命令，创建项目：
+
+```shell
+create-nuxt-app my-nuxt-demo
+```
+
+- 在创建项目过程中，会询问选择哪个包管理器，在这里选择npm，其他选项都可默认：
+
+![image-20231228090511816](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312280905994.png)
+
+- 安装配置完成后，启动项目：
+
+```shell
+cd my-nuxt-demo
+npm run serve/dev
+```
+
+- 访问到如下页面：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312280908852.png" alt="image-20231228090838594" style="zoom:50%;" />
+
+​	项目关键文件说明：
+
+| 文件           | 说明                                                         |
+| -------------- | ------------------------------------------------------------ |
+| assets         | 存放待编译的静态资源，如Less、Sass                           |
+| static         | 存放不需要webpack编译的静态文件，服务器启动的时候，该目录下的文件会映射到应用根路径"/"下 |
+| components     | 存放编写的组件                                               |
+| layouts        | 布局目录，用于存放应用的布局组件                             |
+| middleware     | 用于存放中间件                                               |
+| pages          | 用于存放应用的路由及视图，Nuxt.js会根据该目录自动生成对应的路由配置 |
+| plugins        | 用于存放需要在根Vue应用实例化之前运行阿JS插件                |
+| nuxt.config.js | 用于存放Nuxt.js应用自定义配置，以便覆盖默认配置              |
+
+
+
+### 8.2.页面和路由
+
+​	在项目中，pages目录用来存放应用的路由及视图，目前该目录下有两个文件，分别是`index.vue`和`READEME.md`，当直接访问根路径是，默认打开的就是`index.vue`文件。`Nuxt.js`会根据目录结构自动生成对应的路由配置，将请求路径和pages目录下的文件名映射，例如，访问"/test"就表示访问`test.vue`文件，如果文件不存在，就会提示"This page could not be found"（该页面未找到）错误。
+
+​	接下来，我们创建`pages\test.vue`文件，具体代码如下：
+
+```vue
+<template>
+    <div>
+        测试
+    </div>
+</template>
+```
+
+​	通过浏览器`http://localhost:3000/test`访问：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202312280924395.png" alt="image-20231228092434288" style="zoom:50%;" />
+
+​	`pages`目录下的vue文件也可以放在子目录中，在访问的时候也要加上子目录的路径。例如，创建`pages\sub\test.vue`，然后通过浏览器访问`http://localhost:3000/sub/test`就可以访问到该文件了。
+
+​	通过上述操作演示可以看出，`Nuxt.js`提供了非常方便的自动路由机制，当它检测到`pages`目录下的文件发生变更时，就会自动更新路由。通过查看“.nuxt\router.js”路由文件，可以看到`Nuxt.js`自动生成的代码给用户配置了路由：
+
+```vue
+routes: [{
+    path: "/test",
+    component: _5749a722,
+    name: "test"
+  }, {
+    path: "/sub/test",
+    component: _68b369f2,
+    name: "sub-test"
+  }, {
+    path: "/",
+    component: _aa7e0f1c,
+    name: "index"
+  }],
+```
+
+### 8.3.页面跳转
+
+​	`Nuxt.js`中使用了`<nuxt-link>`组件来完成页面中路由的跳转，它类似于Vue中的路由组件`<router-link>`，它们具有相同的属性，并且使用方式也相同。需要注意的是，在`Nuxt.js`项目中不要直接使用<a>标签来进行页面的跳转，因为<a>标签是重新获取一个新的页面，而<nuxt-link>更符合SPA的开发模式。`Nuxt.js`中页面跳转有两种方式：
+
+- **声明式路由：**以`pages\test.vue`页面为例，在页面中使用`<nuxt-link>`完成路由跳转：
+
+```vue
+<template>
+    <div>
+        <nuxt-link to="/sub/test">
+            跳转到/sub/test
+        </nuxt-link>
+    </div>
+</template>
+```
+
+- **编程式路由：**就是在JS代码中实现路由的跳转。以`pages\sub\test.vue`页面为例：
+
+```vue
+<template>
+    <div>
+        <button @click="jumpTo()">跳转到test</button>
+        <div>sub/test</div>
+    </div>
+</template>
+<script>
+    export default {
+        methods:{
+            jumpTo() {
+                this.$router.push('/test')
+            }
+        }
+    }
+</script>
+```
+
+## 附：Vue学习线路
+
+![](D:%5C%E7%AC%94%E8%AE%B0%5CHTML%5CVUE%5C%E6%96%87%E6%A1%A3%5CVue.png)
+
+参考：尚硅谷-张天禹     《Vue.js前端开发实战》，人民邮电出版社
+
+​			
