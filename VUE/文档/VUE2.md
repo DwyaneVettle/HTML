@@ -19,7 +19,7 @@
 vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的启发，开发出了一款轻量框架---Seed，同年12月，Seed更名为vue，版本号为0.6.0.
 
 - 2014年：vue正式对外发布，版本号为0.8.0，Taylor Otwell(PHP Laravel之父)在Twitter上发表动态，说自己正在学习vue；
-- 2015年：10月27日，正式发布vue1.0.0 Evangelion（新世纪福音战士），同年，vue-touter,vuex,vue-cli相继发布，标志vue正式发展成一个渐进式框架；
+- 2015年：10月27日，正式发布vue1.0.0 Evangelion（新世纪福音战士），同年，vue-router,vuex,vue-cli相继发布，标志vue正式发展成一个渐进式框架；
 - 2016年：10月1日，正式发布vue2.0.0 Ghost in the shell（攻壳机动队），它吸收了react的虚拟dom方案，还支持服务端渲染；
 - 2019年：尤雨溪公布了3.0.0的源代码，当时还是Alpha版本；
 - 2020年：9月18日，正式发布vue3.0.0（海贼王）。
@@ -38,7 +38,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 2.声明式编码，让编码人员无需操作DOM元素，提高开发效率；
 
-3.使用虚拟DOM+Diff算法,尽量复用DOM结点.
+3.使用虚拟DOM+Diff算法,尽量复用DOM结点。
 
 
 
@@ -56,7 +56,7 @@ vue由当时在谷歌工作的尤雨溪(Evan You)在2013年受AngularJS框架的
 
 - 创建工程`vue-basic`，并创建同级文件夹`js`，引入两个版本的`vue.js`和`vue.min.js`，创建文件`01-初识vue.html`，文件层级如下：
 
-**<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627898.png" alt="image-20221222211626476" style="zoom:33%;" />**
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627898.png" alt="image-20221222211626476" style="zoom:33%;" />
 
 - 通过`<script>`标签引入vue，然后再通过浏览器控制台打开查看到两个提示：
 
@@ -6203,7 +6203,7 @@ vue ui
 
 https://blog.csdn.net/zlzbt/article/details/110136755
 
-![image-20230302222042657](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202303022220850.png)
+![image-20230302222042657](C:%5CUsers%5CHP%5CDesktop%5C202303022220850.png)
 
 ​	在创建项目时，Vue CLI提示用户选取一个preset(预设)，Default是默认选项，包含基本的babel+eslint设置，适合快速创建一个新项目；Manually select features表示手动配置，提供可选择的npm包，更适合生产时的项目，在实际工作中推荐使用该种方式。
 
@@ -6223,7 +6223,7 @@ yarn serve
 
 复制任意一个地址到浏览器中就可以访问，这是Vue为我们写好的helloworld案例：
 
-<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202305092015957.png" alt="image-20230509201545668" style="zoom:50%;" />
+<img src="C:%5CUsers%5CHP%5CDesktop%5C202305092015957.png" alt="image-20230509201545668" style="zoom:50%;" />
 
 
 
