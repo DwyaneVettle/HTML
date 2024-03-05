@@ -7,6 +7,28 @@
     <script src="./js/vue.js"></script>
 </head>
 <body>
-    <div>123</div>
+    <!-- 
+        Vue运行的步骤：
+            1.准备一个容器div
+            2.创建一个vue实例，将容器加载进来
+            3.传递需要在容器中显示的值
+     -->
+    <div id="app">
+        <!-- 呈现数据-插值语法 -->
+        {{name}}
+    </div>
+    <script>
+        // 关闭Vue生产环境下的提示
+        // Vue.config.productionTip = false;
+        var vm = new Vue({
+            // el用于加载容器
+            el:"#app",
+            // data用于配置数据
+            data:{
+                // 配置的数据是以k-v结构的，多个数据间用逗号隔开
+                name:"helloworld"
+            }
+        })
+    </script>
 </body>
 </html>

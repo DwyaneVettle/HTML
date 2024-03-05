@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- 
+            插值语法：将data中的数据放入指定的位置
+                {{}}
+         -->
+         <h1>我的学校是：{{school}}</h1>
+         <h2>我的名字是：{{name}}</h2>
+    </div>
+    <script>
+        new Vue({
+            el:"#app",
+            data:{
+                school:'四川城市职业学院',
+                name:'邹堂瑞'
+            }
+        })
+    </script>
+</body>
+</html>
