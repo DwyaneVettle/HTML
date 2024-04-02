@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='./js/vue.js'></script>
+    <style>
+        * {
+                margin-top: 20px;
+        }
+
+        .demo01 {
+                height: 50px;
+                background-color: red;
+        }
+        .box1{
+		padding: 5px;
+		background-color: skyblue;
+	}
+	.box2{
+		padding: 5px;
+		background-color: orange;
+	}
+	.list{
+	        width: 200px;
+		height: 200px;
+		background-color: peru;
+		overflow: auto;
+	}
+	li{
+		height: 100px;
+	}
+    </style>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>欢迎来到{{school}}学习</h3>
+            <a href="https://www.baidu.com"
+                @click.prevent="showInfo()"
+            >点击弹出你好</a>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            school:"四川城市职业学院"
+                        },
+                        methods: {
+                            showInfo(){
+                                alert('同学你好')
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>

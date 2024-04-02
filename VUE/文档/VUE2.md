@@ -587,15 +587,6 @@ Vue模板语法有2大类：
     <script src="../js/vue.js"></script>
 </head>
 <body>
-    <!-- 
-        总结：
-        vue有两种绑定的方式：
-            1.单向绑定(v-bind)：数据只能从data流向页面。
-					2.双向绑定(v-model)：数据不仅能从data流向页面，还可以从页面流向data。
-						备注：
-								1.双向绑定一般都应用在表单类元素上（如：input、select等）
-								2.v-model:value 可以简写为 v-model，因为v-model默认收集的就是value值。
-     -->
     <!-- 准备一个容器 -->
     <div id="root">
         <!-- 常规写法 -->
@@ -1661,10 +1652,10 @@ computed和watch之间的区别：
                 绑定style样式(对象写法)
                 css样式再vue中除第以个单词外，其他单词首字母大写
              -->
-            <h3 class="basic" :class="styleObj01">{{name}}</h3><br><br>
+            <h3 class="basic" :style="styleObj01">{{name}}</h3><br><br>
             
             <!-- 绑定style样式(数组写法):数组里嵌套对象写法 -->
-            <h3 class="basic" :class="[styleObj01, styleObj02]">{{name}}</h3><br><br>
+            <h3 class="basic" :style="[styleObj01, styleObj02]">{{name}}</h3><br><br>
         </div>
         <script>
                 // 设置为 false 以阻止 vue 在启动时生成生产提示
@@ -1684,7 +1675,7 @@ computed和watch之间的区别：
                                 fontSize: '50px',
                                 color: 'red'
                             },
-                            styleObj01: {
+                            styleObj02: {
                                 backgroundColor: 'blue'
                             }
                         },
@@ -6193,7 +6184,7 @@ vue ui
 
 https://blog.csdn.net/zlzbt/article/details/110136755
 
-![image-20230302222042657](C:%5CUsers%5CHP%5CDesktop%5C202303022220850.png)
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202403261504421.jpg)
 
 ​	在创建项目时，Vue CLI提示用户选取一个preset(预设)，Default是默认选项，包含基本的babel+eslint设置，适合快速创建一个新项目；Manually select features表示手动配置，提供可选择的npm包，更适合生产时的项目，在实际工作中推荐使用该种方式。
 
@@ -6213,7 +6204,7 @@ yarn serve
 
 复制任意一个地址到浏览器中就可以访问，这是Vue为我们写好的helloworld案例：
 
-<img src="C:%5CUsers%5CHP%5CDesktop%5C202305092015957.png" alt="image-20230509201545668" style="zoom:50%;" />
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202403261505314.jpg)
 
 
 
@@ -6531,6 +6522,6 @@ routes: [{
 
 ![](D:%5C%E7%AC%94%E8%AE%B0%5CHTML%5CVUE%5C%E6%96%87%E6%A1%A3%5CVue.png)
 
-参考：尚硅谷-张天禹     《Vue.js前端开发实战》，人民邮电出版社
+
 
 ​			

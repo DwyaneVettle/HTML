@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            单向绑定：<input type="text" v-bind:value="name">
+            <br>
+            双向绑定：<input type="text" v-model:value="name">
+            <br>
+            <!-- 绑定可以简写 -->
+            单向绑定：<input type="text" :value="name">
+            <br>
+            双向绑定：<input type="text" v-model="name">
+            <!-- v-bind可以传递数据，但是v-model不能传递数据 -->
+            <h2 v-bind:value="name">你好啊</h2>
+            <h2 v-model="name">你好啊</h2>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                var vm = new Vue({
+                        // el: '#root',
+                        // data: {
+                        //     name: "邹堂瑞"
+                        // }
+                        // data的第二种写法
+                        data:function() {
+                            return{
+                                name:"micheal"
+                            }
+                        }
+                })
+                // el的第二种写法
+                vm.$mount("#root")
+        </script>
+</body>
+</html>

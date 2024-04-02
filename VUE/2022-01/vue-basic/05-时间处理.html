@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <button v-on:click="showName">点我弹出“同学你好”</button>
+            <button v-on:click="showInfo($event,666)">点我接收参数</button>
+            <!-- v-on可以简写成@ -->
+            <button @click.once="showInfo($event,666)">点我接收参数</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {},
+                        // 处理事件的配置项methods
+                        methods: {
+                            // event是一个事件对象，它保存当前事件的
+                            // 属性target-发生事件的目标
+                            showName(event) {
+                                alert('同学你好')
+                                console.log(event);
+                            },
+                            showInfo(event, number) {
+                                console.log(number);
+                            }
+                        },
+                        
+                })
+        </script>
+</body>
+</html>

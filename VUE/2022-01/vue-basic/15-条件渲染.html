@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <!-- 
+                需求：切换显示或隐藏
+                v-show,值是一个条件表达式，true为显示，false隐藏
+                底层是通过display: none;来实现显示和隐藏
+             -->
+            <h3 v-show="false">欢迎来到{{name}}</h3>
+            <!-- 
+                v-if:通过隐藏元素标签来实现展示与否
+             -->
+             <h3 v-if="false">欢迎来到{{name}}</h3>
+
+             <!-- 
+                需求：n=1显示Angular 
+                     n=2显示React
+                     n=3显示Vue
+                注意：v-if、v-else-if、v-else是一组指令
+                中间不能断开
+              -->
+              <h3>当前n的值是:{{n}}</h3>
+              <button @click="n++">点我n+1</button>
+              <div v-if="n == 1">Angular</div>
+              <!-- <div>断开</div> -->
+              <div v-else-if="n == 2">React</div>
+              <div v-else-if="n == 3">Vue</div>
+              <div v-else>加油学习</div>
+              <!-- div包裹的元素会在页面中保留结构
+                template标签不会影响结构，配合v-if使用，
+                不能和v-show配合使用
+            -->
+            <template v-if="n == 1">
+                <div>
+                    <h3>成都</h3>
+                    <h3>重庆</h3>
+                </div>
+            </template>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            name:"四川城市职业学院",
+                            n:0
+                        }
+                        
+                })
+        </script>
+</body>
+</html>

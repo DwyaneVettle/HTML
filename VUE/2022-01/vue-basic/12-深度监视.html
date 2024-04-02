@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>vue使用模板</title>
+    <!-- 引入vue -->
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+        <!-- 准备一个容器 -->
+        <div id='root'>
+            <h3>a的值是:{{number.a}}</h3>
+            <button @click="number.a++">点我让a+1</button>
+
+            <h3>b的值是:{{number.b}}</h3>
+            <button @click="number.b++">点我让b+1</button>
+        </div>
+        <script>
+                // 设置为 false 以阻止 vue 在启动时生成生产提示
+                Vue.config.productionTip = false;
+                // 创建Vue对象
+                new Vue({
+                        el: '#root',
+                        data: {
+                            number:{
+                                a:1,
+                                b:2
+                            }
+                        },
+                        watch:{
+                            // 'number.a':{
+                            //     handler() {
+                            //         console.log("a的值发生了变化");
+                            //     }
+                            // },
+                            // 'number.b':{
+                            //     handler() {
+                            //         console.log("b的值发生了变化");
+                            //     }
+                            // }
+                            number: {
+                                // deep:true表示深度监视，默认值为false
+                                deep:true,
+                                handler() {
+                                    console.log("number发生了改变");
+                                }
+                            }
+                        }
+                        
+                })
+        </script>
+</body>
+</html>
