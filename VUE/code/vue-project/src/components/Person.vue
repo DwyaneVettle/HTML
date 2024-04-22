@@ -1,48 +1,32 @@
 <template>
     <div class="person">
-        <h3>姓名：{{name}}</h3>
-        <h3>年龄：{{age}}</h3>
-        <button @click="changeName">点击修改名字</button>
-        <button @click="changeAge">点击修改年龄</button>
-        <button @click="showTel()">查看联系电话</button>
+        <h3>一辆{{car.brand}}车，价值{{car.price}}万元</h3>
+        <button @click="changePrice">加价10万</button>
+        <hr>
+        <ul>
+          <li v-for="game in games" :key="game.id">{{game.name}}</li>
+        </ul>
+        <button @click="changeFirstGame">修改第一个游戏名字</button>
     </div>
 </template>
 
-<!--<script lang="ts">-->
-<!--    export default {-->
-<!--        name:"Person",-->
-        // setup() {
-        //   console.log(this)  // Vue3中的this是undefined
-        //   let name="张三"
-        //   let age=18
-        //   let tel='15880000000'
-        //   function changeName() {
-        //     name = "李四"
-        //   }
-        //   function changeAge () {
-        //     age += 1
-        //   }
-        //   function showTel() {
-        //     alert(tel)
-        //   }
-        //   return {
-        //     name,age,tel,changeName,changeAge,showTel
-        //   }
-        // }
-<!--    }-->
-<!--</script>-->
+
 <script lang="ts" setup name="Person">
-    let name="张三"
-    let age=18
-    let tel='15880000000'
-    function changeName() {
-      name = "李四"
+    import {reactive} from 'vue'
+    let car = reactive({
+      brand:'奔驰',
+      price:100
+    })
+    let games = reactive([
+      {id:'001',name:'红色警戒'},
+      {id:'002',name:'超级玛丽'},
+      {id:'003',name:'忍者神龟'}
+    ])
+    function changePrice() {
+        car.price += 10
     }
-    function changeAge () {
-      age += 1
-    }
-    function showTel() {
-      alert(tel)
+    function changeFirstGame() {
+        games[0].name = '90坦克'
     }
 </script>
 

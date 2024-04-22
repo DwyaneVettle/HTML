@@ -330,4 +330,163 @@ plugins: [VueSetupExtend]
 
 ​	以上写法是`setup`语法糖的格式，但数据不是响应式的，也就不能实现修改姓名和年龄，因此我们需要使用`ref`创建响应式数据。
 
-### 3.3.ref
+### 3.3.ref-基本类型的响应式数据
+
+​	在组合式 API 中，推荐使用 [`ref()`](https://cn.vuejs.org/api/reactivity-core.html#ref) 函数来声明响应式状态：
+
+```vue
+import { ref } from 'vue'
+
+const count = ref(0)
+```
+
+​	上述数据返回一个RefImpl的实例对象，简称ref对象或ref，ref的value属性是响应式的。
+
+​	`ref()` 接收参数，并将其包裹在一个带有 `.value` 属性的 ref 对象中返回：
+
+```vue
+const count = ref(0)
+
+console.log(count) // { value: 0 }
+console.log(count.value) // 0
+
+count.value++
+console.log(count.value) // 1
+```
+
+​	要在组件模板中访问 ref，请从组件的 `setup()` 函数中声明并返回它们：
+
+```vue
+import { ref } from 'vue'
+
+export default {
+  // `setup` 是一个特殊的钩子，专门用于组合式 API。
+  setup() {
+    const count = ref(0)
+
+    // 将 ref 暴露给模板
+    return {
+      count
+    }
+  }
+}
+```
+
+​	**注意**：在模板中使用 ref 时，我们**不**需要附加 `.value`。为了方便起见，当在模板中使用时，ref 会自动解包 (有一些[注意事项](https://cn.vuejs.org/guide/essentials/reactivity-fundamentals.html#caveat-when-unwrapping-in-templates))。
+
+​	因此在Person.vue中就应该做以下修改，通过ref让数据变成响应式数据：
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404222244133.png)
+
+```vue
+<template>
+    <div class="person">
+        <h3>姓名：{{name}}</h3>
+        <h3>年龄：{{age}}</h3>
+        <button @click="changeName">点击修改名字</button>
+        <button @click="changeAge">点击修改年龄</button>
+        <button @click="showTel()">查看联系电话</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {ref} from 'vue'
+
+    let name=ref("张三")
+    let age=ref(18)
+    let tel='15880000000'
+    function changeName() {
+      name.value = "李四"
+    }
+    function changeAge () {
+      age.value += 1
+    }
+    function showTel() {
+      alert(tel)
+    }
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    button {
+      margin: 0 3px
+    }
+</style>>
+```
+
+### 3.4.reactive-对象类型的相应式数据
+
+​	还有另一种声明响应式状态的方式，即使用 `reactive()` API。与将内部值包装在特殊对象中的 ref 不同，`reactive()` 将使对象（普通对象、数组等）本身具有响应性：
+
+```vue
+import { reactive } from 'vue'
+
+const state = reactive({ count: 0 })
+```
+
+​	在模板中使用：
+
+```vue
+<button @click="state.count++">
+  {{ state.count }}
+</button>
+```
+
+​	响应式对象是 [JavaScript 代理](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy)，其行为就和普通对象一样。不同的是，Vue 能够拦截对响应式对象所有属性的访问和修改，以便进行依赖追踪和触发更新。
+
+​	`reactive()` 将深层地转换对象：当访问嵌套对象时，它们也会被 `reactive()` 包装。当 ref 的值是一个对象时，`ref()` 也会在内部调用它。与浅层 ref 类似，这里也有一个 [`shallowReactive()`](https://cn.vuejs.org/api/reactivity-advanced.html#shallowreactive) API 可以选择退出深层响应性。
+
+​	将`Person.vue`代码改造为对象类型的相应式数据：
+
+```vue
+<template>
+    <div class="person">
+        <h3>一辆{{car.brand}}车，价值{{car.price}}万元</h3>
+        <button @click="changePrice">加价10万</button>
+        <hr>
+        <ul>
+          <li v-for="game in games" :key="game.id">{{game.name}}</li>
+        </ul>
+        <button @click="changeFirstGame">修改第一个游戏名字</button>
+    </div>
+</template>
+
+
+<script lang="ts" setup name="Person">
+    import {reactive} from 'vue'
+    let car = reactive({
+      brand:'奔驰',
+      price:100
+    })
+    let games = reactive([
+      {id:'001',name:'红色警戒'},
+      {id:'002',name:'超级玛丽'},
+      {id:'003',name:'忍者神龟'}
+    ])
+    function changePrice() {
+        car.price += 10
+    }
+    function changeFirstGame() {
+        games[0].name = '90坦克'
+    }
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    button {
+      margin: 0 3px
+    }
+</style>>
+```
+
+![image-20240422230829585](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404222308828.png)
