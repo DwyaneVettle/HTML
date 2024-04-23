@@ -490,3 +490,214 @@ const state = reactive({ count: 0 })
 ```
 
 ![image-20240422230829585](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404222308828.png)
+
+​	**其实`ref`也能使对象类型的数据变为响应式数据。**我们将如上代码进行修改，使数组和对象分别用`ref`和`reactive`进行包裹，并打印car和games，我们发现使用`ref`包裹的数组对象的value值的底层仍然使用了`reactive`：
+
+```vue
+<script lang="ts" setup name="Person">
+    import {reactive,ref} from 'vue'
+    let car = ref({
+      brand:'奔驰',
+      price:100
+    })
+    let games = reactive([
+      {id:'001',name:'红色警戒'},
+      {id:'002',name:'超级玛丽'},
+      {id:'003',name:'忍者神龟'}
+    ])
+    console.log(car)
+    console.log(games)
+    function changePrice() {
+        car.value.price += 10
+    }
+    function changeFirstGame() {
+        games[0].name = '90坦克'
+    }
+</script>
+```
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404230959193.png" style="zoom: 80%;" />
+
+### 3.5.`ref()`和`reactive()` API的对比
+
+​	`reactive()`API有一些局限性：
+
+- **有限的值类型**：它只能用于对象类型 (对象、数组和如 `Map`、`Set` 这样的[集合类型](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects#keyed_collections))。它不能持有如 `string`、`number` 或 `boolean` 这样的[原始类型](https://developer.mozilla.org/en-US/docs/Glossary/Primitive)。
+
+- **不能替换整个对象**：由于 Vue 的响应式跟踪是通过属性访问实现的，因此我们必须始终保持对响应式对象的相同引用。这意味着我们不能轻易地“替换”响应式对象，因为这样的话与第一个引用的响应性连接将丢失：
+
+  ```vue
+  let state = reactive({ count: 0 })
+  
+  // 上面的 ({ count: 0 }) 引用将不再被追踪
+  // (响应性连接已丢失！)
+  state = reactive({ count: 1 })
+  ```
+
+- **对解构操作不友好**：当我们将响应式对象的原始类型属性解构为本地变量时，或者将该属性传递给函数时，我们将丢失响应性连接：
+
+  ```vue
+  const state = reactive({ count: 0 })
+  
+  // 当解构时，count 已经与 state.count 断开连接
+  let { count } = state
+  // 不会影响原始的 state
+  count++
+  
+  // 该函数接收到的是一个普通的数字
+  // 并且无法追踪 state.count 的变化
+  // 我们必须传入整个对象以保持响应性
+  callSomeFunction(state.count)
+  ```
+
+  由于这些限制，官方建议使用 `ref()` 作为声明响应式状态的主要 API。
+
+  **`ref()`和`reactive()`的对比：**
+
+- 宏观角度：
+
+  ```vue
+  1.ref用来定义：基本数据类型、对象数据类型
+  2.reactive用来定义：对象数据类型
+  ```
+
+- 区别：
+
+  ```vue
+  1.ref创建的变量必须使用.value（可以使用volar插件的自动.value，在VSCode中找到该扩展进行如下图设置即可自动为你.value）
+  2.reactive重新分配一个Proxy对象，会失去响应式（可以使用Object.assign整体替换）
+  ```
+
+  ![image-20240423102941150](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404231029219.png)
+
+  ```vue
+  <template>
+      <div class="person">
+          <h3>一辆{{car.brand}}车，价值{{car.price}}万元</h3>
+          <button @click="changePrice">加价10万</button>
+          <button @click="changeBrand">修改品牌</button>
+          <button @click="changeCar">修改汽车对象</button>
+  
+      </div>
+  </template>
+  
+  
+  <script lang="ts" setup name="Person">
+      import {reactive,ref} from 'vue'
+      let car = ref({
+        brand:'奔驰',
+        price:100
+      })
+      // 可以修改属性
+      function changePrice() {
+          car.value.price += 10
+      }
+      function changeBrand() {
+        car.value.brand = '宝马'
+      }
+      // 修改整个对象不可行，必须借助Object.assign()整体替换
+      function changeCar() {
+        // 以下方法直接修改都不可行
+        // car = {brand:'奥迪',price:50}
+        // car = reactive({brand:'奥迪',price:50})
+  
+        // 必须借助Object.assign()整体替换来修改一个对象
+        Object.assign(car,{brand:'BYD',price:50})
+      }
+  </script>
+  
+  <style scoped>
+      .person {
+          background-color: skyblue;
+          box-shadow: 0 0 10px;
+          border-radius: 10px;
+          padding: 20px;
+      }
+      button {
+        margin: 0 3px
+      }
+  </style>>
+  ```
+
+  
+
+- 使用原则：
+
+  ```vue
+  1.若需要一个基本类型的响应式数据，必须使用ref
+  2.若需要使用一个响应式对象，层级不深，ref、reactive都可以
+  3.若需要一个响应式对象，且层级较深，推荐使用reactive
+  ```
+
+  
+
+### 3.6.toRef和toRefs
+
+​	`toRefs()`函数的作用是将响应式对象的所有属性转换为单独的响应式数据，对象成为普通对象，并且值是关联的。在这个过程中`toRefs()`会做两件事：
+
+1. 把一个响应式对象转换成普通对象；
+
+2. 对该普通对象的每个属性都做一次ref操作，这样每个属性都是响应式的。
+
+   **说明：**
+
+- reactive 对象取出的所有属性值都是非响应式的，而利用 toRefs 可以将一个响应式 reactive 对象的所有原始属性转换为响应式的 ref 属性。
+
+- reactive的响应式功能是赋值给对象，如果展开对象，会让数丢失响应的能力。
+
+- 使用toRefs可以保证对象展开的每个属性都是响应式的。
+
+  **应用场景：**
+
+- 展开响应式对象时，想使用响应式对象中的多个或者所有属性做为响应式数据。
+
+- 当函数返回响应式对象时，toRefs非常有用，这样消费组件就可以在不丢失响应式的情况下对返回的对象进行分解使用。
+
+  **备注：**`toRef`和`toRefs`功能一致，但`toRefs`可以批量转换。
+
+```vue
+<template>
+    <div class="person">
+      <h3>姓名：{{name}}</h3>
+      <h3>年龄：{{age}}</h3>
+      <button @click="changeName">修改姓名</button>
+      <button @click="changeAge">修改年龄</button>
+    </div>
+</template>
+
+
+<script lang="ts" setup name="Person">
+    import {reactive,toRefs} from 'vue'
+    let person = reactive({
+      name:'张三',
+      age:18
+    })
+    // toRefs将reactive对象转换为普通对象，该普通对象的每个property都是一个ref
+    // 这样就可以在模板中直接使用而不需要.value
+    let {name,age} = toRefs(person)
+    function changeName() {
+      // name.value += '~'
+      person.name += '~'
+    }
+    function changeAge() {
+      // age.value += 1
+      person.age += 1
+    }
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+    button {
+      margin: 0 3px
+    }
+</style>
+```
+
+![image-20240423113642738](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404231136896.png)
+
+### 3.7.computed计算属性
