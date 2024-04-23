@@ -701,3 +701,138 @@ const state = reactive({ count: 0 })
 ![image-20240423113642738](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404231136896.png)
 
 ### 3.7.computed计算属性
+
+​	模板中的表达式虽然方便，但也只能用来做简单的操作。如果在模板中写太多逻辑，会让模板变得臃肿，难以维护。比如说，我们有这样一个包含嵌套数组的对象：
+
+```vue
+const author = reactive({
+  name: 'John Doe',
+  books: [
+    'Vue 2 - Advanced Guide',
+    'Vue 3 - Basic Guide',
+    'Vue 4 - The Mystery'
+  ]
+})
+```
+
+​	我们想根据 `author` 是否已有一些书籍来展示不同的信息：
+
+```vue
+<p>Has published books:</p>
+<span>{{ author.books.length > 0 ? 'Yes' : 'No' }}</span>
+```
+
+​	这里的模板看起来有些复杂。我们必须认真看好一会儿才能明白它的计算依赖于 `author.books`。更重要的是，如果在模板中需要不止一次这样的计算，我们可不想将这样的代码在模板里重复好多遍。
+
+​	因此我们推荐使用**计算属性**来描述依赖响应式状态的复杂逻辑。这是重构后的示例：
+
+```vue
+<template>
+    <div class="person">
+      <p>Has published books:</p>
+      <span>{{ publishedBooksMessage }}</span>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {reactive,computed} from 'vue'
+    const author = reactive({
+      name: 'Micheal Zou',
+      books: [
+        'Vue 2 - Advanced Guide',
+        'Vue 3 - Basic Guide',
+        'Vue 4 - The Mystery'
+      ]
+    })
+    // 一个计算属性 ref
+    const publishedBooksMessage = computed(() => {
+      return author.books.length > 0 ? 'Yes' : 'No'
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+​	我们在这里定义了一个计算属性 `publishedBooksMessage`。`computed()` 方法期望接收一个 getter 函数，返回值为一个**计算属性 ref**。和其他一般的 ref 类似，你可以通过 `publishedBooksMessage.value` 访问计算结果。计算属性 ref 也会在模板中自动解包，因此在模板表达式中引用时无需添加 `.value`。
+
+​	Vue 的计算属性会自动追踪响应式依赖。它会检测到 `publishedBooksMessage` 依赖于 `author.books`，所以当 `author.books` 改变时，任何依赖于 `publishedBooksMessage` 的绑定都会同时更新。
+
+
+
+**计算属性 VS 方法**
+
+​	你可能注意到我们在表达式中像这样调用一个函数也会获得和计算属性相同的结果：
+
+```vue
+<p>{{ calculateBooksMessage() }}</p>
+
+
+// 组件中
+function calculateBooksMessage() {
+  return author.books.length > 0 ? 'Yes' : 'No'
+}
+```
+
+​	若我们将同样的函数定义为一个方法而不是计算属性，两种方式在结果上确实是完全相同的，然而，不同之处在于**计算属性值会基于其响应式依赖被缓存**。一个计算属性仅会在其响应式依赖更新时才重新计算。这意味着只要 `author.books` 不改变，无论多少次访问 `publishedBooksMessage` 都会立即返回先前的计算结果，而不用重复执行 getter 函数。
+
+​	案例：
+
+![image-20240423224437871](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404232244045.png)
+
+```vue
+<template>
+    <div class="person">
+      姓：<input v-model="firstName"> <br>
+      名：<input v-model="lastName"> <br>
+      全名：<span>{{fullName}}</span> <br>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import { ref, computed } from 'vue'
+    const firstName = ref('Micheal')
+    const lastName = ref('Zou')
+
+    const fullName = computed({
+      // getter
+      get() {
+        return firstName.value + ' ' + lastName.value
+      },
+      // setter
+      set(newValue) {
+        // 注意：我们这里使用的是解构赋值语法
+        [firstName.value, lastName.value] = newValue.split(' ')
+      }
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+​	计算属性默认是只读的。当你尝试修改一个计算属性时，你会收到一个运行时警告。只在某些特殊场景中你可能才需要用到“可写”的属性，你可以通过同时提供 getter 和 setter 来创建。
+
+​	现在当你再运行 `fullName.value = 'John Doe'` 时，setter 会被调用而 `firstName` 和 `lastName` 会随之更新。
+
+
+
+### 3.8.侦听器
+
+​	计算属性允许我们声明性地计算衍生值。然而在有些情况下，我们需要在状态变化时执行一些“副作用”：例如更改 DOM，或是根据异步操作的结果去修改另一处的状态。
+
+​	在组合式 API 中，我们可以使用 [`watch` 函数](https://cn.vuejs.org/api/reactivity-core.html#watch)在每次响应式状态发生变化时触发回调函数。例如，当年龄大于18岁可以上网，当购物满200需要打9折，这些数据都是可以通过侦听`watch`器来完成的。
+
+​	**侦听数据源类型：**`watch` 的第一个参数可以是不同形式的“数据源”：<font color="red">它可以是一个**`ref `(包括计算属性)、一个响应式对象、一个 `getter` 函数、或多个数据源组成的数组**</font>。
