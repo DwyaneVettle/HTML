@@ -836,3 +836,388 @@ function calculateBooksMessage() {
 ​	在组合式 API 中，我们可以使用 [`watch` 函数](https://cn.vuejs.org/api/reactivity-core.html#watch)在每次响应式状态发生变化时触发回调函数。例如，当年龄大于18岁可以上网，当购物满200需要打9折，这些数据都是可以通过侦听`watch`器来完成的。
 
 ​	**侦听数据源类型：**`watch` 的第一个参数可以是不同形式的“数据源”：<font color="red">它可以是一个**`ref `(包括计算属性)、一个响应式对象、一个 `getter` 函数、或多个数据源组成的数组**</font>。
+
+​	侦听器的语法格式为：
+
+```vue
+watch(监视的对象,callback,{监视配置项})
+```
+
+
+
+#### 3.8.1.监听ref定义的基本类型数据
+
+![image-20240424103606567](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404241036933.png)
+
+```vue
+<template>
+    <div class="person">
+        <h1>1.监视ref定义的基本类型数据</h1>
+        <h3>当前sum值为：{{sum}}</h3>
+        <button @click="addSum()">点我+1</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+   import {ref,watch} from 'vue'
+
+   let sum = ref(0)
+   function addSum() {
+      sum.value += 1
+   }
+
+   /* 监视属性-watch
+   *  监视两个值：newValue表示新的值，oldValue表示旧的值
+   *  监视属性有一个返回值，返回值是一个函数，该函数会在监视的属性发生变化时调用
+   *
+   * */
+   const stopWatch = watch(sum,(newValue,oldValue)=>{
+      console.log('sum的值变化了',newValue,oldValue)
+     //当值大于10时停止监视
+     if(newValue > 10) {
+       stopWatch()
+     }
+   })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+​	**即时回调的侦听器：**`watch` 默认是懒执行的：仅当数据源变化时，才会执行回调。但在某些场景中，我们希望在创建侦听器时，立即执行一遍回调。举例来说，我们想请求一些初始数据，然后在相关状态更改时重新请求数据。
+
+​	我们可以通过传入 `immediate: true` 选项来强制侦听器的回调立即执行：
+
+```vue
+watch(
+  source,
+  (newValue, oldValue) => {
+    // 立即执行，且当 `source` 改变时再次执行
+  },
+  { immediate: true }
+)
+```
+
+​	**一次性侦听器：**每当被侦听源发生变化时，侦听器的回调就会执行。如果希望回调只在源变化时触发一次，请使用 `once: true` 选项：
+
+```vue
+watch(
+  source,
+  (newValue, oldValue) => {
+    // 当 `source` 变化时，仅触发一次
+  },
+  { once: true }
+)
+```
+
+
+
+#### 3.8.2.监听对象类型数据
+
+​	`watch`也可以监听对象类型的数据，但监听对象类型数据时需要注意：当监视对象中的属性变化时，需要深层监视，即给`watch()`传递第三个参数，第三个参数是一个配置项`{deep:true}`
+
+```vue
+<template>
+    <div class="person">
+        <h1>2.监视对象类型数据</h1>
+        <h3>姓名：{{person.name}}</h3>
+        <h3>年龄：{{person.age}}</h3>
+        <button @click="changeName">修改姓名</button>
+        <button @click="changeAge">修改年龄</button>
+        <button @click="changePerson">修改对象</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {ref,watch} from 'vue'
+
+    let person = ref({
+      name:'Michealzou',
+      age:30
+    })
+    function changeName() {
+      person.value.name = 'Michealzou2'
+    }
+    function changeAge() {
+      person.value.age = 35
+    }
+    function changePerson() {
+      person.value = {
+        name: 'Michealzou3',
+        age: 36
+      }
+    }
+    /*
+      监视属性监视对象时若想监视内部属性的变化，需要深度监视
+      1.Vue3中的watch默认不监测对象内部值的改变（一层）
+      2.配置deep:true可以监测对象内部值改变（多层）
+      备注：vue自身可以监测对象内部值的改变，但vue提供的watch默认不可以！
+      3.使用reactive监视对象类型时，默认开启深度监视
+     */
+    const stopWatch = watch(person,(newValue,oldValue)=>{
+      console.log('person的值变化了',newValue,oldValue)
+    },{deep:true})
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+#### 3.8.3.监听一个getter函数
+
+​	`getter()`函数即可以返回一个值，也就是对象类型中的某个属性，若该属性不是对象类型，需要写成函数形式；若该属性依然是对象类型，可以直接编写，也可以写函数，不过建议写成函数。
+
+```vue
+<template>
+    <div class="person">
+      <h3>姓名：{{person.name}}</h3>
+      <h3>年龄：{{ person.age }}</h3>
+      <h3>汽车：{{ person.car.c1 }}、 {{ person.car.c2 }}</h3>
+      <button @click="changeName">修改名字</button>
+      <button @click="changeAge">修改年龄</button>
+      <button @click="changeC1">修改汽车c1</button>
+      <button @click="changeC2">修改汽车c2</button>
+      <button @click="changeCar">修改汽车</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {reactive,watch} from 'vue'
+
+    let person = reactive({
+      name:'Michealzou',
+      age: 30,
+      car: {
+        c1:'奔驰',
+        c2:'宝马'
+      }
+    })
+
+    function changeName() {
+      person.name += "~"
+    }
+    function changeAge() {
+      person.age += 1
+    }
+    function changeC1() {
+      person.car.c1 = "奥迪"
+    }
+    function changeC2() {
+      person.car.c2 = "大众"
+    }
+    function changeCar() {
+      person.car = {c1:'特斯拉',c2:'比亚迪'}
+    }
+
+    /*
+    *  监视ref所定义的对象中的某个属性，且该属性是基本类型时，要写成函数式
+    * */
+    watch(() => person.name,(newVal,oldVal) =>{
+      console.log('person.name变化了',newVal,oldVal)
+    })
+    /*
+    *   监视响应式响应式对象中的某个属性，且该属性是对象类型时，可以直接写，也可以写函数
+    *   但更推荐写函数，因为这样可以避免深度监视
+    * */
+    watch(() => person.car,(newVal,oldVal)=> {
+      console.log('person.car变化了',newVal,oldVal)
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+#### 3.8.3.监视一个数组
+
+​	当需要监听上述多个数据时，可以使用数组的形式进行传递：
+
+```vue
+<template>
+    <div class="person">
+      <h3>姓名：{{person.name}}</h3>
+      <h3>年龄：{{ person.age }}</h3>
+      <h3>汽车：{{ person.car.c1 }}、 {{ person.car.c2 }}</h3>
+      <button @click="changeName">修改名字</button>
+      <button @click="changeAge">修改年龄</button>
+      <button @click="changeC1">修改汽车c1</button>
+      <button @click="changeC2">修改汽车c2</button>
+      <button @click="changeCar">修改汽车</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {reactive,watch} from 'vue'
+
+    let person = reactive({
+      name:'Michealzou',
+      age: 30,
+      car: {
+        c1:'奔驰',
+        c2:'宝马'
+      }
+    })
+
+    function changeName() {
+      person.name += "~"
+    }
+    function changeAge() {
+      person.age += 1
+    }
+    function changeC1() {
+      person.car.c1 = "奥迪"
+    }
+    function changeC2() {
+      person.car.c2 = "大众"
+    }
+    function changeCar() {
+      person.car = {c1:'特斯拉',c2:'比亚迪'}
+    }
+
+    watch([() => person.car.c1,() => person.name],(newVal,oldVal)=> {
+      console.log('person.car变化了',newVal,oldVal)
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+#### 3.8.4.`watchEffect()`
+
+​	侦听器的回调使用与源完全相同的响应式状态是很常见的。例如下面的代码，在每当 `todoId` 的引用发生变化时使用侦听器来加载一个远程资源：
+
+```vue
+<template>
+    <div class="person">
+      {{ todoId }}
+      {{ data }}
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {ref,watch} from 'vue'
+
+    const todoId = ref(1)
+    const data = ref(null)
+
+    watch(
+        todoId,
+        async () => {
+          const response = await fetch(
+              `https://jsonplaceholder.typicode.com/todos/${todoId.value}`
+          )
+          data.value = await response.json()
+        },
+        { immediate: true }
+    )
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+
+```
+
+​	特别是注意侦听器是如何两次使用 `todoId` 的，一次是作为源，另一次是在回调中。我们可以用 [`watchEffect` 函数](https://cn.vuejs.org/api/reactivity-core.html#watcheffect) 来简化上面的代码。`watchEffect()` 允许我们自动跟踪回调的响应式依赖。上面的侦听器可以重写为：
+
+```vue
+watchEffect(async () => {
+  const response = await fetch(
+    `https://jsonplaceholder.typicode.com/todos/${todoId.value}`
+  )
+  data.value = await response.json()
+})
+```
+
+​	这个例子中，回调会立即执行，不需要指定 `immediate: true`。在执行期间，它会自动追踪 `todoId.value` 作为依赖（和计算属性类似）。每当 `todoId.value` 变化时，回调会再次执行。有了 `watchEffect()`，我们不再需要明确传递 `todoId` 作为源值。
+
+​	对于这种只有一个依赖项的例子来说，`watchEffect()` 的好处相对较小。但是对于有多个依赖项的侦听器来说，使用 `watchEffect()` 可以消除手动维护依赖列表的负担。此外，如果你需要侦听一个嵌套数据结构中的几个属性，`watchEffect()` 可能会比深度侦听器更有效，因为它将只跟踪回调中被使用到的属性，而不是递归地跟踪所有的属性。
+
+**watch  VS watchEffect：**`watch` 和 `watchEffect` 都能响应式地执行有副作用的回调。它们之间的主要区别是追踪响应式依赖的方式：
+
+- `watch` 只追踪明确侦听的数据源。它不会追踪任何在回调中访问到的东西。另外，仅在数据源确实改变时才会触发回调。`watch` 会避免在发生副作用时追踪依赖，因此，我们能更加精确地控制回调函数的触发时机。
+- `watchEffect`则会在副作用发生期间追踪依赖。它会在同步执行过程中，自动追踪所有能访问到的响应式属性。这更方便，而且代码往往更简洁，但有时其响应性依赖关系会不那么明确。
+
+```vue
+<template>
+    <div class="person">
+      <h3>当身高超过170，体重超过60就输出《身体非常棒》</h3>
+      <p>身高：{{ height }}</p>
+      <p>体重：{{ weight }}</p>
+      <button @click="changeHeight">点我身高+10</button>
+      <button @click="changeWeight">点我体重+10</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {ref,watch,watchEffect} from 'vue'
+
+    let height = ref(100)
+    let weight = ref(40)
+
+    function changeHeight() {
+        height.value += 10
+    }
+    function changeWeight() {
+      weight.value += 10
+    }
+
+    // 监视体重和身高
+    /*watch([height,weight],() => {
+      if(height .value > 170 || weight.value > 60) {
+        console.log("身体非常棒")
+      }
+    })*/
+    /*
+    *   watchEffect()会自动监听，它会立即执行（相当于watch配置了{immetiate:true}）
+    * */
+    watchEffect(() => {
+      if(height .value > 170 || weight.value > 60) {
+        console.log("身体非常棒")
+      }
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+
+
+### 3.9.props
