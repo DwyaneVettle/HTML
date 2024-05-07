@@ -1221,3 +1221,142 @@ watchEffect(async () => {
 
 
 ### 3.9.props
+
+​	一个组件需要显式声明它所接受的 `props`，这样 Vue 才能知道外部传入的哪些是 `props`，哪些是透传 `attribute`（父组件向子组件传递）。在使用 `<script setup>` 的单文件组件中，props 可以使用 `defineProps()` 宏来声明：
+
+```vue
+<script setup>
+const props = defineProps(['foo'])
+
+console.log(props.foo)
+</script>
+```
+
+​	在没有使用 `<script setup>` 的组件中，prop 可以使用 [`props`](https://cn.vuejs.org/api/options-state.html#props) 选项来声明：
+
+```vue
+export default {
+  props: ['foo'],
+  setup(props) {
+    // setup() 接收 props 作为第一个参数
+    console.log(props.foo)
+  }
+}
+```
+
+​	注意传递给 `defineProps()` 的参数和提供给 `props` 选项的值是相同的，两种声明方式背后其实使用的都是 prop 选项。除了使用字符串数组来声明 prop 外，还可以使用对象的形式：
+
+```vue
+// 使用 <script setup>
+defineProps({
+  title: String,
+  likes: Number
+})
+    
+    
+// 非 <script setup>
+export default {
+  props: {
+    title: String,
+    likes: Number
+  }
+}
+```
+
+**案例：**
+
+1.在src下创建`types/index.ts`，用于限制Person的类型：
+
+```ts
+// 定义一个接口，用于限制person对象的具体属性
+export interface PersonInter {
+    id: string,
+    name: string,
+    age: number
+}
+
+// 自定义一个类型
+export type Persons = PersonInter[]
+```
+
+2.`App.vue`：
+
+```vue
+<template>
+        <!-- 组件标签，给Person组件传递list -->
+         <Person :list="personList"/>
+</template>
+
+<script lang="ts" setup name="App">
+    import Person from './components/Person.vue'
+    import {Persons} from '@/types'
+    import {reactive}from 'vue'
+
+    let personList = reactive<Persons>([
+      {id:"001",name:"张三",age:18},
+      {id:"002",name:"李四",age:20},
+      {id:"003",name:"王五",age:30}
+    ])
+</script>
+
+<style>
+</style>
+```
+
+3.`Person.vue`
+
+```vue
+<template>
+    <div class="person">
+      <ul>
+        <li v-for="personObj in list" :key="personObj.id">
+          {{ personObj.name }}-{{ personObj.age }}
+        </li>
+      </ul>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+    import {defineProps,withDefaults} from 'vue'
+    import {Persons} from '@/types'
+
+    // 接收父组件App传递过来的list
+    // 这里定义的list，在模板中可以直接使用
+    // defineProps(['list'])
+
+    // 接收父组件APP传递过来的list并限制类型
+    // defineProps<{list:Persons}>()
+
+    // 接收list+限定类型+限定必要性(用?限定)+指定默认值(假定父组件没有传递list)
+    withDefaults(defineProps<{list?:Persons}>(),{
+      list:() => [{
+        id: '007',
+        name: '李坤',
+        age: 30
+      }]
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+​	父组件传递`list`时：
+
+![image-20240425112639918](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404251126056.png)
+
+​	父组件不传递`list`时，根据默认值显示：
+
+![image-20240425112725964](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404251127916.png)
+
+### 3.10.生命周期
+
+​	Vue2的生命周期分为4个阶段：创建、挂载、更新、销毁，与之匹配的是8个生命钩子，即创建前`beforeCreate`、`Created`、`beforeMount`、`Mounted`、`beforeUpdate`、`Updated`、`beforeDestory`、`Destoryed`，其详细的执行时期如下图：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627931.png" style="zoom: 50%;" />

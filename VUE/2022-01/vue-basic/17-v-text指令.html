@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+  <!--
+      v-text向标签所在的节点渲染文本内容
+      v-text会替换掉节点中的所有内容，包括元素自带的文本内容
+    -->
+  <div id="app">
+    <h3>{{ msg }}</h3>
+    <h3 v-text="str">hello</h3>
+  </div>
+
+  <script>
+
+    var vm = new Vue({
+            el:'#app',
+            data:{
+              msg: 'hello vue',
+              str: '你好！'
+            }
+    })
+  </script>
+</body>
+</html>

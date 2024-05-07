@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+    <div id="app">
+        <!--
+            v-once指令：所在节点在初次渲染之后，就视为静态资源
+            以后的改变不会影响v-once所在结构的变化，可以用于优化性能
+        -->
+        <h3>当前n的值为: {{ n }}</h3>
+        <h3 v-once>初始化n的值为: {{ n }}</h3>
+        <button @click="n++">点我n+1</button>
+    </div>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                n:1
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src='./js/vue.js'></script>
+</head>
+<body>
+    <div id="app">
+        <!--
+            v-pre：跳过所在节点的编译过程
+            可利用它跳过没有使用指令语法、没有使用插值语法的节点，
+            加快编译的过程
+        -->
+        <h3 v-pre>hello Vue</h3>
+        <h3 v-pre>当前n的值为: {{ n }}</h3>
+        <button  @click="n++">点我n+1</button>
+    </div>
+    <script>
+        new Vue({
+            el:'#app',
+            data:{
+                n:1
+            }
+        })
+    </script>
+</body>
+</html>

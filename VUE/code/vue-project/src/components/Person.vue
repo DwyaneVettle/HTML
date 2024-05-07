@@ -1,39 +1,31 @@
 <template>
     <div class="person">
-      <h3>当身高超过170，体重超过60就输出《身体非常棒》</h3>
-      <p>身高：{{ height }}</p>
-      <p>体重：{{ weight }}</p>
-      <button @click="changeHeight">点我身高+10</button>
-      <button @click="changeWeight">点我体重+10</button>
+      <ul>
+        <li v-for="personObj in list" :key="personObj.id">
+          {{ personObj.name }}-{{ personObj.age }}
+        </li>
+      </ul>
     </div>
 </template>
 
 <script lang="ts" setup name="Person">
-    import {ref,watch,watchEffect} from 'vue'
+    import {defineProps,withDefaults} from 'vue'
+    import {Persons} from '@/types'
 
-    let height = ref(100)
-    let weight = ref(40)
+    // 接收父组件App传递过来的list
+    // 这里定义的list，在模板中可以直接使用
+    // defineProps(['list'])
 
-    function changeHeight() {
-        height.value += 10
-    }
-    function changeWeight() {
-      weight.value += 10
-    }
+    // 接收父组件APP传递过来的list并限制类型
+    // defineProps<{list:Persons}>()
 
-    // 监视体重和身高
-    /*watch([height,weight],() => {
-      if(height .value > 170 || weight.value > 60) {
-        console.log("身体非常棒")
-      }
-    })*/
-    /*
-    *   watchEffect()会自动监听，它会立即执行（相当于watch配置了{immetiate:true}）
-    * */
-    watchEffect(() => {
-      if(height .value > 170 || weight.value > 60) {
-        console.log("身体非常棒")
-      }
+    // 接收list+限定类型+限定必要性(用?限定)+指定默认值(假定父组件没有传递list)
+    withDefaults(defineProps<{list?:Persons}>(),{
+      list:() => [{
+        id: '007',
+        name: '李坤',
+        age: 30
+      }]
     })
 </script>
 
