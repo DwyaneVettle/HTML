@@ -225,9 +225,13 @@ createApp(App).mount('#app')
 
 ![image.png](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404171608424.webp)
 
+![img](https://www.runoob.com/wp-content/uploads/2022/04/1__OJ4DRgn_7hq82F-DJfZTQ.png)
+
 - **组合式 API (Composition API)：**通过组合式 API，我们可以使用导入的 API 函数来描述组件逻辑。在单文件组件中，组合式 API 通常会与 [``](https://cn.vuejs.org/api/sfc-script-setup.html) 搭配使用。这个 `setup` attribute 是一个标识，告诉 Vue 需要在编译时进行一些处理，让我们可以更简洁地使用组合式 API。比如，`<script setup>` 中的导入和顶层变量/函数都能够在模板中直接使用。
 
 ![image.png](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202404171608281.webp)
+
+![img](https://www.runoob.com/wp-content/uploads/2022/04/1_5XIfD_RUPMBJ6tRzr5OVJw.png)
 
 ### 3.2.setup语法糖
 
@@ -1360,3 +1364,528 @@ export type Persons = PersonInter[]
 ​	Vue2的生命周期分为4个阶段：创建、挂载、更新、销毁，与之匹配的是8个生命钩子，即创建前`beforeCreate`、`Created`、`beforeMount`、`Mounted`、`beforeUpdate`、`Updated`、`beforeDestory`、`Destoryed`，其详细的执行时期如下图：
 
 <img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202302171627931.png" style="zoom: 50%;" />
+
+​	Vue3生命钩子也分为4个阶段：创建阶段setup，挂载阶段(onBeforeMount, onMounted)，更新阶段(onBeforeUpdate,onUpdated)，卸载阶段(onBeforeUnmount,onUnmounted)，常用的生命钩子有：onMounted，onUpdated，onBeforeUnmount：
+
+![组件生命周期图示](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405081356446.png)
+
+修改`Person.vue`：
+
+```vue
+<template>
+    <div class="person">
+      <h3>当前值为：{{ sum }}</h3>
+      <button @click="add">点我sum+1</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+import {onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUnmounted, onUpdated, ref} from 'vue'
+
+    let sum = ref(0)
+
+    function add() {
+      sum.value += 1
+    }
+
+    // 创建-来自setup
+    console.log("创建。。。")
+
+    // 挂载前
+    onBeforeMount(() =>{
+      console.log("挂载前。。。")
+    })
+
+    // 挂载完毕
+    onMounted(() =>{
+      console.log("挂载完毕。。。")
+    })
+
+    // 更新前
+    onBeforeUpdate(() => {
+      console.log("更新前。。。")
+    })
+
+    // 更新完毕
+    onUpdated(() => {
+      console.log("更新完毕。。。")
+    })
+
+    // 卸载前
+    onBeforeUnmount(() => {
+      console.log("卸载前。。。")
+    })
+
+    // 卸载完毕
+    onUnmounted(() => {
+      console.log("卸载完毕。。。")
+    })
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+在`App.vue`中引入的Person组件添加v-if指令，修改v-if的值，使其隐藏，并调用到卸载的生命钩子：
+
+```vue
+<template>
+         <Person v-if="isShow"/>
+</template>
+
+<script lang="ts" setup name="App">
+    import Person from './components/Person.vue'
+    import { ref } from 'vue'
+
+    let isShow = ref(true)
+</script>
+
+<style>
+</style>
+```
+
+​	**在生命周期中，App钩子是最后执行的。**
+
+
+
+### 3.11.hooks
+
+​	`hook`是钩子的意思，看到“钩子”是不是就想到了钩子函数，事实上，`hooks `还真是函数的一种写法。vue3 借鉴 react hooks 开发出了 Composition API ，所以也就意味着 Composition API 也能进行自定义封装 hooks。
+
+​	vue3 中的 hooks 就是函数的一种写法，就是将文件的一些单独功能的js代码进行抽离出来，放到单独的js文件中，或者说是一些可以复用的公共方法/功能。其实 hooks 和 vue2 中的 mixin 有点类似，但是相对 mixins 而言， hooks 更清楚复用功能代码的来源, 更清晰易懂。
+
+​	使用方法：
+
+```text
+1.在src下创建一个hooks文件夹，用于存放hook文件
+2.根据需要写的hook在hooks下创建ts文件，命名规则是使用use开头(useXxx.ts)，如useStudent.ts
+3.使用函数包裹hook内部的数据和方法，并且导出该函数，在函数内部需要返回所有的数据和方法
+4.在组件中引入hook文件中的数据和方法。
+```
+
+**示例：**
+
+`Person.vue`：
+
+```vue
+<template>
+    <div class="person">
+      <h3>当前值为：{{ sum }}</h3>
+      <button @click="add">点我sum+1</button>
+      <ul>
+        <li v-for="(student,index) in students" :key="index">
+          {{ student.name }} - {{ student.age }}
+        </li>
+      </ul>
+      <button @click="updateFirstName">点我修改第一个学生名字</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+import { ref, reactive } from 'vue'
+
+    // 数据
+    let students = reactive([
+          { name: '张三', age: 18 },
+          { name: '李四', age: 20 },
+          { name: '王五', age: 24 },
+        ])
+    let sum = ref(0)
+
+    function add() {
+      sum.value += 1
+    }
+
+    function updateFirstName() {
+      students[0].name = '张三丰'
+    }
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+​	上述代码，我们将sum相加和student两个不相关的业务放到了一个组件中，这样使代码的可维护性降低，所以我们在src下创建hooks文件夹，再在该文件夹下创建`useSum.ts`和`useStudent.ts`两个文件，并把之前的代码粘贴过来进行改进，具体代码如下：
+
+`useSum.ts`：
+
+```typescript
+import { ref } from 'vue'
+
+// 默认暴露
+export default function () {
+    // 数据
+    let sum = ref(0)
+    // 方法
+    function add() {
+        sum.value += 1
+    }
+    // 向外部提供数据和函数
+    return { sum, add }
+}
+```
+
+`useStudent.ts`：
+
+```typescript
+import { reactive } from 'vue'
+
+export default function () {
+    // 数据
+    let students = reactive([
+        { name: '张三', age: 18 },
+        { name: '李四', age: 20 },
+        { name: '王五', age: 24 },
+    ])
+    // 方法
+    function updateFirstName() {
+        students[0].name = '张三丰'
+    }
+    // 向外部提供数据
+    return { students,updateFirstName }
+}
+```
+
+在`Person.vue`中引入hook文件中返回的方法和数据：
+
+```vue
+<template>
+    <div class="person">
+      <h3>当前值为：{{ sum }}</h3>
+      <button @click="add">点我sum+1</button>
+      <ul>
+        <li v-for="(student,index) in students" :key="index">
+          {{ student.name }} - {{ student.age }}
+        </li>
+      </ul>
+      <button @click="updateFirstName">点我修改第一个学生名字</button>
+    </div>
+</template>
+
+<script lang="ts" setup name="Person">
+  import useSum  from "@/hooks/useSum";
+  import useStudent from "@/hooks/useStudent";
+
+  const {sum,add} = useSum();
+  const {students,updateFirstName} = useStudent();
+</script>
+
+<style scoped>
+    .person {
+        background-color: skyblue;
+        box-shadow: 0 0 10px;
+        border-radius: 10px;
+        padding: 20px;
+    }
+</style>
+```
+
+​	刷新页面，和之间运行的效果一样：
+
+![image-20240508122238340](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405081355406.png)
+
+## 4.路由
+
+​	服务端路由指的是服务器根据用户访问的 URL 路径返回不同的响应结果。当我们在一个传统的服务端渲染的 web 应用中点击一个链接时，浏览器会从服务端获得全新的 HTML，然后重新加载整个页面。
+
+​	然而，在[单页面应用](https://developer.mozilla.org/en-US/docs/Glossary/SPA)中，客户端的 JavaScript 可以拦截页面的跳转请求，动态获取新的数据，然后在无需重新加载的情况下更新当前页面。这样通常可以带来更顺滑的用户体验，尤其是在更偏向“应用”的场景下，因为这类场景下用户通常会在很长的一段时间中做出多次交互。
+
+​	在这类单页应用中，“路由”是在客户端执行的。一个客户端路由器的职责就是利用诸如 [History API](https://developer.mozilla.org/en-US/docs/Web/API/History) 或是 [`hashchange` 事件](https://developer.mozilla.org/en-US/docs/Web/API/Window/hashchange_event)这样的浏览器 API 来管理应用当前应该渲染的视图。
+
+​	Vue所支持的官方路由是Vue-Router。它与 Vue.js 核心深度集成，让用 Vue.js 构建单页应用变得轻而易举。功能包括：
+
+- 嵌套路由映射
+- 动态路由选择
+- 模块化、基于组件的路由配置
+- 路由参数、查询、通配符
+- 展示由 Vue.js 的过渡系统提供的过渡效果
+- 细致的导航控制
+- 自动激活 CSS 类的链接
+- HTML5 history 模式或 hash 模式
+- 可定制的滚动行为
+- URL 的正确编码 
+
+### 4.1.路由操作基本切换效果
+
+​	在H5C3阶段，都是通过a标签来实现页面跳转，但在Vue中，我们需要通过路由来实现。现需完成如下页面，通过点击按钮，下面的内容也随之实现联动变化：
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405131624163.gif)
+
+1.删除之前的所有文件，在App.vue中创建如下代码：
+
+```vue
+<template>
+         <div class="app">
+           <h3 class="title">vue路由测试</h3>
+           <div class="navigate">
+             <a href="#" class="active">首页</a>
+             <a href="#">新闻</a>
+             <a href="#">关于</a>
+           </div>
+           <div class="main-content">
+               实现页面跳转的组件
+           </div>
+         </div>
+</template>
+
+<script lang="ts" setup name="App">
+
+</script>
+
+<style>
+    .title {
+      text-align: center;
+      word-spacing: 5px;
+      margin: 30px 0;
+      height: 70px;
+      line-height: 70px;
+      background-image: linear-gradient(45deg,gray,white);
+      border-radius: 10px;
+      box-shadow: 0 0 2px;
+      font-size: 30px;
+    }
+    .navigate {
+      display: flex;
+      justify-content: space-around;
+      margin: 0 100px;
+    }
+    .navigate a {
+      display: block;
+      text-align: center;
+      width: 90px;
+      height: 40px;
+      line-height: 40px;
+      border-radius: 10px;
+      background-color: gray;
+      text-decoration: none;
+    }
+    .navigate a.active {
+      background-color: #64967E;
+      color: #ffc268;
+      font-weight: 900;
+      text-shadow: 0 0 1px black;
+      font-family: 微软雅黑,serif;
+    }
+    .main-content {
+      margin: 0 auto;
+      margin-top: 30px;
+      border-radius: 10px;
+      width: 90%;
+      height: 400px;
+      border: 1px solid;
+    }
+</style>
+```
+
+2.在src/components下分别创建Home.vue、News.vue、About.vue：
+
+```vue
+<template>
+  <div class="home">
+    <p>
+      欢迎来到首页
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts" name="Home">
+
+</script>
+
+<style scoped></style>
+```
+
+```vue
+<template>
+  <div class="news">
+    <p>
+      新闻页面
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts" name="News">
+
+</script>
+
+<style scoped></style>
+```
+
+```vue
+<template>
+  <div class="about">
+    <p>
+      欢迎来到about
+    </p>
+  </div>
+</template>
+
+<script setup lang="ts" name="About">
+
+</script>
+
+<style scoped></style>
+```
+
+3.下载路由：
+
+```shell
+npm install vue-router
+```
+
+4.在src/router下创建index.ts，用于配置路由项：
+
+```vue
+// 创建一个路由器，并暴露
+// 1.引入 createRouter,createWebHistory
+import { createRouter,createWebHistory } from 'vue-router'
+// 引入路由组件
+import Home from '@/components/Home.vue'
+import News from '@/components/News.vue'
+import About from '@/components/About.vue'
+
+// 2.创建路由器
+const router = createRouter({
+    history: createWebHistory(), // 路由器工作模式
+    // 配置路由
+    routes: [
+        {
+            path: '/home',
+            component: Home
+        },
+        {
+            path: '/news',
+            component: News
+        },
+        {
+            path: '/about',
+            component: About
+        }
+    ]
+})
+
+// 3.导出路由器
+export default router
+```
+
+5.在main.ts中使用路由：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405131631692.png" style="zoom:50%;" />
+
+6.在App.vue中引入路由，并实现路由跳转，即把原来的a标签修改为RouterLink，href属性修改为to属性，active-class表示出发时生效：
+
+```vue
+<template>
+         <div class="app">
+           <h3 class="title">vue路由测试</h3>
+           <div class="navigate">
+             <RouterLink to="/home" active-class="active">首页</RouterLink>
+             <RouterLink to="/news" active-class="active">新闻</RouterLink>
+             <RouterLink to="/about" active-class="active">关于</RouterLink>
+           </div>
+           <div class="main-content">
+               <RouterView></RouterView>
+           </div>
+         </div>
+</template>
+
+<script lang="ts" setup name="App">
+  import { RouterView,RouterLink } from 'vue-router'
+
+</script>
+```
+
+### 4.2.两个注意事项
+
+```text
+1.路由组件通常放到pages或views文件夹，一般组件通常存放在components文件夹（以该组件名为标签名添加到页面的就是一般组件，如Header.vue--> <Header/>）
+2.通过点击导航，视觉效果上“消失”了的路由组件，默认是被卸载掉的，需要的时候再挂载上去
+```
+
+![image-20240513165225335](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405131652414.png)
+
+### 4.3.路由的两种工作模式
+
+**1.history模式：**
+
+```vue
+优点：URL更加美观，路径中不带#，更接近传统URL
+缺点：项目上线时，需要服务端配合处理路径问题，否则404
+用法:
+const router = createRouter({
+	history:createWebHistory(),
+	...
+})
+```
+
+**2.history模式：**
+
+```vue
+优点：兼容性更好，因为不需要服务器处理路径
+缺点：URL中有#，SEO优化方面相对较差
+用法：
+const router = createRouter({
+	history:createWebHashHistory,
+	...
+})
+```
+
+### 4.4.to的两种写法
+
+```vue
+<!-- 1.字符串方式 -->
+<RouterLink to="/home" active-class="active">首页</RouterLink>
+
+<!-- 2.对象方式 -->
+<RouterLink :to="{path:"/home"}" active-class="active">首页</RouterLink>
+```
+
+### 4.5.命名路由
+
+作用：简化路由跳转及参数
+
+用法：在routes配置中，通过name属性命名该路由
+
+给路由规则命名：
+
+```vue
+// 配置路由
+    routes: [
+        {
+            name:'zhuye',
+            path: '/home',
+            component: Home
+        },
+        {
+            name:'xinwen',
+            path: '/news',
+            component: News
+        },
+        {
+            name:'guanyu',
+            path: '/about',
+            component: About
+        }
+    ]
+```
+
+配置了命名路由后，使用路由的地方就可以用name属性跳转：
+
+```vue
+<RouterLink :to="{name:'xinwen'}" active-class="active">新闻</RouterLink>
+```
+
+### 4.6.嵌套路由
+
