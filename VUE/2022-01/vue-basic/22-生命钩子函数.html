@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="./js/vue.js"></script>
+</head>
+<body>
+    <div id="root">
+      <h3>当前的n值是：{{ n }}</h3>
+      <button @click="add">点我n+1</button>
+      <button @click="goodbye">点我销毁vm对象</button>
+    </div>
+    <script>
+        Vue.config.productionTip = false;
+        var vm = new Vue({
+            // el:'#root',  // vm.$mount("#root")
+            data: {
+              n: 1
+            },
+            methods: {
+              add() {
+                this.n += 1
+              },
+              goodbye() {
+                this.$destroy()
+                console.log('goodbye')
+              }
+            },
+          // 创建前
+          beforeCreate() {
+            console.log("创建前。。。")
+          },
+          created() {
+            console.log("创建完成之后。。。")
+          },
+          beforeMount() {
+            console.log("挂载前。。。")
+          },
+          onMounted() {
+            console.log("挂载后。。。", this.$el)
+          },
+          beforeUpdate() {
+            console.log("更新前。。。")
+          },
+          updated() {
+            console.log("更新完毕。。。")
+          },
+          beforeDestroy() {
+            console.log("销毁前。。。")
+          },
+          destroyed() {
+            console.log("销毁完毕。。。")
+          }
+        })
+        vm.$mount("#root")
+    </script>
+</body>
+</html>

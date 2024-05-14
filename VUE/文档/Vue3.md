@@ -1791,11 +1791,16 @@ export default router
          <div class="app">
            <h3 class="title">vue路由测试</h3>
            <div class="navigate">
+             <!-- 使用 router-link 组件进行导航 -->
+             <!-- 通过传递 `to` 来指定链接 -->
+             <!-- `<router-link>` 将呈现一个带有正确 `href` 属性的 `<a>` 标签 -->
              <RouterLink to="/home" active-class="active">首页</RouterLink>
              <RouterLink to="/news" active-class="active">新闻</RouterLink>
              <RouterLink to="/about" active-class="active">关于</RouterLink>
            </div>
            <div class="main-content">
+               <!-- 路由出口 -->
+  			   <!-- 路由匹配到的组件将渲染在这里 -->
                <RouterView></RouterView>
            </div>
          </div>
@@ -1888,4 +1893,486 @@ const router = createRouter({
 ```
 
 ### 4.6.嵌套路由
+
+​	一些应用程序的 UI 由多层嵌套的组件组成。在这种情况下，URL 的片段通常对应于特定的嵌套组件结构，例如：
+
+```text
+/user/johnny/profile                     /user/johnny/posts
++------------------+                  +-----------------+
+| User             |                  | User            |
+| +--------------+ |                  | +-------------+ |
+| | Profile      | |  +------------>  | | Posts       | |
+| |              | |                  | |             | |
+| +--------------+ |                  | +-------------+ |
++------------------+                  +-----------------+
+```
+
+​	将上面案例的代码进行改造，我们期望在新闻中有嵌套的页面呈现：
+
+![](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405141157101.gif)
+
+​	**操作步骤：**
+
+1.改造News.vue，让其拥有一个新闻详情页的数据：
+
+```vue
+<template>
+  <div class="news">
+    <!-- 新闻的导航区 -->
+    <ul>
+      <li v-for="news in newsList" :key="news.id">
+          <RouterLink to="/news/detail">{{news.title}}</RouterLink>>
+      </li>
+    </ul>
+    <!--  新闻展示区 -->
+    <div class="news-content">
+      <RouterView></RouterView>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts" name="News">
+  import { reactive } from 'vue'
+  import { RouterView,RouterLink } from 'vue-router'
+  const newsList = reactive([
+    {id:'001',title:'四川',content:'天府之国'},
+    {id:'002',title:'湖北',content:'就省通衢'},
+    {id:'003',title:'江苏',content:'鱼米之乡'},
+    {id:'004',title:'广东',content:'开放前沿'},
+    {id:'005',title:'山东',content:'礼仪之乡'},
+  ])
+
+</script>
+
+<style scoped>
+
+</style>
+```
+
+2.创建pages/Detail.vue，用于呈现新闻详情页：
+
+```vue
+<template>
+  <ul class="news-list">
+    <li>编号：xxx</li>
+    <li>标题：xxx</li>
+    <li>内容：xxx</li>
+  </ul>
+</template>
+
+<script setup name="Detail" lang="ts">
+
+</script>
+
+<style scoped>
+  .news-list {
+    list-style: none;
+    padding-left: 20px;
+  }
+  .news-list > li {
+    line-height: 30px;
+  }
+</style>
+```
+
+3.配置router/index.ts，让news中新增子路由：
+
+```vue
+{
+      name:'xinwen',
+      path: '/news',
+      component: News,
+      children:[
+          {
+             path: 'detail',
+             component: Detail
+          }
+      ]
+}
+```
+
+刷新页面 ，在新闻页就可以看到嵌套路由的呈现。
+
+
+
+### 4.7.路由传递参数
+
+​	上述的案例中并没有完成点击新闻标题呈现对应的新闻内容。这是因为我们并没有将值传递给展示区域，要想传递值，需要传递参数。路由传参的方式有两种，分别为query和params。
+
+#### 4.7.1.query参数
+
+​	query传参的方式就是在URL上拼接参数，使用k-v结构进行传参，多组参数间使用&进行拼接，并在双引号中使用模板字符串，即通过反斜杠`包裹，再使用$()的方式解析参数。使用query传参的步骤如下：
+
+1.在News.vue中传递参数:
+
+```vue
+<!-- 新闻的导航区 -->
+    <ul>
+      <li v-for="news in newsList" :key="news.id">
+          <!-- 第一种写法：模板字符串 -->
+          <!--<RouterLink :to="`/news/detail?id=${news.id}&title=${news.title}&content=${news.content}`">{{news.title}}</RouterLink>>-->
+          <!-- 第二种写法：对象写法 -->
+          <RouterLink :to="{
+            path:'/news/detail',
+            query:{
+              id:news.id,
+              title:news.title,
+              content:news.content
+            }}">
+            {{ news.title }}
+          </RouterLink>
+      </li>
+
+</ul>
+```
+
+2.在Detail.vue中引入useRoute，通过它来传递参数：
+
+```vue
+<template>
+  <ul class="news-list">
+    <li>编号：{{ route.query.id }}</li>
+    <li>标题：{{ route.query.title }}</li>
+    <li>内容：{{ route.query.content }}</li>
+  </ul>
+</template>
+
+<script setup name="Detail" lang="ts">
+  import {useRoute} from "vue-router";
+  const route = useRoute();
+  // console.log(route)
+</script>
+
+<style scoped>
+  .news-list {
+    list-style: none;
+    padding-left: 20px;
+  }
+  .news-list > li {
+    line-height: 30px;
+  }
+</style>
+
+```
+
+上述写法可以通过toRefs结构，简化代码：
+
+```vue
+// 1.引入toRefs进行结构，将route交给query
+import {toRefs} from "vue";
+
+const route = useRoute();
+const {query} = toRefs(route)
+
+// 2.简化写法
+<ul class="news-list">
+    <li>编号：{{ query.id }}</li>
+    <li>标题：{{ query.title }}</li>
+    <li>内容：{{ query.content }}</li>
+</ul>
+```
+
+
+
+#### 4.7.2.params参数
+
+​	还原4.7.1之前的代码，使用params传参的方式也是可以的。params传参使用动态字段冒号的方式传递`{ path: '/users/:id', component: User }`。
+
+1.修改router/index.ts路由规则，利用冒号占位方式传参：
+
+```
+{
+            name:'xinwen',
+            path: '/news',
+            component: News,
+            children:[
+                {
+                    name:'news-detail',
+                    path: 'detail/:id/:title/:content',
+                    component: Detail
+                }
+            ]
+},
+```
+
+2.修改Detail.vue的现实内容：
+
+```vue
+<template>
+  <ul class="news-list">
+    <li>编号：{{ route.params.id }}</li>
+    <li>标题：{{ route.params.title }}</li>
+    <li>内容：{{ route.params.content }}</li>
+  </ul>
+</template>
+
+<script setup name="Detail" lang="ts">
+  import {useRoute} from "vue-router";
+
+  const route = useRoute();
+
+</script>
+```
+
+3.修改News.vue传递参数的方式（注意：对象传参方式只能使用命名路由）：
+
+```vue
+<!-- 新闻的导航区 -->
+    <ul>
+      <li v-for="news in newsList" :key="news.id">
+          <!-- 第一种写法：模板字符串 -->
+          <!--<RouterLink :to="`/news/detail?id=${news.id}&title=${news.title}&content=${news.content}`">{{news.title}}</RouterLink>>-->
+          <!-- 第二种写法：对象写法 -->
+          <RouterLink :to="{
+            // path:'/news/detail', 不能用path，因为path是路径，而params是参数，必须使用命名路由
+            name:'news-detail',
+            params:{
+              id:news.id,
+              title:news.title,
+              content:news.content
+            }}">
+            {{ news.title }}
+          </RouterLink>
+      </li>
+
+</ul>
+```
+
+### 4.8.路由的props配置
+
+​	上述案例中，我们在Detail.vue中引入的id、title、content都是通过`route.param.xxx`的方式编写的，这使得代码的可读性较差，显得比较臃肿。此时我们可以在路由规则中新增`props`配置，简化代码，让路由组件更方便的接收参数。`props`的写法有如下三种：
+
+```vue
+{
+	name:'news-detail',
+	path:'detail/:id/:title/:content',
+	component:Detail,
+
+  // props的对象写法，作用：把对象中的每一组key-value作为props传给Detail组件
+  // props:{a:1,b:2,c:3}, 
+
+  // props的布尔值写法，作用：把收到了每一组params参数，作为props传给Detail组件
+  // props:true
+  
+  // props的函数写法，作用：把返回的对象中每一组key-value作为props传给Detail组件
+  	props(route){
+    	return route.query
+  }
+}
+```
+
+​	此时我们在Detail.vue中就可以简化操作：
+
+```vue
+<template>
+  <ul class="news-list">
+    <li>编号：{{ id }}</li>
+    <li>标题：{{ title }}</li>
+    <li>内容：{{ content }}</li>
+  </ul>
+</template>
+
+<script setup name="Detail" lang="ts">
+  import {defineProps} from "vue";
+
+  defineProps(['id', 'title', 'content'])
+
+</script>
+```
+
+### 4.9.replace属性
+
+    1. 作用：控制路由跳转时操作浏览器历史记录的模式。
+    2. 浏览器的历史记录有两种写入方式：分别为```push```和```replace```：
+
+       - ```push```是追加历史记录（默认值）。
+       - `replace`是替换当前记录。
+    3. 开启`replace`模式：
+
+```vue
+<RouterLink replace .......>News</RouterLink>
+```
+
+### 4.10.编程式导航
+
+​	除了使用 `<router-link>` 创建 a 标签来定义导航链接，我们还可以借助 router 的实例方法，通过编写代码来实现。
+
+​	实际就是脱离<router-link>来实现跳转。
+
+**导航到不同位置：**
+
+注意: 下面的示例中的 `router` 指代路由器实例。在组件内部，你可以使用 `$router` 属性访问路由，例如 `this.$router.push(...)`。如果使用组合式 API，你可以通过调用 [`useRouter()`](https://router.vuejs.org/zh/guide/advanced/composition-api.html) 来访问路由器。**
+
+想要导航到不同的 URL，可以使用 `router.push` 方法。这个方法会向 history 栈添加一个新的记录，所以，当用户点击浏览器后退按钮时，会回到之前的 URL。
+
+当你点击 `<router-link>` 时，内部会调用这个方法，所以点击 `<router-link :to="...">` 相当于调用 `router.push(...)` ：
+
+| 声明式                    | 编程式             |
+| :------------------------ | :----------------- |
+| `<router-link :to="...">` | `router.push(...)` |
+
+```vue
+// 字符串路径
+router.push('/users/eduardo')
+
+// 带有路径的对象
+router.push({ path: '/users/eduardo' })
+
+// 命名的路由，并加上参数，让路由建立 url
+router.push({ name: 'user', params: { username: 'eduardo' } })
+
+// 带查询参数，结果是 /register?plan=private
+router.push({ path: '/register', query: { plan: 'private' } })
+
+// 带 hash，结果是 /about#team
+router.push({ path: '/about', hash: '#team' })
+```
+
+
+
+**替换当前位置：**
+
+它的作用类似于 `router.push`，唯一不同的是，它在导航时不会向 history 添加新记录，正如它的名字所暗示的那样——它取代了当前的条目。
+
+| 声明式                            | 编程式                |
+| :-------------------------------- | :-------------------- |
+| `<router-link :to="..." replace>` | `router.replace(...)` |
+
+也可以直接在传递给 `router.push` 的 `to` 参数中增加一个属性 `replace: true` ：
+
+```vue
+router.push({ path: '/home', replace: true })
+// 相当于
+router.replace({ path: '/home' })
+```
+
+**需求1：进入首页3秒后自动跳转到新闻。**
+
+在Home.vue中修改代码：
+
+```vue
+<script setup lang="ts" name="Home">
+  import { onMounted } from 'vue'
+  import { useRouter } from 'vue-router'
+
+  const router = useRouter()
+
+  onMounted(() => {
+    setTimeout(() => {
+      router.push('/news')
+    }, 3000)
+  })
+</script>
+```
+
+**需求2：在新闻各个标签前添加按钮，通过点击按钮实现新闻内容的呈现：**
+
+在News.vue中添加按钮，导入useRouter，并编写方法：
+
+```vue
+<template>
+  <div class="news">
+    <!-- 新闻的导航区 -->
+    <ul>
+      <li v-for="news in newsList" :key="news.id">
+          <button @click="showNewsDetail(news)">查看新闻</button>
+          <RouterLink :to="{
+            // path:'/news/detail', 不能用path，因为path是路径，而params是参数，必须使用命名路由
+            name:'news-detail',
+            params:{
+              id:news.id,
+              title:news.title,
+              content:news.content
+            }}">
+            {{ news.title }}
+          </RouterLink>
+      </li>
+
+    </ul>
+    <!--  新闻展示区 -->
+    <div class="news-content">
+      <RouterView></RouterView>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts" name="News">
+  import { reactive } from 'vue'
+  import { RouterView,RouterLink,useRouter } from 'vue-router'
+  const newsList = reactive([
+    {id:'001',title:'四川',content:'天府之国'},
+    {id:'002',title:'湖北',content:'就省通衢'},
+    {id:'003',title:'江苏',content:'鱼米之乡'},
+    {id:'004',title:'广东',content:'开放前沿'},
+    {id:'005',title:'山东',content:'礼仪之乡'},
+  ])
+
+  const router = useRouter()
+  interface NewsInter {
+    id:string,
+    title:string,
+    content:string
+  }
+  function showNewsDetail(news:NewsInter){
+    router.push({
+      // 这里和to里面的写法一致
+      name:'news-detail',
+      params:{
+        id:news.id,
+        title:news.title,
+        content:news.content
+      }
+    })
+  }
+</script>
+
+<style scoped>
+
+</style>
+```
+
+和a标签相同，编程式路由也可以横跨历史，使用router.go(n)便可以实现。该方法采用一个整数作为参数，表示在历史堆栈中前进或后退多少步，类似于 `window.history.go(n)`。
+
+```vue
+// 向前移动一条记录，与 router.forward() 相同
+router.go(1)
+
+// 返回一条记录，与 router.back() 相同
+router.go(-1)
+
+// 前进 3 条记录
+router.go(3)
+
+// 如果没有那么多记录，静默失败
+router.go(-100)
+router.go(100)
+```
+
+
+
+### 4.11.重定向
+
+1. 作用：将特定的路径，重新定向到已有路由。
+2. 具体编码：
+
+```vue
+{
+    path:'/',
+    redirect:'/about'
+}
+```
+
+​	我们上述的案例，重启后任何内容也不现实，我们可以在index.ts中配置重定向规则，使项目启动时自动重定向某个路径：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405141809086.png" style="zoom:50%;" />
+
+## 5.Pinia
+
+
+
+
+
+
+
+
 
