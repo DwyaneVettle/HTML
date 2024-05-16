@@ -2184,7 +2184,7 @@ const {query} = toRefs(route)
 
     1. 作用：控制路由跳转时操作浏览器历史记录的模式。
     2. 浏览器的历史记录有两种写入方式：分别为```push```和```replace```：
-
+    
        - ```push```是追加历史记录（默认值）。
        - `replace`是替换当前记录。
     3. 开启`replace`模式：
@@ -2368,11 +2368,1070 @@ router.go(100)
 
 ## 5.Pinia
 
+​	官方网站：https://pinia.vuejs.org/zh/。Pinia是一个符合直觉的Vue状态管理器，它具有类型安全、可扩展性以及模块化的设计，甚至让你忘记正在使用一个状态库。
+
+ 	特点：
+
+- 所见即所得
+- 类型安全
+- 可扩展性
+- 模块化设计
+- 极致轻量化
+- 支持开发工具Devtools
 
 
 
+### 5.1.准备一个基本效果
+
+​	效果需求如下，根据用户在下拉框的选择，点击加/减完成指定数值的加减操作；点击获取一句古诗，在列表后面随机添加一句古诗：
+
+![image-20240515095015359](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405150950817.png)
+
+1.分别创建Count.vue和Poetry.vue：
+
+```vue
+<template>
+  <div class="count">
+    <h3>当前求和为：{{ sum }}</h3>
+    <!-- .value将收集的数据转为数字 -->
+    <select v-model.number="option">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+    <button @click="add">加</button>
+    <button @click="minus">减</button>
+  </div>
+</template>
+<script setup lang="ts" name="Count">
+  import { ref } from 'vue'
+  // 数据
+  let sum = ref(1)
+  let option = ref(1)  // 用户选择的数字
+  // 方法
+  function add() {
+    sum.value += option.value
+  }
+  function minus() {
+    sum.value -= option.value
+  }
+</script>
+<style>
+  .count {
+    background-color: skyblue;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px;
+  }
+  select,button {
+    margin-left: 5px;
+    height: 25px;
+  }
+</style>
+```
 
 
 
+```vue
+<template>
+  <div class="poetry">
+      <button @click="getPoetry">获取一句诗句</button>
+      <ul>
+        <li v-for="poetry in poetryList" :key="poetry.id">
+          {{ poetry.content }}
+        </li>
+      </ul>
+  </div>
+</template>
+<script setup lang="ts" name="Poetry">
+  import { ref } from 'vue'
+  import axios from 'axios'
+  import {nanoid} from 'nanoid'
+  // 数据
+  let poetryList = ref([
+    {id:'001',content:'春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明？'},
+    {id:'002',content:'人生如逆旅，我亦是行人'},
+    {id:'003',content:'人生到处知何似，应似飞鸿踏雪泥'},
+    {id:'004',content:'天生我材必有用，千金散尽还复来'},
+  ])
+  // 方法
+  async function getPoetry() {
+    let result = await axios.get('https://v1.jinrishici.com/all')
+    // console.log(result.data.content)
+    poetryList.value.push({id:nanoid(),content:result.data.content})
 
+  }
+</script>
+<style>
+.poetry {
+  background-color: orange;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px;
+}
+</style>
+```
+
+2.在App.vue中引入：
+
+```vue
+<template>
+  <div class="app">
+    <Count class="count"/>
+    <Poetry />
+  </div>
+</template>
+
+<script lang="ts" setup name="App">
+  import Count from './components/Count.vue'
+  import Poetry from './components/Poetry.vue'
+</script>
+
+<style>
+  .count {
+    margin-bottom: 20px;
+  }
+</style>
+```
+
+注意：项目中下载的随机生成id的库nanoid和异步请求的库axios，下载方式如下：
+
+```shell
+npm install axios
+npm install nanoid
+```
+
+![image-20240515095258281](https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405150952214.png)
+
+
+
+### 5.2.Pinia环境搭建
+
+1.下载pinia：
+
+```shell
+npm install pinia
+```
+
+2.在main.ts引入pinia：
+
+```vue
+// 引入createApp用于创建应用
+import {createApp} from 'vue'
+// 引入App根组件
+import App from './App.vue'
+// 1.引入pinia
+import { createPinia } from "pinia";
+
+const app = createApp(App)
+// 2.创建pinia实例
+const pinia = createPinia();
+// 3.将pinia实例挂载到应用上
+app.use(pinia);
+
+app.mount('#app')
+```
+
+此时开发者工具中已经有了`pinia`选项：
+
+<img src="https://gitee.com/zou_tangrui/note-pic/raw/master/img/202405151035549.png" style="zoom:80%;border:1px solid black;border-radius:10px" />
+
+### 5.3.存储+读取数据
+
+1. `Store`是一个保存：**状态**、**业务逻辑** 的实体，每个组件都可以**读取**、**写入**它。
+
+2. 它有三个概念：`state`、`getter`、`action`，相当于组件中的： `data`、 `computed` 和 `methods`。
+
+3. 具体实现：
+
+   1. 在src/store下创建count.ts和poetry.ts：
+
+   ```typescript
+   import {defineStore}  from "pinia";
+   
+   export const useCountStore = defineStore('count', {
+       state() {
+           return {
+               sum: 88
+           }
+       }
+   })
+   ```
+
+   ```typescript
+   import { defineStore } from "pinia";
+   
+   export const usePoetryStore = defineStore("poetry", {
+       state() {
+           return {
+               poetryList:[
+                   {id:'001',content:'春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明？'},
+                   {id:'002',content:'人生如逆旅，我亦是行人'},
+                   {id:'003',content:'人生到处知何似，应似飞鸿踏雪泥'},
+                   {id:'004',content:'天生我材必有用，千金散尽还复来'}
+               ]
+           }
+       }
+   })
+   ```
+
+   2.在Count.vue和Poetry.vue中使用数据：
+
+   ```vue
+   <template>
+     <div class="count">
+       <h3>当前求和为：{{ countStore.sum }}</h3>
+       <!-- .value将收集的数据转为数字 -->
+       <select v-model.number="option">
+         <option value="1">1</option>
+         <option value="2">2</option>
+         <option value="3">3</option>
+       </select>
+       <button @click="add">加</button>
+       <button @click="minus">减</button>
+     </div>
+   </template>
+   <script setup lang="ts" name="Count">
+     import { ref } from 'vue'
+     // 引入
+     import { useCountStore} from "@/store/count";
+     // 数据
+     const countStore = useCountStore()
+     // console.log(countStore.sum)
+   
+     let option = ref(1)  // 用户选择的数字
+     // 方法
+     function add() {
+       countStore.sum += option.value
+     }
+     function minus() {
+       countStore.sum -= option.value
+     }
+   </script>
+   ```
+
+   ```vue
+   <template>
+     <div class="poetry">
+         <button @click="getPoetry">获取一句诗句</button>
+         <ul>
+           <li v-for="poetry in poetryStore.poetryList" :key="poetry.id">
+             {{ poetry.content }}
+           </li>
+         </ul>
+     </div>
+   </template>
+   <script setup lang="ts" name="Poetry">
+     import { ref } from 'vue'
+     import axios from 'axios'
+     import {nanoid} from 'nanoid'
+     import { usePoetryStore } from "@/store/poetry";
+     // 数据
+     let poetryStore = usePoetryStore()
+   
+     // 方法
+     async function getPoetry() {
+       let result = await axios.get('https://v1.jinrishici.com/all')
+       // console.log(result.data.content)
+       poetryStore.poetryList.push({id:nanoid(),content:result.data.content})
+   
+     }
+   </script>
+   ```
+
+   
+
+### 5.4.修改数据的三种方式
+
+1. 第一种修改方式，直接修改
+
+   ```ts
+   countStore.sum = 888
+   ```
+
+2. 第二种修改方式：批量修改
+
+   ```ts
+   countStore.$patch({
+     sum:999,
+     school:'四川城市职业学院'
+   })
+   ```
+
+3. 第三种修改方式：借助`action`修改（`action`中可以编写一些业务逻辑）
+
+   ```js
+   import { defineStore } from 'pinia'
+   
+   export const useCountStore = defineStore('count', {
+     /*************/
+     actions: {
+       //加
+       increment(value:number) {
+         if (this.sum < 10) {  // 有逻辑操作的时候actions就非常有意义
+           //操作countStore中的sum
+           this.sum += value
+         }
+       },
+       //减
+       decrement(value:number){
+         if(this.sum > 1){
+           this.sum -= value
+         }
+       }
+     },
+     /*************/
+   })
+   ```
+
+4. 组件中调用`action`即可
+
+   ```js
+   // 使用countStore
+   const countStore = useCountStore()
+   
+   // 调用对应action
+   countStore.incrementOdd(n.value)
+   ```
+   
+5. poetry.ts新增actions:
+
+   ```typescript
+   import { defineStore } from "pinia";
+   import axios from "axios";
+   import {nanoid} from "nanoid";
+   
+   export const usePoetryStore = defineStore("poetry", {
+       actions: {
+           async getPoetry() {
+               let result = await axios.get('https://v1.jinrishici.com/all')
+               // console.log(result.data.content)
+               this.poetryList.push({id:nanoid(),content:result.data.content})
+           }
+       },
+       state() {
+           return {
+               poetryList:[
+                   {id:'001',content:'春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明？'},
+                   {id:'002',content:'人生如逆旅，我亦是行人'},
+                   {id:'003',content:'人生到处知何似，应似飞鸿踏雪泥'},
+                   {id:'004',content:'天生我材必有用，千金散尽还复来'}
+               ]
+           }
+       }
+   })
+   ```
+
+6. poetry.vue引入方法：
+
+   ```vue
+   // 数据
+     let poetryStore = usePoetryStore()
+   
+   // 方法
+   function getPoetry() {
+     poetryStore.getPoetry()
+   }
+   ```
+
+   
+
+### 5.5.storeToRefs
+
+​	我们目前在模板中使用的数据仍然显得臃肿，不利于我们的操作。
+
+<img src="C:\Users\HP\AppData\Roaming\Typora\typora-user-images\image-20240516114201325.png" alt="image-20240516114201325" style="zoom:50%;" />
+
+​	如果通过我们之前所学的toRefs结构会让该数据丢失响应式，所以pinia提供了storeToRefs，让数据结构的同时不丢失响应式。借助`storeToRefs`将`store`中的数据转为`ref`对象，方便在模板中使用。
+
+```vue
+/ 引入
+import { useCountStore} from "@/store/count";
+// 引入storeToRefs
+import {storeToRefs} from "pinia";
+// 数据
+const countStore = useCountStore()
+const {sum} = storeToRefs(countStore)  // 结构模板中的{{ countStore.sum }}
+
+// 此时在模板中就可以直接使用{{ sum }}
+<h3>当前求和为：{{ sum }}</h3>
+```
+
+### 5.6.getters
+
+    1. 概念：当`state`中的数据，需要经过处理后再使用时，可以使用`getters`配置。
+    2. 在count.ts后追加```getters```配置：
+
+```vue
+import {defineStore}  from "pinia";
+
+export const useCountStore = defineStore('count', {
+    actions: {
+      // 加
+      increment(value:number) {
+          this.sum += value
+      },
+        // 减
+        decrement(value:number) {
+          this.sum -= value
+        }
+    },
+    state() {
+        return {
+            sum: 88
+        }
+    },
+    // 对state中的数据进行加工
+    getters: {
+            doubleSum: (state) => state.sum * 2
+    }
+})
+```
+
+可以在Count.vue中接收：
+
+```vue
+const {sum,doubleSum} = storeToRefs(countStore)
+<h3>将sum放大两倍： {{ doubleSum }}</h3>
+```
+
+### 5.7.订阅$sumscribe
+
+​	通过 store 的 `$subscribe()` 方法侦听 `state` 及其变化（相当于watch）:
+
+```vue
+poetryStore.$subscribe((mutation, state) => {
+    // console.log(poetryList,'mutation', mutation) // 监视了poetryList的变化
+    // 变化后就可以做进一步的操作，如存储到localStorage
+    localStorage.setItem('poetryList', JSON.stringify(poetryList.value))  
+})
+
+// 以上方式存储数据后我们就可以直接在poetry.ts的state中从localStorage中获取数据
+state() {
+       return {
+			// 原来的初始数据
+            /*poetryList:[
+                {id:'001',content:'春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明？'},
+                {id:'002',content:'人生如逆旅，我亦是行人'},
+                {id:'003',content:'人生到处知何似，应似飞鸿踏雪泥'},
+                {id:'004',content:'天生我材必有用，千金散尽还复来'}
+            ]*/
+			// 从localStorage获取，不会导致页面刷新后数据还原
+            poetryList:JSON.parse(localStorage.getItem('poetryList') as string) || []
+        }
+    }
+```
+
+### 5.8.store的组合式写法
+
+​		之前我们对于ts中store的写法都是通过对象方式来编写的，其实store还有一种写法是组合式写法，即将数据和方法都以函数的方式进行返回：
+
+```vue
+import { defineStore } from "pinia";
+import axios from "axios";
+import {nanoid} from "nanoid";
+import { reactive } from "vue";
+// 对象式写法
+/*export const usePoetryStore = defineStore("poetry", {
+    actions: {
+        async getPoetry() {
+            let result = await axios.get('https://v1.jinrishici.com/all')
+            // console.log(result.data.content)
+            this.poetryList.push({id:nanoid(),content:result.data.content})
+        }
+    },
+    state() {
+        return {
+            /!*poetryList:[
+                {id:'001',content:'春江潮水连海平，海上明月共潮生。滟滟随波千万里，何处春江无月明？'},
+                {id:'002',content:'人生如逆旅，我亦是行人'},
+                {id:'003',content:'人生到处知何似，应似飞鸿踏雪泥'},
+                {id:'004',content:'天生我材必有用，千金散尽还复来'}
+            ]*!/
+            poetryList:JSON.parse(localStorage.getItem('poetryList') as string) || []
+        }
+    }
+})*/
+
+// 组合式写法
+export const usePoetryStore = defineStore("poetry", () => {
+        // 数据
+        let poetryList = reactive(
+            JSON.parse(localStorage.getItem('poetryList') as string) || []
+        )
+        // 方法
+        async function getPoetry() {
+            let result = await axios.get('https://v1.jinrishici.com/all')
+            // console.log(result.data.content)
+            poetryList.push({id:nanoid(),content:result.data.content})
+        }
+		// 返回数据
+        return {poetryList,getPoetry}
+})
+```
+
+
+
+## 6.组件间通信
+
+**`Vue3`组件通信和`Vue2`的区别：**
+
+* 移出事件总线，使用`mitt`代替。
+
+- `vuex`换成了`pinia`。
+- 把`.sync`优化到了`v-model`里面了。
+- 把`$listeners`所有的东西，合并到`$attrs`中了。
+- `$children`被砍掉了。
+
+**常见搭配形式：**
+
+<img src="D:/笔记/HTML/VUE/资料/images/image-20231119185900990.png" alt="image-20231119185900990" style="zoom:60%;" /> 
+
+### 6.1.props-父子组件间通信
+
+概述：`props`是使用频率最高的一种通信方式，常用与 ：**父 ↔ 子**。
+
+- 若 **父传子**：属性值是**非函数**。
+- 若 **子传父**：属性值是**函数**。
+
+父组件Father.vue：
+
+```vue
+<template>
+  <div class="father">
+    <h3>父组件，</h3>
+		<h4>我的车：{{ car }}</h4>
+		<h4>儿子给的玩具：{{ toy }}</h4>
+		<Child :car="car" :getToy="getToy"/>
+  </div>
+</template>
+
+<script setup lang="ts" name="Father">
+	import Child from './Child.vue'
+	import { ref } from "vue";
+	// 数据
+	const car = ref('奔驰')
+	const toy = ref()
+	// 方法
+	function getToy(value:string){
+		toy.value = value
+	}
+</script>
+```
+
+子组件Child.vue:
+
+```vue
+<template>
+  <div class="child">
+    <h3>子组件</h3>
+		<h4>我的玩具：{{ toy }}</h4>
+		<h4>父给我的车：{{ car }}</h4>
+		<button @click="getToy(toy)">玩具给父亲</button>
+  </div>
+</template>
+
+<script setup lang="ts" name="Child">
+	import { ref } from "vue";
+	const toy = ref('奥特曼')
+	
+	defineProps(['car','getToy'])
+</script>
+```
+
+### 6.2.自定义事件
+
+1. 概述：自定义事件常用于：**子 => 父。**
+2. 注意区分好：原生事件、自定义事件。
+
+- 原生事件：
+  - 事件名是特定的（`click`、`mosueenter`等等）	
+  - 事件对象`$event`: 是包含事件相关信息的对象（`pageX`、`pageY`、`target`、`keyCode`）
+- 自定义事件：
+  - 事件名是任意名称
+  - <strong style="color:red">事件对象`$event`: 是调用`emit`时所提供的数据，可以是任意类型！！！</strong >
+
+3. 示例：
+
+   ```html
+   <!--在父组件中，给子组件绑定自定义事件：-->
+   <Child @send-toy="toy = $event"/>
+   
+   <!--注意区分原生事件与自定义事件中的$event-->
+   <button @click="toy = $event">测试</button>
+   ```
+
+   ```js
+   //子组件中，触发事件：
+   this.$emit('send-toy', 具体数据)
+   ```
+
+Father.vue:
+
+```vue
+<template>
+  <div class="father">
+    <h3>父组件</h3>
+		<h4 v-show="toy">子给的玩具：{{ toy }}</h4>
+		<!-- 给子组件Child绑定事件 -->
+    <Child @send-toy="saveToy"/>
+  </div>
+</template>
+
+<script setup lang="ts" name="Father">
+  import Child from './Child.vue'
+	import { ref } from "vue";
+	// 数据
+	let toy = ref('')
+	// 用于保存传递过来的玩具
+	function saveToy(value:string){
+		console.log('saveToy',value)
+		toy.value = value
+	}
+</script>
+
+<style scoped>
+	.father{
+		background-color:rgb(165, 164, 164);
+		padding: 20px;
+    border-radius: 10px;
+	}
+	.father button{
+		margin-right: 5px;
+	}
+</style>
+```
+
+Child.vue:
+
+```vue
+<template>
+  <div class="child">
+    <h3>子组件</h3>
+		<h4>玩具：{{ toy }}</h4>
+		<button @click="emit('send-toy',toy)">测试</button>
+  </div>
+</template>
+
+<script setup lang="ts" name="Child">
+	import { ref } from "vue";
+	// 数据
+	let toy = ref('奥特曼')
+	// 声明事件
+	const emit =  defineEmits(['send-toy'])
+</script>
+
+<style scoped>
+	.child{
+		margin-top: 10px;
+		background-color: rgb(76, 209, 76);
+		padding: 10px;
+		box-shadow: 0 0 10px black;
+		border-radius: 10px;
+	}
+</style>
+```
+
+
+
+### 6.3. mitt
+
+概述：与消息订阅与发布（`pubsub`）功能类似，可以实现任意组件间通信。
+
+安装`mitt`
+
+```shell
+npm i mitt
+```
+
+新建文件：`src\utils\emitter.ts`
+
+```javascript
+// 引入mitt 
+import mitt from "mitt";
+
+// 创建emitter
+const emitter = mitt()
+
+/*
+  // 绑定事件
+  emitter.on('abc',(value)=>{
+    console.log('abc事件被触发',value)
+  })
+  emitter.on('xyz',(value)=>{
+    console.log('xyz事件被触发',value)
+  })
+
+  setInterval(() => {
+    // 触发事件
+    emitter.emit('abc',666)
+    emitter.emit('xyz',777)
+  }, 1000);
+
+  setTimeout(() => {
+    // 清理事件
+    // emitter.off("abc")  // 清除abc事件
+    emitter.all.clear()  // 一次性清除所有事件
+  }, 3000); 
+*/
+
+// 创建并暴露mitt
+export default emitter
+```
+
+接收数据的组件中：绑定事件、同时在销毁前解绑事件：
+
+```typescript
+import emitter from "@/utils/emitter";
+import { onUnmounted } from "vue";
+
+// 绑定事件
+emitter.on('send-toy',(value)=>{
+  console.log('send-toy事件被触发',value)
+})
+
+onUnmounted(()=>{
+  // 解绑事件
+  emitter.off('send-toy')
+})
+```
+
+【第三步】：提供数据的组件，在合适的时候触发事件
+
+```javascript
+import emitter from "@/utils/emitter";
+
+function sendToy(){
+  // 触发事件
+  emitter.emit('send-toy',toy.value)
+}
+```
+
+**注意这个重要的内置关系，总线依赖着这个内置关系**
+
+### 6.4.v-model
+
+1. 概述：实现 **父↔子** 之间相互通信。
+
+2. 前序知识 —— `v-model`的本质
+
+   ```vue
+   <!-- 使用v-model指令 -->
+   <input type="text" v-model="userName">
+   
+   <!-- v-model的本质是下面这行代码 -->
+   <input 
+     type="text" 
+     :value="userName" 
+     @input="userName =(<HTMLInputElement>$event.target).value"
+   >
+   ```
+
+3. 组件标签上的`v-model`的本质：`:moldeValue` ＋ `update:modelValue`事件。
+
+   ```vue
+   <!-- 组件标签上使用v-model指令 -->
+   <Hwua v-model="userName"/>
+   
+   <!-- 组件标签上v-model的本质 -->
+   <Hwua :modelValue="userName" @update:model-value="userName = $event"/>
+   ```
+
+   `Hwua`组件中：
+
+   ```vue
+   <template>
+     <div class="box">
+       <!--将接收的value值赋给input元素的value属性，目的是：为了呈现数据 -->
+   		<!--给input元素绑定原生input事件，触发input事件时，进而触发update:model-value事件-->
+       <input 
+          type="text" 
+          :value="modelValue" 
+          @input="emit('update:model-value',$event.target.value)"
+       >
+     </div>
+   </template>
+   
+   <script setup lang="ts" name="Hwua">
+     // 接收props
+     defineProps(['modelValue'])
+     // 声明事件
+     const emit = defineEmits(['update:model-value'])
+   </script>
+   ```
+
+4. 也可以更换`value`，例如改成`abc`
+
+   ```vue
+   <!-- 也可以更换value，例如改成abc-->
+   <Hwua v-model:abc="userName"/>
+   
+   <!-- 上面代码的本质如下 -->
+   <Hwua :abc="userName" @update:abc="userName = $event"/>
+   ```
+
+   `Hwua`组件中：
+
+   ```vue
+   <template>
+     <div class="box">
+       <input 
+          type="text" 
+          :value="abc" 
+          @input="emit('update:abc',$event.target.value)"
+       >
+     </div>
+   </template>
+   
+   <script setup lang="ts" name="Hwua">
+     // 接收props
+     defineProps(['abc'])
+     // 声明事件
+     const emit = defineEmits(['update:abc'])
+   </script>
+   ```
+
+5. 如果`value`可以更换，那么就可以在组件标签上多次使用`v-model`
+
+   ```vue
+   <Hwua v-model:abc="userName" v-model:xyz="password"/>
+   ```
+
+   
+
+
+### 6.5.$attrs 
+
+1. 概述：`$attrs`用于实现**当前组件的父组件**，向**当前组件的子组件**通信（**祖→孙**）。
+
+2. 具体说明：`$attrs`是一个对象，包含所有父组件传入的标签属性。
+
+   >  注意：`$attrs`会自动排除`props`中声明的属性(可以认为声明过的 `props` 被子组件自己“消费”了)
+
+父组件：
+
+```vue
+<template>
+  <div class="father">
+    <h3>父组件</h3>
+		<Child :a="a" :b="b" :c="c" :d="d" v-bind="{x:100,y:200}" :updateA="updateA"/>
+  </div>
+</template>
+
+<script setup lang="ts" name="Father">
+	import Child from './Child.vue'
+	import { ref } from "vue";
+	let a = ref(1)
+	let b = ref(2)
+	let c = ref(3)
+	let d = ref(4)
+
+	function updateA(value){
+		a.value = value
+	}
+</script>
+```
+
+子组件：
+
+```vue
+<template>
+	<div class="child">
+		<h3>子组件</h3>
+		<GrandChild v-bind="$attrs"/>
+	</div>
+</template>
+
+<script setup lang="ts" name="Child">
+	import GrandChild from './GrandChild.vue'
+</script>
+```
+
+孙组件：
+
+```vue
+<template>
+	<div class="grand-child">
+		<h3>孙组件</h3>
+		<h4>a：{{ a }}</h4>
+		<h4>b：{{ b }}</h4>
+		<h4>c：{{ c }}</h4>
+		<h4>d：{{ d }}</h4>
+		<h4>x：{{ x }}</h4>
+		<h4>y：{{ y }}</h4>
+		<button @click="updateA(666)">点我更新A</button>
+	</div>
+</template>
+
+<script setup lang="ts" name="GrandChild">
+	defineProps(['a','b','c','d','x','y','updateA'])
+</script>
+```
+
+### 6.6. $refs、$parent
+
+1. 概述：
+
+   * `$refs`用于 ：**父→子。**
+   * `$parent`用于：**子→父。**
+
+2. 原理如下：
+
+   | 属性      | 说明                                                     |
+   | --------- | -------------------------------------------------------- |
+   | `$refs`   | 值为对象，包含所有被`ref`属性标识的`DOM`元素或组件实例。 |
+   | `$parent` | 值为对象，当前组件的父组件实例对象。                     |
+
+### 6.7. provide、inject
+
+1. 概述：实现**祖孙组件**直接通信
+
+2. 具体使用：
+
+   * 在祖先组件中通过`provide`配置向后代组件提供数据
+   * 在后代组件中通过`inject`配置来声明接收数据
+
+3. 具体编码：
+
+   【第一步】父组件中，使用`provide`提供数据
+
+   ```vue
+   <template>
+     <div class="father">
+       <h3>父组件</h3>
+       <h4>资产：{{ money }}</h4>
+       <h4>汽车：{{ car }}</h4>
+       <button @click="money += 1">资产+1</button>
+       <button @click="car.price += 1">汽车价格+1</button>
+       <Child/>
+     </div>
+   </template>
+   
+   <script setup lang="ts" name="Father">
+     import Child from './Child.vue'
+     import { ref,reactive,provide } from "vue";
+     // 数据
+     let money = ref(100)
+     let car = reactive({
+       brand:'奔驰',
+       price:100
+     })
+     // 用于更新money的方法
+     function updateMoney(value:number){
+       money.value += value
+     }
+     // 提供数据
+     provide('moneyContext',{money,updateMoney})
+     provide('car',car)
+   </script>
+   ```
+
+   > 注意：子组件中不用编写任何东西，是不受到任何打扰的
+
+   【第二步】孙组件中使用`inject`配置项接受数据。
+
+   ```vue
+   <template>
+     <div class="grand-child">
+       <h3>我是孙组件</h3>
+       <h4>资产：{{ money }}</h4>
+       <h4>汽车：{{ car }}</h4>
+       <button @click="updateMoney(6)">点我</button>
+     </div>
+   </template>
+   
+   <script setup lang="ts" name="GrandChild">
+     import { inject } from 'vue';
+     // 注入数据
+    let {money,updateMoney} = inject('moneyContext',{money:0,updateMoney:(x:number)=>{}})
+     let car = inject('car')
+   </script>
+   ```
+
+
+### 6.8. pinia
+
+参考之前`pinia`部分的讲解
+
+### 6.9. slot
+
+#### 1. 默认插槽
+
+![img](http://49.232.112.44/images/default_slot.png)
+
+```vue
+父组件中：
+        <Category title="今日热门游戏">
+          <ul>
+            <li v-for="g in games" :key="g.id">{{ g.name }}</li>
+          </ul>
+        </Category>
+子组件中：
+        <template>
+          <div class="item">
+            <h3>{{ title }}</h3>
+            <!-- 默认插槽 -->
+            <slot></slot>
+          </div>
+        </template>
+```
+
+#### 2. 具名插槽
+
+```vue
+父组件中：
+        <Category title="今日热门游戏">
+          <template v-slot:s1>
+            <ul>
+              <li v-for="g in games" :key="g.id">{{ g.name }}</li>
+            </ul>
+          </template>
+          <template #s2>
+            <a href="">更多</a>
+          </template>
+        </Category>
+子组件中：
+        <template>
+          <div class="item">
+            <h3>{{ title }}</h3>
+            <slot name="s1"></slot>
+            <slot name="s2"></slot>
+          </div>
+        </template>
+```
+
+#### 3. 作用域插槽 
+
+1. 理解：<span style="color:red">数据在组件的自身，但根据数据生成的结构需要组件的使用者来决定。</span>（新闻数据在`News`组件中，但使用数据所遍历出来的结构由`App`组件决定）
+
+2. 具体编码：
+
+   ```vue
+   父组件中：
+         <Game v-slot="params">
+         <!-- <Game v-slot:default="params"> -->
+         <!-- <Game #default="params"> -->
+           <ul>
+             <li v-for="g in params.games" :key="g.id">{{ g.name }}</li>
+           </ul>
+         </Game>
+   
+   子组件中：
+         <template>
+           <div class="category">
+             <h2>今日游戏榜单</h2>
+             <slot :games="games" a="哈哈"></slot>
+           </div>
+         </template>
+   
+         <script setup lang="ts" name="Category">
+           import {reactive} from 'vue'
+           let games = reactive([
+             {id:'asgdytsa01',name:'英雄联盟'},
+             {id:'asgdytsa02',name:'王者荣耀'},
+             {id:'asgdytsa03',name:'红色警戒'},
+             {id:'asgdytsa04',name:'斗罗大陆'}
+           ])
+         </script>
+   ```
 
