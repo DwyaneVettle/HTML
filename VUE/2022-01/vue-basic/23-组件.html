@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+  <script src="./js/vue.js"></script>
+</head>
+<body>
+  <div id="app">
+  <!--  以组件为标签添加到容器中-->
+    <School/>
+    <Student/>
+  </div>
+  <script>
+    import {Student} from './Student.vue'
+    import {School} from './School.vue'
+
+    new Vue({
+      /*
+      * 使用组件的步骤：
+      *   1.编写组件.vue
+      *   2.注册组件-引入组件
+      *   3.以组件名为标签名添加到页面结构中
+      * */
+      el: '#app',
+    })
+  </script>
+</body>
+</html>
+<script>
+  import School from "./School";
+  export default {
+    components: {School}
+  }
+</script>
