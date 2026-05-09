@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- 
+        图像标签：<img src=""/>
+        img是标签名，表示这个一个引入图片的标签
+        src是source的简写，表示图片的位置/路径
+        alt表示当图片不限时时，用文本去替换
+        title是鼠标移动到图片上做提示使用
+        width表示设置图片的宽度，一般使用像素值或百分比
+        height表示设置图片的长度，单位是像素值或百分比
+        border表示图片的边框,三个值：像素值 线条格式 线条颜色
+    -->
+        <!-- <img src="https://vcg02.cfp.cn/creative/vcg/800/new/VCG41N1205513386.jpg" alt=""> -->
+        <!-- <img src="D:\1.jpg" alt=""> -->
+         <img src="imgs/1.jpg" alt="服务器出问题了，请稍后！" 
+                title="这是一张图片" width="20%" height="20%"
+                border="10px solid red">
+
+        <!-- 
+            超链接a标签：用于页面的跳转        
+            href:必须具有，用于传递跳转页面的url
+            target：跳转的方式，默认值self跳转到当前页面
+                    blank是跳转到新的页面
+        -->
+            <!-- 外部跳转 -->
+            <a href="https://www.baidu.com" target="blank">百度一下</a>
+            <!-- 内部跳转 -->
+             <a href="demo02.html" target="blank">跳转到demo02</a>
+             <!-- 不跳转 -->
+              <a href="#">不知道</a>
+              <!-- 文件或压缩包，直接下载 -->
+               <a href="demo.zip">文件</a>
+
+</body>
+</html>
